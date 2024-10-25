@@ -1,9 +1,13 @@
 import streamlit as st
 import os
 from streamlit_option_menu import option_menu
+from streamlit_extras.stylable_container import stylable_container
+from streamlit_extras.bottom_container import bottom
+from streamlit_extras.colored_header import colored_header
 import app_pages as pg
 from PIL import Image
 from app_scripts import app_access
+import base64
 
 # from streamlit_extras.container import style_container
 
@@ -72,12 +76,12 @@ with st.sidebar:
     page = option_menu(
         None,
         ["Home", "Simulate", "Analyze", "Materials and models"],
-        icons=['house', 'play', 'graph-up', 'layers'],
+        icons=['house', 'battery-charging', 'graph-up', 'layers'],
         menu_icon="cast",
         default_index=0,
-        styles={
-            "container": {"background-color": "transparent"},
-        },
+        # styles={
+        #     "container": {"background-color": "transparent"},
+        # },
     )
 
 if page == "Home":
@@ -92,7 +96,7 @@ elif page == "Simulate":
             "Build Model",
             "Build Geometry",
             "Fill Geometry",
-            "Cycling",
+            "Protocol",
             "Simulation",
         ],
         icons=[
@@ -108,9 +112,18 @@ elif page == "Simulate":
         orientation="horizontal",
     )
 
-    if bar == "Build Geometry":
+    if bar == "Upload":
+        pg.show_upload()
+    elif bar == "Build Model":
+        pg.show_build_model()
+
+    elif bar == "Build Geometry":
         pg.show_cell_design()
-    elif bar == "Simulation setup":
+    elif bar == "Fill Geometry":
+        pg.show_fill_geometry()
+    elif bar == "Protocol":
+        pg.show_protocol()
+    elif bar == "Simulation":
         pg.show_simulation()
 
 elif page == "Analyze":
@@ -123,13 +136,56 @@ else:
 if "theme" not in st.session_state:
     st.session_state.theme = False
 
-with st.sidebar:
+with bottom():
 
-    theme = st.toggle(
-        "Dark theme",
-    )
+    _, col1, col2 = st.columns((7, 1.5, 1))
 
-    st.session_state.theme = theme
+    with col2:
+        # flag_image = Image.open(
+        #     os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg")
+        # )
+        # st.image(os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg"))
+
+        def image_to_base64(image_path):
+            with open(image_path, "rb") as image_file:
+                return base64.b64encode(image_file.read()).decode()
+
+        # Path to the image
+        image_path = os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg")
+
+        # Convert image to base64
+        image_base64 = image_to_base64(image_path)
+
+        # Embed the image in HTML
+        st.html(
+            f'<img src="data:image/jpeg;base64,{image_base64}" id="flag_of_europe" style="width: 80px;">'
+        )
+
+    with col1:
+        with stylable_container(
+            key="indicator_container",
+            css_styles="""
+                {
+                    background-color: #F0F0F0;
+                    color: black;
+                    border-radius: 10px;
+                    border: 4px solid #770737;
+                    height: 25px;
+                    padding: 5px; /* Padding to give some space inside */
+
+                }
+                """,
+        ):
+
+            cont = st.container(key="bottom_container")
+            # cont.markdown("*Dark theme*")
+
+            with cont:
+                cola, colb = st.columns((1, 10))
+                cola.text("")
+                theme = colb.toggle("Dark theme", label_visibility="visible")
+
+        st.session_state.theme = theme
 
     # style_container()
 

@@ -11,6 +11,7 @@ import tempfile
 import uuid
 import h5py
 from streamlit_extras.stylable_container import stylable_container
+import streamlit_extras
 
 
 # ##############################
@@ -123,27 +124,35 @@ def show_simulation():
     if "stop_simulation" not in st.session_state:
         st.session_state.stop_simulation = None
 
+    if "selected_model" not in st.session_state:
+        st.session_state.selected_model = None
+
     page_name = "Simulation"
 
     log_memory_usage()
 
     app = get_app_controller()
 
-    model_id = app.set_model_choice().selected_model
+    # model_id = app.set_model_choice().selected_model
+    # model_id = st.session_state.selected_model
 
-    # if st.session_state.success and st.session_state.transfer_results:
-    #     st.session_state["toast"](":green-background[Gathering the results!]", icon="💤")
+    # # if st.session_state.success and st.session_state.transfer_results:
+    # #     st.session_state["toast"](":green-background[Gathering the results!]", icon="💤")
 
-    gui_parameters = app.set_tabs(model_id).user_input
+    # gui_parameters = app.set_tabs(model_id).user_input
 
-    app.set_indicators(page_name)
+    with st.sidebar:
+        st.text("")
+
+        page_name = "Cell_design"
+        app.set_indicators(page_name)
     # st.divider()
 
     # app.set_geometry_visualization(gui_parameters)
 
-    app.download_parameters(gui_parameters)
+    app.download_parameters(st.session_state.json_linked_data_input)
 
-    success = app.run_simulation(gui_parameters).success
+    success = app.run_simulation(st.session_state.json_linked_data_input).success
 
     if st.session_state.sim_finished == True:
 
@@ -161,12 +170,6 @@ def show_simulation():
         st.session_state.sim_finished = None
 
     st.session_state.response = None
-
-    with st.sidebar:
-        # app_view.st_space(space_width=3)
-
-        st.divider()
-        set_acknowlegent_info()
 
 
 ############################################

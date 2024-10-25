@@ -28,6 +28,7 @@ import websocket
 import time
 import asyncio
 import base64
+import copy
 import uuid
 
 
@@ -43,32 +44,6 @@ from app_scripts import app_calculations as calc
 #####################################
 # Convenient random functions
 #####################################
-
-
-def get_theme_style():
-
-    if st.session_state.theme == "dark":
-        with open(app_access.get_path_to_dark_style_css()) as f:
-            style = st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-    else:
-        with open(app_access.get_path_to_light_style_css()) as f:
-            style = st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
-    return style
-
-
-def reset_func(category_id, parameter_id, parameter):
-    """
-    Function needed for the selectboxes and number_inputs to work properly together.
-    """
-    value = parameter.options[
-        st.session_state["select_{}_{}".format(category_id, parameter_id)]
-    ].value
-    if isinstance(parameter, FunctionParameter):
-        value = value.get("functionname")
-    else:
-        value = value
-    st.session_state["input_{}_{}".format(category_id, parameter_id)] = value
 
 
 def st_space(tab=None, space_width=1, space_number=1):
@@ -276,7 +251,7 @@ class SetModelChoice:
 
     def __init__(self):
 
-        self.title = "Model"
+        self.title = "Basis Model"
         self.selected_model = None
 
         # Set Model choice
@@ -285,7 +260,7 @@ class SetModelChoice:
     def set_model_choice(self):
         self.set_title()
         self.set_dropdown()
-        st_space()
+        # st_space()
 
     def set_title(self):
         st.markdown("### " + self.title)
@@ -326,7 +301,7 @@ class SetupLinkedDataStruct:
         self.hasBatteryCell = "hasBatteryCell"
 
         self.hasProperty = "hasProperty"
-        self.hasQuantitativeProperty = "hasQuantitativeProperty"
+        self.hasQuantitativeProperty = "hasProperty"
         self.hasObjectiveProperty = "hasObjectiveProperty"
         self.hasConstituent = "hasConstituent"
         self.hasNumericalPart = "hasNumericalPart"
@@ -334,9 +309,6 @@ class SetupLinkedDataStruct:
         self.hasStringValue = "hasStringValue"
         self.hasStringPart = "hasStringPart"
         self.hasModel = "hasModel"
-        self.hasCell = "hasCell"
-
-        self.cell_type = "battery:Cell"
 
         self.context = "https://w3id.org/emmo/domain/battery/context"
 
@@ -349,7 +321,7 @@ class SetupLinkedDataStruct:
             "@context": _self.context,
             _self.graph: {
                 _self.id: "https://www.batterymodel.org/parameters/m309c-ed93mdp3d",
-                _self.type: "Icon",
+                _self.type: "BatteryCell",
                 _self.hasModel: {
                     _self.type: model_type,
                     _self.hasQuantitativeProperty: db_helper.get_model_parameters_as_dict(
@@ -410,16 +382,16 @@ class SetupLinkedDataStruct:
     def setup_sub_dict(
         _self,
         dict=None,
-        display_name=None,
+        name=None,
         context_type=None,
         type=None,
         existence=None,
     ):
         if existence == "new":
-            dict = {_self.label: display_name, _self.type: context_type}
+            dict = {_self.label: name, _self.type: context_type}
 
         else:
-            dict[_self.label] = display_name
+            dict[_self.label] = name
             dict[_self.type] = context_type
 
         return dict
@@ -452,8 +424,11 @@ class SetupLinkedDataStruct:
 
                 parameter_details["hasMeasurementUnit"] = {
                     "hasSymbolValue": parameter.unit,
-                    _self.type: (parameter.unit_iri if parameter.unit_iri else None),
+                    _self.type: (parameter.unit_name if parameter.unit_name else None),
                 }
+
+                if reference_url:
+                    parameter_details["schema:citation"] = {_self.id: reference_url}
 
                 if reference_url:
                     parameter_details["schema:citation"] = {_self.id: reference_url}
@@ -561,8 +536,11 @@ class SetupLinkedDataStruct:
                 parameter_details["hasMeasurementUnit"] = {
                     # _self.label: unit_name,
                     "hasSymbolValue": unit,
-                    _self.type: (unit_iri if unit_iri else None),
+                    _self.type: (unit_name if unit_name else None),
                 }
+
+                if reference_url:
+                    parameter_details["schema:citation"] = {_self.id: reference_url}
 
                 if reference_url:
                     parameter_details["schema:citation"] = {_self.id: reference_url}
@@ -589,7 +567,11 @@ class SetupLinkedDataStruct:
         else:
             print("Error: The relation for type {} is non-existing.".format(type))
 
-        relation = "has" + context_type.split(":")[1]
+        if len(context_type.split(":")) > 1:
+            relation = "has" + context_type.split(":")[1]
+        else:
+            relation = "has" + context_type
+
         return relation
 
     @st.cache_data
@@ -601,17 +583,20 @@ class SetupLinkedDataStruct:
         elif existence == "existing":
             if _self.hasQuantitativeProperty in component_parameters:
 
-                if _self.hasQuantitativeProperty in dict:
-                    dict[_self.hasQuantitativeProperty] += component_parameters[
-                        _self.hasQuantitativeProperty
-                    ]
-                elif relation in dict:
+                if relation in dict:
                     if _self.hasQuantitativeProperty in dict[relation]:
                         dict[relation][_self.hasQuantitativeProperty] += component_parameters[
                             _self.hasQuantitativeProperty
                         ]
+
                     else:
                         dict[relation][_self.hasQuantitativeProperty] = component_parameters
+
+                elif _self.hasQuantitativeProperty in dict:
+                    dict[_self.hasQuantitativeProperty] += component_parameters[
+                        _self.hasQuantitativeProperty
+                    ]
+
                 else:
                     if relation:
                         dict[relation] = component_parameters
@@ -650,22 +635,22 @@ class SetupLinkedDataStruct:
         energy,
         dis_energy,
     ):
-        dict[_self.graph][_self.hasBatteryCell][_self.hasQuantitativeProperty] += n_to_p
-        dict[_self.graph][_self.hasBatteryCell][_self.hasQuantitativeProperty] += cell_mass
-        dict[_self.graph][_self.hasBatteryCell][_self.hasQuantitativeProperty] += cell_cap
-        dict[_self.graph][_self.hasBatteryCell][_self.hasQuantitativeProperty] += rte
-        dict[_self.graph][_self.hasBatteryCell][_self.hasQuantitativeProperty] += energy
-        dict[_self.graph][_self.hasBatteryCell][_self.hasQuantitativeProperty] += dis_energy
-        dict[_self.graph][_self.hasElectrode][_self.hasNegativeElectrode][
-            _self.hasNegativeElectrode
-        ][_self.hasQuantitativeProperty] += specific_cap_ne
-        dict[_self.graph][_self.hasElectrode][_self.hasPositiveElectrode][
-            _self.hasPositiveElectrode
-        ][_self.hasQuantitativeProperty] += specific_cap_pe
-        dict[_self.graph][_self.hasElectrode][_self.hasNegativeElectrode][_self.hasActiveMaterial][
+        dict[_self.graph][_self.hasQuantitativeProperty] += n_to_p
+        dict[_self.graph][_self.hasQuantitativeProperty] += cell_mass
+        dict[_self.graph][_self.hasQuantitativeProperty] += cell_cap
+        dict[_self.graph][_self.hasQuantitativeProperty] += rte
+        dict[_self.graph][_self.hasQuantitativeProperty] += energy
+        dict[_self.graph][_self.hasQuantitativeProperty] += dis_energy
+        dict[_self.graph][_self.hasNegativeElectrode][
+            _self.hasQuantitativeProperty
+        ] += specific_cap_ne
+        dict[_self.graph][_self.hasPositiveElectrode][
+            _self.hasQuantitativeProperty
+        ] += specific_cap_pe
+        dict[_self.graph][_self.hasNegativeElectrode][_self.hasActiveMaterial][
             _self.hasQuantitativeProperty
         ] += cap_ne
-        dict[_self.graph][_self.hasElectrode][_self.hasPositiveElectrode][_self.hasActiveMaterial][
+        dict[_self.graph][_self.hasPositiveElectrode][_self.hasActiveMaterial][
             _self.hasQuantitativeProperty
         ] += cap_pe
 
@@ -690,11 +675,98 @@ def set_select(
         st.session_state[key_input_number] = material_value
 
     st.session_state[user_interaction] = False
+    st.session_state.clear_upload = None
 
 
-def set_number_input(material_value, key_input_number, user_interaction):
+def set_number_input(
+    material_value, key_input_number, user_interaction, key_select=None, material_dict=None
+):
+    st.session_state.clear_upload = None
     if st.session_state[key_input_number] != material_value:
+
         st.session_state[user_interaction] = True
+        if material_dict:
+            parameter_set_id = next(
+                (
+                    key
+                    for key, value in material_dict.items()
+                    if value.display_name == "User defined"
+                ),
+                None,
+            )
+        else:
+            parameter_set_id = "User defined"
+
+        if key_select:
+            st.session_state[key_select] = parameter_set_id
+
+
+class SetInputUpload:
+    def __init__(self):
+
+        # File input feature
+        self.info = "Upload here your JSON LD input parameter file to automatically fill the parameter inputs."
+        self.help = "You can only upload the JSON LD format"
+
+        self.set_file_input()
+        self.uploaded_input_dict = st.session_state.json_uploaded_input
+
+    def set_sessions_state_upload(self):
+        st.session_state.upload = True
+        st.session_state.clear_upload = False
+
+        for key in st.session_state.keys():
+            if key.startswith("user_interaction"):
+                st.session_state[key] = False
+
+    def set_sessions_state_clear_upload(self):
+        st.session_state.upload = False
+        st.session_state.clear_upload = True
+
+    def set_file_input(self):
+        """Function that create a file input at the Simulation page"""
+
+        # upload_col, update_col = st.columns((3, 1))
+        uploaded_file = st.file_uploader(
+            self.info,
+            type="json",
+            help=self.help,
+            on_change=self.set_sessions_state_upload,
+            # on_change=self.set_sessions_state_upload_true,
+        )
+        # uploaded_file = None
+
+        if uploaded_file:
+            if st.session_state.upload == True and st.session_state.clear_upload != True:
+
+                uploaded_file = uploaded_file.read()
+                uploaded_file_dict = json.loads(uploaded_file)
+                # uploaded_file_str = str(uploaded_file_dict)
+
+                with open(app_access.get_path_to_uploaded_input(), "w") as outfile:
+                    json.dump(uploaded_file_dict, outfile, indent=3)
+
+                uploaded_input_gui_dict = match_json_LD.get_gui_dict_from_linked_data(
+                    uploaded_file_dict
+                )
+
+                uploaded_input_gui_dict = match_json_LD.GuiDict(uploaded_input_gui_dict)
+
+                st.session_state.json_uploaded_input = uploaded_input_gui_dict
+
+                st.success(
+                    "Your file is succesfully uploaded. Click on the 'CLEAR' button if you want to reset the parameters to the default values again."
+                )
+            else:
+                uploaded_input_gui_dict = None
+
+        else:
+            uploaded_input_gui_dict = st.session_state.json_uploaded_input
+
+        # update_col.text(" ")
+        # update_col.text(" ")
+
+        st.button("CLEAR", on_click=self.set_sessions_state_clear_upload, use_container_width=True)
 
 
 class SetTabs:
@@ -759,7 +831,8 @@ class SetTabs:
         self.user_input = self.LD.setup_linked_data_dict(self.model_id, self.model_name)
 
         # Create file input
-        self.uploaded_input_dict = self.set_file_input()
+        # self.set_file_input()
+        # self.uploaded_input_dict = st.session_state.json_uploaded_input
 
         # Fill tabs
         self.set_tabs()
@@ -768,9 +841,12 @@ class SetTabs:
         st.markdown("### " + self.title)
 
     def set_sessions_state_upload(self):
+        st.session_state.upload = True
         st.session_state.clear_upload = False
 
-        # st.session_state.upload = True
+        for key in st.session_state.keys():
+            if key.startswith("user_interaction"):
+                st.session_state[key] = False
 
     def set_sessions_state_clear_upload(self):
         st.session_state.upload = False
@@ -780,19 +856,17 @@ class SetTabs:
         """Function that create a file input at the Simulation page"""
 
         # upload_col, update_col = st.columns((3, 1))
-        # uploaded_file = st.file_uploader(
-        #     self.info,
-        #     type="json",
-        #     help=self.help,
-        #     on_change=self.set_sessions_state_upload,
-        #     # on_change=self.set_sessions_state_upload_true,
-        # )
-        uploaded_file = None
+        uploaded_file = st.file_uploader(
+            self.info,
+            type="json",
+            help=self.help,
+            on_change=self.set_sessions_state_upload,
+            # on_change=self.set_sessions_state_upload_true,
+        )
+        # uploaded_file = None
 
         if uploaded_file:
-            if st.session_state.clear_upload == False:
-
-                st.session_state.upload = True
+            if st.session_state.upload == True and st.session_state.clear_upload != True:
 
                 uploaded_file = uploaded_file.read()
                 uploaded_file_dict = json.loads(uploaded_file)
@@ -801,29 +875,27 @@ class SetTabs:
                 with open(app_access.get_path_to_uploaded_input(), "w") as outfile:
                     json.dump(uploaded_file_dict, outfile, indent=3)
 
-                uploaded_input_dict = match_json_LD.GuiDict(uploaded_file_dict)
+                uploaded_input_gui_dict = match_json_LD.get_gui_dict_from_linked_data(
+                    uploaded_file_dict
+                )
 
-                # gui_formatted_dict = match_json_upload.GuiInputFormatting(
-                #     self.model_name
-                # ).gui_dict
+                uploaded_input_gui_dict = match_json_LD.GuiDict(uploaded_input_gui_dict)
 
-                # with open(app_access.get_path_to_gui_formatted_input(), "w") as outfile:
-                #     json.dump(gui_formatted_dict, outfile, indent=3)
+                st.session_state.json_uploaded_input = uploaded_input_gui_dict
 
                 st.success(
                     "Your file is succesfully uploaded. Click on the 'CLEAR' button if you want to reset the parameters to the default values again."
                 )
             else:
-                uploaded_input_dict = None
+                uploaded_input_gui_dict = None
+
         else:
-            uploaded_input_dict = None
+            uploaded_input_gui_dict = st.session_state.json_uploaded_input
 
         # update_col.text(" ")
         # update_col.text(" ")
 
-        # st.button("CLEAR", on_click=self.set_sessions_state_clear_upload, use_container_width=True)
-
-        return uploaded_input_dict
+        st.button("CLEAR", on_click=self.set_sessions_state_clear_upload, use_container_width=True)
 
     def set_logo_and_title(self, tab, tab_index):
         if tab_index == 0:
@@ -885,7 +957,6 @@ class SetTabs:
             return int(increment)
 
     def set_tabs(self):
-
         cell_parameters = {}
 
         all_tab_display_names = db_helper.get_basis_tabs_display_names(self.model_name)
@@ -900,10 +971,12 @@ class SetTabs:
             db_tab_id = db_tab_ids[index][0]
 
             tab_context_type = db_helper.get_context_type_and_iri_by_id(db_tab_id)
-            tab_name = db_helper.get_tab_name_by_id(db_tab_id)
+            # tab_name = db_helper.get_tab_name_by_id(db_tab_id)
+            tab_display_name = db_helper.get_basis_tabs_display_names(self.model_name)[index]
+            tab_name = db_helper.get_basis_tab_names(self.model_name)[index]
 
             tab_parameters = self.LD.setup_sub_dict(
-                display_name=db_helper.get_basis_tabs_display_names(self.model_name)[index],
+                name=tab_name,
                 context_type=tab_context_type,
                 existence="new",
             )
@@ -941,7 +1014,7 @@ class SetTabs:
                 for category in categories:
 
                     category_parameters = self.LD.setup_sub_dict(
-                        display_name=db_helper.get_basis_categories_display_names(db_tab_id)[i][0],
+                        name=db_helper.get_basis_categories_names(db_tab_id)[i][0],
                         context_type=db_helper.get_categories_context_type(db_tab_id)[i][0],
                         existence="new",
                     )
@@ -966,6 +1039,7 @@ class SetTabs:
                         category_id=category_id,
                         category_display_name=category_display_name,
                         category_name=category_name,
+                        tab_display_name=tab_display_name,
                         emmo_relation=emmo_relation,
                         default_template_id=default_template_id,
                         tab=all_sub_tabs[i],
@@ -974,8 +1048,8 @@ class SetTabs:
                     )
                     i += 1
 
-                    tab_parameters[category_relation] = category_parameters
-                    cell_parameters[tab_relation] = tab_parameters
+                    # tab_parameters[category_relation] = category_parameters
+                    cell_parameters[category_relation] = category_parameters
 
             else:  # no sub tab is needed
 
@@ -1000,6 +1074,7 @@ class SetTabs:
                     # different way of filling parameters for protocol section, the idea is to choose the name of the
                     # protocol and then the parameters are filled. Could be done also for the Cell tab
                     category_parameters = self.fill_category_protocol(
+                        tab_display_name,
                         category_id=category_id,
                         category_display_name=category_display_name,
                         category_name=category_name,
@@ -1018,6 +1093,7 @@ class SetTabs:
                         category_id=category_id,
                         category_display_name=category_display_name,
                         category_name=category_name,
+                        tab_display_name=tab_display_name,
                         emmo_relation=emmo_relation,
                         default_template_id=default_template_id,
                         tab=tab,
@@ -1025,7 +1101,10 @@ class SetTabs:
                         mass_loadings=None,
                     )
 
-                    cell_parameters[tab_relation] = category_parameters[tab_relation]
+                    if category_display_name == "Cell":
+                        cell_parameters.update(category_parameters)
+                    else:
+                        cell_parameters[tab_relation] = category_parameters[tab_relation]
 
                     # cell_parameters = LD.fill_sub_dict(cell_parameters, tab_relation, category_parameters,"new",relation_dict_2=tab_relation)
 
@@ -1083,8 +1162,8 @@ class SetTabs:
         ).get("value")
         mf_ne = input_dict.ne.am.get("mass_fraction").get("value")
         mf_pe = input_dict.pe.am.get("mass_fraction").get("value")
-        length = input_dict.cell.get("length").get("value")
-        width = input_dict.cell.get("width").get("value")
+        length = input_dict.pe.properties.get("length").get("value")
+        width = input_dict.pe.properties.get("width").get("value")
 
         CC_thickness = {
             "ne": input_dict.ne.properties.get("current_collector_thickness").get("value"),
@@ -1283,6 +1362,15 @@ class SetTabs:
         )
         rte_category_parameters = _self.LD.setup_parameter_struct(raw_template_rte, value=None)
 
+        # Include indicators in calculated_values file
+        if "cell" not in parameters_dict["calculatedParameters"]:
+            parameters_dict["calculatedParameters"]["cell"] = {}
+
+        parameters_dict["calculatedParameters"]["cell"]["mass"] = cell_mass
+
+        with open(app_access.get_path_to_calculated_values(), "w") as f:
+            json.dump(parameters_dict, f)
+
         # Include indicators in linked data input dict
         user_input = _self.LD.add_indicators_to_struct(
             user_input,
@@ -1305,6 +1393,7 @@ class SetTabs:
         category_id,
         category_display_name,
         category_name,
+        tab_display_name,
         emmo_relation,
         default_template_id,
         tab,
@@ -1421,6 +1510,7 @@ class SetTabs:
                     component_parameters_,
                     emmo_relation,
                     density,
+                    material_context_type,
                 ) = self.fill_material_components(
                     component_name,
                     component_parameters,
@@ -1436,10 +1526,43 @@ class SetTabs:
                     tab,
                 )
 
+                if material_context_type != None:
+
+                    if material_context_type.startswith("["):
+                        material_context_type = ast.literal_eval(material_context_type)
+                        if material_comp_context_type.startswith("["):
+                            material_comp_context_type = ast.literal_eval(
+                                material_comp_context_type
+                            )
+
+                            for type_str in material_context_type:
+                                material_comp_context_type = material_comp_context_type.append(
+                                    type_str
+                                )
+
+                        else:
+                            context_type_list = [material_comp_context_type]
+
+                            for type_str in material_context_type:
+                                context_type_list.append(type_str)
+
+                    else:
+                        if material_comp_context_type.startswith("["):
+                            material_comp_context_type = ast.literal_eval(
+                                material_comp_context_type
+                            )
+                            context_type_list = material_comp_context_type.append(
+                                material_context_type
+                            )
+                        else:
+                            context_type_list = [material_comp_context_type, material_context_type]
+                else:
+                    context_type_list = material_comp_context_type
+
                 component_parameters_ = self.LD.fill_component_dict(component_parameters_, "new")
                 component_parameters = self.LD.setup_sub_dict(
-                    display_name=material_comp_display_name,
-                    context_type=material_comp_context_type,
+                    name=component_name,
+                    context_type=context_type_list,
                     existence="new",
                 )
                 component_parameters = self.LD.fill_component_dict(
@@ -1480,6 +1603,9 @@ class SetTabs:
                         material_component_id,
                         material_comp_context_type,
                         selected_value_id,
+                        tab_display_name,
+                        category_display_name,
+                        material_comp_display_name,
                     )
 
                 component_parameters_ = []
@@ -1493,8 +1619,10 @@ class SetTabs:
                 ) = self.fill_mass_fraction_column(
                     mass_fraction_col,
                     category_id,
+                    category_display_name,
                     material_comp_default_template_id,
                     material_component_id,
+                    material_comp_display_name,
                     component_parameters_,
                     mass_fraction_id_dict,
                 )
@@ -1505,7 +1633,7 @@ class SetTabs:
                     )
                     component_parameters = self.LD.setup_sub_dict(
                         dict=component_parameters,
-                        display_name=material_comp_display_name,
+                        name=component_name,
                         context_type=material_comp_context_type,
                     )
                     component_parameters = self.LD.fill_component_dict(
@@ -1573,6 +1701,7 @@ class SetTabs:
             mass_loadings,
         ) = self.fill_non_material_components(
             density,
+            tab_display_name,
             category_display_name,
             category_parameters,
             component_parameters,
@@ -1595,12 +1724,13 @@ class SetTabs:
         )
 
         category_parameters = self.fill_advanced_expander(
-            tab, category_name, category_display_name, category_parameters
+            tab, tab_display_name, category_name, category_display_name, category_parameters
         )
         return category_parameters, emmo_relation, mass_loadings
 
     def fill_category_protocol(
         self,
+        tab_display_name,
         category_id,
         category_display_name,
         category_name,
@@ -1650,10 +1780,28 @@ class SetTabs:
         ) in parameter_sets:
             parameter_sets_name_by_id[id] = name
 
+        #####################################################################################
+        # Set Session state
+        #####################################################################################
+
+        key_selectbox = "key_selectbox_{}".format(non_material_component_id)
+        user_interaction_select = "user_interaction_select_{}".format(non_material_component_id)
+
+        key_list = list(parameter_sets_name_by_id.keys())
+
+        if key_selectbox not in st.session_state:
+            keys = list(parameter_sets_name_by_id.keys())
+            st.session_state[key_selectbox] = keys[0]
+
+        if user_interaction_select not in st.session_state:
+            st.session_state[user_interaction_select] = False
+
+        ######################################################################################
+
         selected_parameter_set_id = tab.selectbox(
             label="Protocol",
             options=parameter_sets_name_by_id,
-            key="{}_{}".format(category_id, "parameter_sets"),
+            key=key_selectbox,
             label_visibility="visible",
             format_func=lambda x: parameter_sets_name_by_id.get(x),
         )
@@ -1680,6 +1828,58 @@ class SetTabs:
 
                 if parameter.options.get(selected_parameter_id):
 
+                    #####################################################################################
+                    # Set Session state
+                    #####################################################################################
+
+                    key_user_input = "key_user_input{}_{}".format(
+                        non_material_component_id, parameter_id
+                    )
+                    user_interaction = 'user_interaction_{}'.format(parameter_id)
+
+                    if user_interaction not in st.session_state:
+                        st.session_state[user_interaction] = False
+
+                    if key_user_input not in st.session_state:
+                        value_ses = parameter.options.get(selected_parameter_id).value
+                        if isinstance(value_ses, str):
+                            value_ses = "charging"
+                        st.session_state[key_user_input] = value_ses
+
+                    ######################################################################################
+
+                    if (
+                        st.session_state.upload == True
+                        and st.session_state[user_interaction] == False
+                        and st.session_state[user_interaction_select] == False
+                    ):
+
+                        name_dict = {
+                            "Protocol": "protocol",
+                        }
+                        cat = getattr(
+                            self.uploaded_input_dict, name_dict[category_display_name], None
+                        )
+                        par = cat.get(parameter.name)
+                        value = par.get('value')
+                        if parameter.name == "protocol_name":
+                            self.use_uploaded_dataset(
+                                options=parameter_sets_name_by_id,
+                                key_list=key_list,
+                                option_value=value,
+                                select_key=key_selectbox,
+                            )
+                        else:
+                            self.use_uploaded_dataset(
+                                input_key=key_user_input, uploaded_value=value
+                            )
+
+                    elif st.session_state.upload == False and st.session_state.clear_upload == True:
+                        value_ses = parameter.options.get(selected_parameter_id).value
+                        if isinstance(value_ses, str):
+                            value_ses = "charging"
+                        st.session_state[key_user_input] = value_ses
+
                     name_col, input_col = tab.columns([1, 2])
 
                     if isinstance(parameter, NumericalParameter):
@@ -1695,7 +1895,7 @@ class SetTabs:
                             value=parameter.options.get(selected_parameter_id).value,
                             min_value=parameter.min_value,
                             max_value=parameter.max_value,
-                            key="input_{}_{}".format(non_material_component_id, parameter_id),
+                            key=key_user_input,
                             # format=parameter.format,
                             format=self.set_format(
                                 parameter.options.get(selected_parameter_id).value
@@ -1704,6 +1904,12 @@ class SetTabs:
                                 parameter.options.get(selected_parameter_id).value
                             ),
                             label_visibility="collapsed",
+                            on_change=set_number_input,
+                            args=(
+                                parameter.options.get(selected_parameter_id).value,
+                                key_user_input,
+                                user_interaction,
+                            ),
                         )
                     else:
                         try:
@@ -1717,12 +1923,14 @@ class SetTabs:
                         user_input = input_col.selectbox(
                             label=parameter.display_name,
                             options=value_list,
-                            key="input_{}_{}_{}".format(
-                                non_material_component_id,
-                                parameter_id,
-                                Protocol_name,
-                            ),
+                            key=key_user_input,
                             label_visibility="collapsed",
+                            on_change=set_number_input,
+                            args=(
+                                parameter.options.get(selected_parameter_id).value,
+                                key_user_input,
+                                user_interaction,
+                            ),
                         )
                     parameter.set_selected_value(user_input)
 
@@ -1743,7 +1951,7 @@ class SetTabs:
         component_parameters_ = self.LD.fill_component_dict(component_parameters_, "new")
         component_parameters = self.LD.setup_sub_dict(
             existence="new",
-            display_name=non_material_comp_display_name,
+            name=non_material_component_name,
             context_type=non_material_comp_context_type,
         )
         component_parameters = self.LD.fill_component_dict(
@@ -1756,29 +1964,42 @@ class SetTabs:
         )
 
         category_parameters = self.fill_advanced_expander(
-            tab, category_name, category_display_name, category_parameters
+            tab, tab_display_name, category_name, category_display_name, category_parameters
         )
 
         return category_parameters
 
     def ud_set_select(
-        self, key_select, key_input_number, material, parameter, user_interaction, key_arg=None
+        self,
+        key_select=None,
+        key_user_input=None,
+        material=None,
+        parameter=None,
+        user_interaction=None,
+        user_interaction_select=None,
+        key_arg=None,
     ):
         if key_arg:
             selected_parameter_set = st.session_state[key_select]
             parameter_set_id = material.options.get(selected_parameter_set).parameter_set_id
-            st.session_state[key_input_number] = str(
+            st.session_state[key_user_input] = str(
                 parameter.options.get(parameter_set_id).value["function"]
             )
             st.session_state[key_arg] = self.create_string_from_list(
                 parameter.options.get(parameter_set_id).value["argument_list"]
             )
             st.session_state[user_interaction] = False
-        else:
+            st.session_state[user_interaction_select] = True
+
+        elif material:
             selected_parameter_set = st.session_state[key_select]
             parameter_set_id = material.options.get(selected_parameter_set).parameter_set_id
-            st.session_state[key_input_number] = parameter.options.get(parameter_set_id).value
+            st.session_state[key_user_input] = parameter.options.get(parameter_set_id).value
             st.session_state[user_interaction] = False
+            st.session_state[user_interaction_select] = True
+        else:
+            st.session_state[user_interaction] = False
+            st.session_state[user_interaction_select] = True
 
     @st.cache_data
     def create_string_from_list(_self, list):
@@ -1801,6 +2022,9 @@ class SetTabs:
         component_id,
         comp_context_type,
         selected_value_id,
+        tab_display_name,
+        category_display_name,
+        component_display_name,
     ):
 
         ex = tab.expander("Fill in '%s' parameters" % comp_display_name)
@@ -1817,32 +2041,92 @@ class SetTabs:
                     if key in formatted_material.options
                 }
 
-                key_select = "ud_select_{}_{}".format(component_id, parameter_id)
-                key_input_number = "ud_input_number_{}_{}".format(component_id, parameter_id)
-                user_interaction = 'ud_number_input_changed_by_user_{}'.format(parameter_id)
+                ##################################################################################
+                # Set Session states
+                ##################################################################################
+
+                key_select = "key_select_ud_{}_{}".format(component_id, parameter_id)
+                key_user_input = "key_user_input_ud_{}_{}".format(component_id, parameter_id)
+                user_interaction = 'user_interaction_ud_{}'.format(parameter_id)
+                user_interaction_select = "user_interaction_select_ud_{}".format(parameter_id)
                 key_list = list(sub_formatted_material.keys())
 
                 if key_select not in st.session_state:
                     keys = list(sub_formatted_material.keys())
                     st.session_state[key_select] = keys[0]
 
-                if key_input_number not in st.session_state:
-                    st.session_state[key_input_number] = parameter.options.get(
+                if key_user_input not in st.session_state:
+                    st.session_state[key_user_input] = parameter.options.get(
                         st.session_state[key_select]
                     ).value
 
                 if user_interaction not in st.session_state:
                     st.session_state[user_interaction] = False
 
-                # if st.session_state.upload == True:
-                #     self.uploaded_input_dict.
+                if user_interaction_select not in st.session_state:
+                    st.session_state[user_interaction_select] = False
 
-                #     if uploaded_reference:
+                ##################################################################################
 
-                #         self.use_uploaded_dataset(sub_formatted_material,"reference_url", key_list, uploaded_reference, key_select)
+                if (
+                    st.session_state.upload == True
+                    and st.session_state[user_interaction] == False
+                    and st.session_state[user_interaction_select] == False
+                ):
+                    if tab_display_name == "Electrodes":
+                        name_dict = {
+                            "Negative electrode": "ne",
+                            "Positive electrode": "pe",
+                            "Active Material": "am",
+                            "Additive": "add",
+                            "Binder": "binder",
+                        }
+                        cat = getattr(
+                            self.uploaded_input_dict, name_dict[category_display_name], None
+                        )
+                        comp = getattr(cat, name_dict[component_display_name], None)
+                        par = comp.get(parameter.name)
+                        value = par.get('value')
 
-                #     else:
-                #         self.use_uploaded_dataset(sub_formatted_material, "display_names", key_list, "User defined", )
+                    elif tab_display_name == "Electrolyte" or tab_display_name == "Separator":
+                        name_dict = {
+                            "Electrolyte": "elyte_mat",
+                            "Separator": "sep_mat",
+                        }
+                        cat = getattr(
+                            self.uploaded_input_dict, name_dict[category_display_name], None
+                        )
+                        # comp = getattr(cat, name_dict[component_display_name], None)
+                        par = cat.get(parameter.name)
+                        value = par.get('value')
+
+                    if "reference_url" in par:
+                        uploaded_reference = par.get("reference_url")
+                    else:
+                        uploaded_reference = None
+
+                    if uploaded_reference:
+
+                        self.use_uploaded_dataset(
+                            sub_formatted_material,
+                            "reference_url",
+                            key_list,
+                            uploaded_reference,
+                            key_select,
+                            input_key=key_user_input,
+                            uploaded_value=value,
+                        )
+
+                    else:
+                        self.use_uploaded_dataset(
+                            sub_formatted_material,
+                            "display_name",
+                            key_list,
+                            "User defined",
+                            key_select,
+                            input_key=key_user_input,
+                            uploaded_value=value,
+                        )
 
                 elif st.session_state.upload == False and st.session_state.clear_upload == True:
                     st.session_state[key_select] = key_list[0]
@@ -1862,10 +2146,11 @@ class SetTabs:
                             on_change=self.ud_set_select,
                             args=(
                                 key_select,
-                                key_input_number,
+                                key_user_input,
                                 formatted_material,
                                 parameter,
                                 user_interaction,
+                                user_interaction_select,
                             ),
                             label_visibility="collapsed",
                             format_func=lambda x: sub_formatted_material.get(x).display_name,
@@ -1874,12 +2159,14 @@ class SetTabs:
                         user_input = value_col.text_input(
                             label=parameter.name,
                             value=parameter.options.get(st.session_state[key_select]).value,
-                            key=key_input_number,
+                            key=key_user_input,
                             on_change=set_number_input,
                             args=(
                                 parameter.options.get(selected_parameter_set).value,
-                                key_input_number,
+                                key_user_input,
                                 user_interaction,
+                                key_select,
+                                sub_formatted_material,
                             ),
                             label_visibility="collapsed",
                         )
@@ -1888,6 +2175,7 @@ class SetTabs:
                             reference_url = db_helper.get_reference_url_from_parameter_set(
                                 formatted_material.options.get(selected_parameter_set).display_name
                             )
+
                         else:
                             reference_url = None
 
@@ -1906,10 +2194,11 @@ class SetTabs:
                             on_change=self.ud_set_select,
                             args=(
                                 key_select,
-                                key_input_number,
+                                key_user_input,
                                 formatted_material,
                                 parameter,
                                 user_interaction,
+                                user_interaction_select,
                             ),
                             label_visibility="collapsed",
                             format_func=lambda x: sub_formatted_material.get(x).display_name,
@@ -1920,12 +2209,14 @@ class SetTabs:
                             value=parameter.options.get(st.session_state[key_select]).value,
                             min_value=parameter.min_value,
                             max_value=parameter.max_value,
-                            key=key_input_number,
+                            key=key_user_input,
                             on_change=set_number_input,
                             args=(
                                 parameter.options.get(selected_parameter_set).value,
-                                key_input_number,
+                                key_user_input,
                                 user_interaction,
+                                key_select,
+                                sub_formatted_material,
                             ),
                             format=self.set_format(
                                 parameter.options.get(selected_parameter_set).value
@@ -1945,32 +2236,60 @@ class SetTabs:
 
                 elif isinstance(parameter, FunctionParameter):
 
-                    key_input_function = "ud_input_function_{}_{}".format(
+                    ##################################################################################
+                    # Set Session states
+                    ##################################################################################
+
+                    key_user_input_function = "key_user_input_function_{}_{}".format(
                         component_id, parameter_id
                     )
-                    user_interaction_function = 'ud_function_input_changed_by_user_{}'.format(
+                    key_user_input_function_args = "key_user_input_function_args_{}_{}".format(
+                        component_id, parameter_id
+                    )
+                    user_interaction_function = 'user_interaction_function_{}'.format(parameter_id)
+                    user_interaction_function_args = 'user_interaction_function_args_{}'.format(
                         parameter_id
                     )
-                    key_input_args = "ud_input_args_{}_{}".format(component_id, parameter_id)
-                    user_interaction_args = 'ud_args_input_changed_by_user_{}'.format(parameter_id)
 
-                    if key_input_function not in st.session_state:
-                        st.session_state[key_input_function] = str(
-                            parameter.options.get(st.session_state[key_select]).value["function"]
-                        )
+                    if key_user_input_function not in st.session_state:
+
+                        if "function" in parameter.options.get(st.session_state[key_select]).value:
+                            st.session_state[key_user_input_function] = str(
+                                parameter.options.get(st.session_state[key_select]).value[
+                                    "function"
+                                ]
+                            )
+                        elif (
+                            "functionname"
+                            in parameter.options.get(st.session_state[key_select]).value
+                        ):
+                            st.session_state[key_user_input_function] = str(
+                                parameter.options.get(st.session_state[key_select]).value[
+                                    "functionname"
+                                ]
+                            )
+                        else:
+                            st.session_state[key_user_input_function] = None
+                            st.error(
+                                "The user input function contains a data type that is not recognised."
+                            )
 
                     if user_interaction_function not in st.session_state:
                         st.session_state[user_interaction_function] = False
 
-                    if key_input_args not in st.session_state:
-                        st.session_state[key_input_args] = self.create_string_from_list(
-                            parameter.options.get(st.session_state[key_select]).value[
-                                "argument_list"
-                            ]
+                    if key_user_input_function_args not in st.session_state:
+                        st.session_state[key_user_input_function_args] = (
+                            self.create_string_from_list(
+                                parameter.options.get(st.session_state[key_select]).value[
+                                    "argument_list"
+                                ]
+                            )
                         )
 
-                    if user_interaction_args not in st.session_state:
-                        st.session_state[user_interaction_args] = False
+                    if user_interaction_function_args not in st.session_state:
+                        st.session_state[user_interaction_function_args] = False
+
+                    ##################################################################################
 
                     st.divider()
                     st.write("[{}]({})".format(parameter.display_name, parameter.context_type_iri))
@@ -1982,11 +2301,12 @@ class SetTabs:
                         on_change=self.ud_set_select,
                         args=(
                             key_select,
-                            key_input_function,
+                            key_user_input_function,
                             formatted_material,
                             parameter,
                             user_interaction,
-                            key_input_args,
+                            user_interaction_select,
+                            key_user_input_function_args,
                         ),
                         label_visibility="collapsed",
                         format_func=lambda x: sub_formatted_material.get(x).display_name,
@@ -2024,17 +2344,36 @@ class SetTabs:
                                 """
                         )
 
+                    if "function" in parameter.options.get(st.session_state[key_select]).value:
+                        function_type = "function"
+                        input_function = str(
+                            parameter.options.get(st.session_state[key_select]).value["function"]
+                        )
+                    elif (
+                        "functionname" in parameter.options.get(st.session_state[key_select]).value
+                    ):
+                        function_type = "functionname"
+                        input_function = str(
+                            parameter.options.get(st.session_state[key_select]).value[
+                                "functionname"
+                            ]
+                        )
+                    else:
+                        st.error(
+                            "The user input function contains a data type that is not recognised."
+                        )
+
                     user_input_func = st.text_input(
                         label=parameter.display_name,
-                        value=str(
-                            parameter.options.get(st.session_state[key_select]).value["function"]
-                        ),
-                        key=key_input_function,
+                        value=input_function,
+                        key=key_user_input_function,
                         on_change=set_number_input,
                         args=(
-                            str(parameter.options.get(selected_parameter_set).value["function"]),
-                            key_input_function,
+                            input_function,
+                            key_user_input_function,
                             user_interaction_function,
+                            key_select,
+                            sub_formatted_material,
                         ),
                         label_visibility="visible",
                     )
@@ -2063,14 +2402,16 @@ class SetTabs:
                                 "argument_list"
                             ]
                         ),
-                        key=key_input_args,
+                        key=key_user_input_function_args,
                         on_change=set_number_input,
                         args=(
                             self.create_string_from_list(
                                 parameter.options.get(selected_parameter_set).value["argument_list"]
                             ),
-                            key_input_args,
-                            user_interaction_args,
+                            key_user_input_function_args,
+                            user_interaction_function_args,
+                            key_select,
+                            sub_formatted_material,
                         ),
                         label_visibility="visible",
                     )
@@ -2078,7 +2419,7 @@ class SetTabs:
                     variables_array = user_input_arg.split(",")
 
                     user_input = {
-                        "function": user_input_func,
+                        function_type: user_input_func,
                         "argument_list": variables_array,
                     }
 
@@ -2088,196 +2429,6 @@ class SetTabs:
                         )
                     else:
                         reference_url = None
-
-                    # if (
-                    #     component_name == "negative_electrode_active_material"
-                    #     or component_name == "positive_electrode_active_material"
-                    # ):
-
-                    #     ref_ocp = "ref_ocp_{}".format(component_id)
-                    #     variables = "variables_{}".format(component_id)
-
-                    #     if variables not in st.session_state:
-
-                    #         st.session_state[variables] = r"c,cmax"
-                    #     if ref_ocp not in st.session_state:
-                    #         if component_name == "negative_electrode_active_material":
-                    #             st.session_state[ref_ocp] = (
-                    #                 r"""1.9793 * exp(-39.3631*(c/cmax)) + 0.2482 - 0.0909 * tanh(29.8538*((c/cmax) - 0.1234)) - 0.04478 * tanh(14.9159*((c/cmax) - 0.2769)) - 0.0205 * tanh(30.4444*((c/cmax) - 0.6103))"""
-                    #             )
-                    #         elif component_name == "positive_electrode_active_material":
-                    #             st.session_state[ref_ocp] = (
-                    #                 r"""-0.8090 * (c/cmax) + 4.4875 - 0.0428 * tanh(18.5138*((c/cmax) - 0.5542)) - 17.7326 * tanh(15.7890*((c/cmax) - 0.3117)) + 17.5842 * tanh(15.9308*((c/cmax) - 0.3120))"""
-                    #             )
-
-                    #     info = ex.toggle(
-                    #         label="OCP guidelines",
-                    #         key="toggle_{}".format(component_id),
-                    #     )
-                    #     if info:
-                    #         parameters_col, language_col = ex.columns(2)
-                    #         language_col.markdown(
-                    #             r"""
-                    #                 **Allowed language**
-                    #                 - Use '^' to indicate a superscript
-                    #                 - Use '*' to indicate a multiplication
-                    #                 - Use 'exp(a)' to indicate an exponential with power a
-                    #                 - Use 'tanh()' for hyperbolic tangent
-                    #                 - Use '/' for dividing
-
-                    #                 """
-                    #         )
-
-                    #         parameters_col.markdown(
-                    #             r"""
-                    #                 **Allowed variables**
-                    #                 - Surface concentration : c
-                    #                 - Maximum concentration : cmax
-                    #                 - Temperature    : T
-                    #                 - Reference Temperature : refT
-                    #                 - State of charge: SOC
-
-                    #                 """
-                    #         )
-
-                    #     ex.text_input(
-                    #         label="OCP",
-                    #         value=st.session_state[ref_ocp],
-                    #         key=ref_ocp,
-                    #         label_visibility="visible",
-                    #     )
-                    #     ref_ocp_str = st.session_state[ref_ocp]
-                    #     func_ocpref = ex.toggle(
-                    #         label="Visualize OCP_ref",
-                    #         key="toggle_vis_{}".format(component_id),
-                    #     )
-
-                    #     if func_ocpref:
-                    #         # Convert the input string to a SymPy equation
-                    #         try:
-                    #             ref_ocp_str_py = ref_ocp_str.replace("^", "**")
-                    #             eq_ref_ocp = sp.sympify(ref_ocp_str_py)
-                    #             ex.latex("OCP = " + sp.latex(eq_ref_ocp))
-
-                    #         except sp.SympifyError:
-                    #             ex.warning(
-                    #                 "Invalid equation input. Please enter a valid mathematical expression."
-                    #             )
-
-                    #     ex.text_input(
-                    #         label="Variables (ex: c,T,refT,cmax)",
-                    #         value=st.session_state[variables],
-                    #         key=variables,
-                    #         label_visibility="visible",
-                    #     )
-
-                    #     variables_str = st.session_state[variables]
-
-                    #     if variables_str == "":
-                    #         ex.warning(
-                    #             "You haven't specified the variables your equation depends on."
-                    #         )
-
-                    #     else:
-                    #         variables_array = variables_str.split(",")
-                    #         # user_input = {'@type': 'emmo:String', 'hasStringData': {'function': ref_ocp_str, 'argument_list':variables_array}}
-                    #         user_input = {
-                    #             "function": ref_ocp_str,
-                    #             "argument_list": variables_array,
-                    #         }
-
-                    # if component_name == "electrolyte_materials":
-
-                    #     variables = "variables_{}".format(parameter_id)
-
-                    #     if variables not in st.session_state:
-
-                    #         st.session_state[variables] = r"c"
-
-                    #     if "conductivity" not in st.session_state:
-                    #         st.session_state.conductivity = (
-                    #             r"""0.1297*(c/1000)^3 - 2.51*(c/1000)^(1.5) + 3.329*(c/1000)"""
-                    #         )
-
-                    #     if "diffusion_coefficient" not in st.session_state:
-                    #         st.session_state.diffusion_coefficient = r"""8.794*10^(-11)*(c/1000)^2 - 3.972*10^(-10)*(c/1000) + 4.862*10^(-10)"""
-
-                    #     info = ex.toggle(
-                    #         label="{} Guidelines".format(parameter.display_name),
-                    #         key="toggle_{}".format(parameter_id),
-                    #     )
-                    #     if info:
-                    #         parameters_col, language_col = ex.columns(2)
-                    #         language_col.markdown(
-                    #             r"""
-                    #                 **Allowed language**
-                    #                 - Use '^' to indicate a superscript
-                    #                 - Use '*' to indicate a multiplication
-                    #                 - Use 'exp(a)' to indicate an exponential with power a
-                    #                 - Use 'tanh()' for hyperbolic tangent
-                    #                 - Use '/' for dividing
-
-                    #                 """
-                    #         )
-
-                    #         parameters_col.markdown(
-                    #             r"""
-                    #                 **Allowed variables**
-                    #                 - Surface concentration : c
-                    #                 - Temperature    : T
-
-                    #                 """
-                    #         )
-
-                    #     # quantity = ex.toggle(label="Create your own {} function".format(parameter.display_name), key = "toggle_quantity_{}".format(parameter_id))
-
-                    #     # if quantity:
-                    #     ex.text_input(
-                    #         label="{}".format(parameter.display_name),
-                    #         value=st.session_state[parameter.name],
-                    #         key=parameter.name,
-                    #         label_visibility="visible",
-                    #     )
-                    #     quantity_str = st.session_state[parameter.name]
-                    #     func_quantity = ex.toggle(
-                    #         label="Visualize {}".format(parameter.display_name),
-                    #         key="toggle_vis_{}".format(parameter_id),
-                    #     )
-
-                    #     if func_quantity:
-                    #         # Convert the input string to a SymPy equation
-                    #         try:
-                    #             quantity_str_py = quantity_str.replace("^", "**")
-                    #             eq_quantity = sp.sympify(quantity_str_py)
-                    #             ex.latex(
-                    #                 "{} = ".format(parameter.display_name) + sp.latex(eq_quantity)
-                    #             )
-
-                    #         except sp.SympifyError:
-                    #             ex.warning(
-                    #                 "Invalid equation input. Please enter a valid mathematical expression."
-                    #             )
-
-                    #     ex.text_input(
-                    #         label="Variables (ex: c,T)",
-                    #         value=st.session_state[variables],
-                    #         key=variables,
-                    #         label_visibility="visible",
-                    #     )
-
-                    #     variables_str = st.session_state[variables]
-
-                    #     if variables_str == "":
-                    #         ex.warning(
-                    #             "You haven't specified the variables your equation depends on."
-                    #         )
-
-                    #     else:
-                    #         variables_array = variables_str.split(",")
-                    #         user_input = {
-                    #             "function": quantity_str,
-                    #             "argument_list": variables_array,
-                    #         }
 
                 if parameter:
 
@@ -2295,7 +2446,7 @@ class SetTabs:
 
             component_parameters = self.LD.setup_sub_dict(
                 existence="new",
-                display_name=comp_display_name,
+                name=component_name,
                 context_type=comp_context_type,
             )
             component_parameters = self.LD.fill_component_dict(
@@ -2319,6 +2470,9 @@ class SetTabs:
         checkbox_key = "checkbox_{}_{}".format(category_id, non_material_parameter_name)
         state_key = "state_" + checkbox_key
         input_value = "input_value_{}_{}".format(category_id, non_material_parameter_name)
+        user_interaction = 'number_input_changed_by_user_{}_{}'.format(
+            category_id, non_material_parameter_name
+        )
 
         state_count = "state_count_" + str(category_id)
         states = "states_" + str(category_id)
@@ -2331,6 +2485,7 @@ class SetTabs:
             state_count,
             states,
             states_to_count,
+            user_interaction,
         )
 
     def initialize_session_states(self, variable, value):
@@ -2340,6 +2495,7 @@ class SetTabs:
     def fill_non_material_components(
         self,
         density,
+        tab_display_name,
         category_display_name,
         category_parameters,
         component_parameters,
@@ -2406,6 +2562,7 @@ class SetTabs:
                 state_count,
                 states,
                 states_to_count,
+                user_interaction,
             ) = self.define_session_state_keys(category_id, non_material_parameter_name)
 
             self.initialize_session_states(state_count, 0)
@@ -2430,6 +2587,7 @@ class SetTabs:
             for id in parameter_id:
                 state[id] = False
             self.initialize_session_states(state_key, state)
+            self.initialize_session_states(user_interaction, False)
 
         for non_material_parameter_id in formatted_non_material_parameters:
             non_material_parameter = formatted_non_material_parameters.get(
@@ -2452,7 +2610,40 @@ class SetTabs:
                 state_count,
                 states,
                 states_to_count,
+                user_interaction,
             ) = self.define_session_state_keys(category_id, non_material_parameter_name)
+
+            if st.session_state.upload == True and st.session_state[user_interaction] == False:
+                if tab_display_name == "Electrodes":
+                    name_dict = {
+                        "Negative electrode": "ne",
+                        "Positive electrode": "pe",
+                    }
+
+                    cat = getattr(self.uploaded_input_dict, name_dict[category_display_name], None)
+                    comp = getattr(cat, "properties", None)
+                    par = comp.get(non_material_parameter_name)
+                    value = par.get('value')
+
+                else:
+                    name_dict = {
+                        "Electrolyte": "elyte_mat",
+                        "Separator": "sep_mat",
+                        "Cell": "cell",
+                        "Boundary conditions": "bc",
+                        "Protocol": "protocol",
+                    }
+                    cat = getattr(self.uploaded_input_dict, name_dict[category_display_name], None)
+                    par = cat.get(non_material_parameter_name)
+                    value = par.get('value')
+
+                self.use_uploaded_dataset(
+                    input_key=input_key,
+                    uploaded_value=value,
+                )
+
+            elif st.session_state.upload == False and st.session_state.clear_upload == True:
+                st.session_state[input_key] = non_material_parameter.default_value
 
             st.session_state[states_to_count][checkbox_key] = st.session_state[checkbox_key]
 
@@ -2539,6 +2730,12 @@ class SetTabs:
                     step=self.set_increment(st.session_state[input_value]),
                     label_visibility="collapsed",
                     disabled=not st.session_state[checkbox_key],
+                    on_change=set_number_input,
+                    args=(
+                        st.session_state[input_value],
+                        input_key,
+                        user_interaction,
+                    ),
                 )
 
             if non_material_parameter:
@@ -2628,6 +2825,7 @@ class SetTabs:
                             state_count,
                             states,
                             states_to_count,
+                            user_interaction,
                         ) = self.define_session_state_keys(category_id, non_material_parameter_name)
 
                         st.session_state[input_value] = par_value_ml
@@ -2666,6 +2864,12 @@ class SetTabs:
                             step=self.set_increment(st.session_state[input_value]),
                             label_visibility="collapsed",
                             disabled=not st.session_state[checkbox_key],
+                            on_change=set_number_input,
+                            args=(
+                                st.session_state[input_value],
+                                input_key,
+                                user_interaction,
+                            ),
                         )
 
             elif (
@@ -2689,6 +2893,7 @@ class SetTabs:
                             state_count,
                             states,
                             states_to_count,
+                            user_interaction,
                         ) = self.define_session_state_keys(category_id, non_material_parameter_name)
 
                         st.session_state[input_value] = par_value_co
@@ -2725,6 +2930,12 @@ class SetTabs:
                             step=self.set_increment(st.session_state[input_value]),
                             label_visibility="collapsed",
                             disabled=not st.session_state[checkbox_key],
+                            on_change=set_number_input,
+                            args=(
+                                st.session_state[input_value],
+                                input_key,
+                                user_interaction,
+                            ),
                         )
 
                         tab.write(
@@ -2751,6 +2962,7 @@ class SetTabs:
                             state_count,
                             states,
                             states_to_count,
+                            user_interaction,
                         ) = self.define_session_state_keys(category_id, non_material_parameter_name)
 
                         st.session_state[input_value] = par_value_th
@@ -2787,6 +2999,12 @@ class SetTabs:
                             step=self.set_increment(st.session_state[input_value]),
                             label_visibility="collapsed",
                             disabled=not st.session_state[checkbox_key],
+                            on_change=set_number_input,
+                            args=(
+                                st.session_state[input_value],
+                                input_key,
+                                user_interaction,
+                            ),
                         )
                         par_index = 0
                         tab.write(
@@ -2812,9 +3030,10 @@ class SetTabs:
                     # st.rerun
 
         component_parameters_ = self.LD.fill_component_dict(component_parameters_, "new")
+
         component_parameters = self.LD.setup_sub_dict(
             dict=component_parameters,
-            display_name=non_material_comp_display_name,
+            name=non_material_component_name,
             context_type=non_material_comp_context_type,
         )
         component_parameters = self.LD.fill_component_dict(
@@ -2823,12 +3042,21 @@ class SetTabs:
 
         component_relation = self.LD.get_relation(non_material_component_id, "component")
 
-        category_parameters = self.LD.fill_component_dict(
-            component_parameters,
-            "existing",
-            dict=category_parameters,
-            relation=component_relation,
-        )
+        if (
+            category_display_name == "Cell"
+            or category_display_name == "Negative electrode"
+            or category_display_name == "Positive electrode"
+        ):
+            category_parameters = self.LD.fill_component_dict(
+                component_parameters, "existing", dict=category_parameters
+            )
+        else:
+            category_parameters = self.LD.fill_component_dict(
+                component_parameters,
+                "existing",
+                dict=category_parameters,
+                relation=component_relation,
+            )
 
         return (
             non_material_parameter,
@@ -2849,6 +3077,7 @@ class SetTabs:
             state_count,
             states,
             states_to_count,
+            user_interaction,
         ) = self.define_session_state_keys(category_id, non_material_parameter_name)
 
         if st.session_state[checkbox_key] == True:
@@ -2886,6 +3115,7 @@ class SetTabs:
 
         # Extract material ids and fetch parameter sets
         material_ids = [material[0] for material in materials]
+        # context_types = [material[14] for material in materials]
         material_parameter_sets = db_helper.get_parameter_sets_by_material_ids(material_ids)
 
         # Reorder the material_parameter_sets to match the order of materials
@@ -2906,6 +3136,13 @@ class SetTabs:
 
         reference_urls = {
             material_parameter_set[0]: material[7]
+            for material_parameter_set, material in zip(
+                reordered_material_parameter_sets, materials
+            )
+        }
+
+        material_context_types = {
+            material_parameter_set[0]: material[14]
             for material_parameter_set, material in zip(
                 reordered_material_parameter_sets, materials
             )
@@ -2946,6 +3183,7 @@ class SetTabs:
             materials,
             material_display_names,
             reference_urls,
+            material_context_types,
             reordered_material_parameter_sets,
             material_parameter_sets_name_by_id,
             material_raw_template_parameters,
@@ -2953,13 +3191,31 @@ class SetTabs:
             all_basis_material_raw_template_parameters,
         )
 
-    def reset_clear_upload_button(self):
+    def set_user_change_session_state(self, key, key_select=None, options=None):
         st.session_state.clear_upload = None
+        id = st.session_state[key_select]
+        if options.get(id).display_name == "User defined":
+            st.session_state[key] = False
+        else:
+            st.session_state[key] = True
 
-    def use_uploaded_dataset(self, options, value_key, key_list, value, widget_key):
-        list = [options.get(key)[value_key] for key in key_list]
-        index = list.index(value)
-        st.session_state[widget_key] = key_list[index]
+    def use_uploaded_dataset(
+        self,
+        options=None,
+        value_key=None,
+        key_list=None,
+        option_value=None,
+        select_key=None,
+        input_key=None,
+        uploaded_value=None,
+    ):
+        if options:
+            list = [getattr(options.get(key), value_key, None) for key in key_list]
+            index = list.index(option_value)
+        if select_key:
+            st.session_state[select_key] = key_list[index]
+        if input_key:
+            st.session_state[input_key] = uploaded_value
 
     def fill_material_components(
         self,
@@ -2982,6 +3238,7 @@ class SetTabs:
             materials,
             material_display_names,
             reference_urls,
+            context_types,
             material_parameter_sets,
             material_parameter_sets_name_by_id,
             material_raw_template_parameters,
@@ -3002,46 +3259,45 @@ class SetTabs:
             materials,
             material_display_names,
             reference_urls,
+            context_types,
             material_parameter_sets,
             material_parameter_sets_name_by_id,
             material_raw_template_parameters,
             material_raw_parameters,
             material_component_id,
         )
-        key_select_mat = "select_{}".format(material_component_id)
+        key_select = "key_selectbox_{}".format(material_component_id)
+        user_interaction_select = "user_interaction_select_{}".format(material_component_id)
         key_list = list(formatted_component.options.keys())
 
-        if key_select_mat not in st.session_state:
-            st.session_state[key_select_mat] = key_list[0]
+        if key_select not in st.session_state:
+            st.session_state[key_select] = key_list[0]
 
-        if st.session_state.upload == True:
+        if user_interaction_select not in st.session_state:
+            st.session_state[user_interaction_select] = False
+
+        if st.session_state.upload == True and st.session_state[user_interaction_select] == False:
 
             self.use_uploaded_dataset(
                 formatted_component.options,
                 "display_name",
                 key_list,
                 "User defined",
-                key_select_mat,
+                key_select,
             )
 
         elif st.session_state.upload == False and st.session_state.clear_upload == True:
-            st.session_state[key_select_mat] = key_list[0]
-        ### Use this perhaps when input file utility is implemented #############
-        # if st.session_state.upload:
-        #     uploaded_id = self.uploaded_input[component_name]
-        #     index = list(formatted_component.options.keys()).index(uploaded_id)
-        #########################################################################
+            st.session_state[key_select] = key_list[0]
 
         selected_value_id = material_col.selectbox(
             label="[{}]({})".format(formatted_component.name, formatted_component.context_type_iri),
             options=key_list,
-            key=key_select_mat,
+            key=key_select,
             label_visibility="collapsed",
             format_func=lambda x: formatted_component.options.get(x).display_name,
-            on_change=self.reset_clear_upload_button,
-            # args=(material_component_id, material_parameter_set_id, formatted_component)
+            on_change=self.set_user_change_session_state,
+            args=(user_interaction_select, key_select, formatted_component.options),
         )
-
         # db_helper.reset_material_template_parameters(material_comp_default_template_id)
 
         if formatted_component:
@@ -3051,6 +3307,7 @@ class SetTabs:
             material_parameter_set_id = material_choice.parameter_set_id
             material = material_choice.display_name
             reference_url = material_choice.reference_url
+            material_context_type = material_choice.context_type
 
             parameter_ids = material_choice.parameter_ids
             parameters = material_choice.parameters
@@ -3109,7 +3366,7 @@ class SetTabs:
 
                     for template_parameter in missing_parameters:
                         (
-                            id,
+                            template_par_id,
                             par_name,
                             _,
                             _,
@@ -3128,22 +3385,25 @@ class SetTabs:
                             par_display_name,
                         ) = template_parameter
 
-                        raw_parameters = db_helper.get_parameter_from_template_parameter_id(id)
+                        raw_parameters = db_helper.get_parameter_from_template_parameter_id(
+                            template_par_id
+                        )
 
                         material_display_names = []
                         material_values = []
+                        sub_formatted_material = {}
                         for raw_parameter in raw_parameters:
                             id, name, material_parameter_set_id, _, value = raw_parameter
 
-                            # if par_type == "float":
-                            #     value = float(value)
-                            #     min_value = float(min_value)
-                            #     max_value = float(max_value)
+                            if par_type == "float":
+                                value = float(value)
+                                min_value = float(min_value)
+                                max_value = float(max_value)
 
-                            # elif par_type == "int":
-                            #     value = int(value)
-                            #     min_value = int(min_value)
-                            #     max_value = int(max_value)
+                            elif par_type == "int":
+                                value = int(value)
+                                min_value = int(min_value)
+                                max_value = int(max_value)
 
                             material_name = db_helper.get_parameter_set_name_from_id(
                                 material_parameter_set_id
@@ -3161,9 +3421,9 @@ class SetTabs:
                                 material_values.append(value)
                             elif (
                                 not material_display_name
-                                and "Default" not in material_display_names
+                                and "User defined" not in material_display_names
                             ):
-                                material_display_names.append("Default")
+                                material_display_names.append("User defined")
                                 material_values.append(value)
 
                         st.write(
@@ -3173,15 +3433,47 @@ class SetTabs:
                         )
                         select_col, value_col = st.columns(2)
 
-                        key_select = "select_{}_{}".format(material_component_id, id)
-                        key_input_number = "input_number_{}_{}".format(material_component_id, id)
-                        user_interaction = 'number_input_changed_by_user_{}'.format(parameter_id)
+                        #############################################################################
+                        # Set Session states
+                        #############################################################################
+
+                        key_select = "key_select_{}_{}".format(
+                            material_component_id, template_par_id
+                        )
+                        key_user_input = "key_user_input_{}_{}".format(
+                            material_component_id, template_par_id
+                        )
+                        user_interaction = 'user_interaction{}'.format(template_par_id)
 
                         if key_select not in st.session_state:
-                            st.session_state[key_select] = "Default"
+                            st.session_state[key_select] = "User defined"
 
-                        if key_input_number not in st.session_state:
-                            st.session_state[key_input_number] = None
+                        if key_user_input not in st.session_state:
+                            st.session_state[key_user_input] = None
+
+                        if user_interaction not in st.session_state:
+                            st.session_state[user_interaction] = False
+
+                        #############################################################################
+
+                        if (
+                            st.session_state.upload == True
+                            and st.session_state[user_interaction_select] == False
+                        ):
+
+                            self.use_uploaded_dataset(
+                                formatted_component.options,
+                                "display_name",
+                                key_list,
+                                "User defined",
+                                key_select,
+                            )
+
+                        elif (
+                            st.session_state.upload == False
+                            and st.session_state.clear_upload == True
+                        ):
+                            st.session_state[key_select] = material_display_names[0]
 
                         if user_interaction not in st.session_state:
                             st.session_state[user_interaction] = False
@@ -3197,7 +3489,7 @@ class SetTabs:
                                 material_component_id,
                                 id,
                                 user_interaction,
-                                key_input_number,
+                                key_user_input,
                                 key_select,
                             ),
                             label_visibility="collapsed",
@@ -3206,17 +3498,23 @@ class SetTabs:
                         index = material_display_names.index(selected_parameter_set)
                         material_value = material_values[index]
 
-                        if st.session_state[key_input_number] is None:
-                            st.session_state[key_input_number] = material_value
+                        if st.session_state[key_user_input] is None:
+                            st.session_state[key_user_input] = material_value
 
-                        user_input = value_col.text_input(
+                        user_input = value_col.number_input(
                             label=par_display_name,
-                            value=st.session_state[key_input_number],
-                            # min_value=min_value,
-                            # max_value=max_value,
-                            key=key_input_number,
+                            value=st.session_state[key_user_input],
+                            min_value=min_value,
+                            max_value=max_value,
+                            key=key_user_input,
                             on_change=set_number_input,
-                            args=(material_value, key_input_number, user_interaction),
+                            args=(
+                                material_value,
+                                key_user_input,
+                                user_interaction,
+                                key_select,
+                            ),
+                            step=self.set_increment(st.session_state[key_user_input]),
                             label_visibility="collapsed",
                         )
 
@@ -3225,8 +3523,15 @@ class SetTabs:
                                 selected_parameter_set
                             )
 
-                        if user_input != st.session_state[key_input_number]:
-                            st.session_state[key_input_number] = user_input
+                        if st.session_state[user_interaction] == False:
+                            reference_url = db_helper.get_reference_url_from_parameter_set(
+                                selected_parameter_set
+                            )
+                        else:
+                            reference_url = None
+
+                        if user_input != st.session_state[key_user_input]:
+                            st.session_state[key_user_input] = user_input
 
                         if par_name == "density" and density != None:
                             density[material_component_id] = float(user_input)
@@ -3245,29 +3550,6 @@ class SetTabs:
                             reference_url=reference_url,
                         )
 
-            # con, cur = app_access.get_sqlite_con_and_cur()
-            # data=cur.execute('''SELECT * FROM template_parameter WHERE id = 52''')
-            # # Fetch all rows from the result
-            # data = cur.fetchall()
-
-            # # Check if there are columns to describe
-            # if cur.description:
-            #     # Print the column information
-            #     print("Column names:", [col[0] for col in cur.description])
-
-            # else:
-            #     print("No columns to describe (empty result set)")
-
-            # # Print the retrieved data
-            # for row in data:
-            #     st.write(row)
-
-            # # Don't forget to close the cursor and connection when done
-            # cur.close()
-            # con.close()
-
-        # self.set_material_parameter_difficulty(material_parameter_sets,material_raw_parameters,material_comp_default_template_id)
-
         return (
             material_formatted_parameters,
             formatted_component,
@@ -3276,6 +3558,7 @@ class SetTabs:
             component_parameters_,
             emmo_relation,
             density,
+            material_context_type,
         )
 
     @st.cache_data
@@ -3322,7 +3605,10 @@ class SetTabs:
         self,
         tab_advanced,
         formatted_parameters,
+        tab_display_name,
+        category_display_name,
         non_material_component_name,
+        component_display_name,
         non_material_component_id,
         non_material_parameter_set_id,
     ):
@@ -3354,6 +3640,63 @@ class SetTabs:
             selected_parameter_id = self.get_first_id_by_second_id(
                 selected_parameter_ids, parameter_id
             )
+
+            #################################################################################
+            # Set session states
+            #################################################################################
+
+            key_user_input = "key_user_input_{}_{}".format(
+                non_material_component_name, parameter.name
+            )
+            user_interaction = 'user_interaction_{}'.format(parameter.id)
+
+            if key_user_input not in st.session_state:
+                st.session_state[key_user_input] = parameter.default_value
+
+            if user_interaction not in st.session_state:
+                st.session_state[user_interaction] = False
+
+            #################################################################################
+
+            if st.session_state.upload == True and st.session_state[user_interaction] == False:
+                if tab_display_name == "Electrodes":
+                    name_dict = {
+                        "Negative electrode": "ne",
+                        "Positive electrode": "pe",
+                        "Active Material": "am",
+                        "Additive": "add",
+                        "Binder": "binder",
+                        "Negative electrode properties": "properties",
+                        "Positive electrode properties": "properties",
+                    }
+
+                    cat = getattr(self.uploaded_input_dict, name_dict[category_display_name], None)
+                    comp = getattr(cat, name_dict[component_display_name], None)
+                    par = comp.get(parameter.name)
+                    value = par.get('value')
+
+                else:
+                    name_dict = {
+                        "Electrolyte": "elyte_mat",
+                        "Separator": "sep_mat",
+                        "Cell": "cell",
+                        "Boundary conditions": "bc",
+                        "Protocol": "protocol",
+                    }
+                    cat = getattr(self.uploaded_input_dict, name_dict[category_display_name], None)
+                    par = cat.get(parameter.name)
+                    value = par.get('value')
+
+                self.use_uploaded_dataset(
+                    input_key=key_user_input,
+                    uploaded_value=value,
+                )
+
+            elif st.session_state.upload == False and st.session_state.clear_upload == True:
+                st.session_state[key_user_input] = parameter.options.get(
+                    selected_parameter_id
+                ).value
+
             if selected_parameter_id is None:
                 st.write(f"selected parameter id: {selected_parameter_id} ")
                 continue
@@ -3375,10 +3718,16 @@ class SetTabs:
                     value=parameter.options.get(selected_parameter_id).value,
                     min_value=parameter.min_value,
                     max_value=parameter.max_value,
-                    key="input_{}_{}".format(non_material_component_name, parameter.name),
+                    key=key_user_input,
                     format=self.set_format(parameter.options.get(selected_parameter_id).value),
                     step=self.set_increment(parameter.options.get(selected_parameter_id).value),
                     label_visibility="collapsed",
+                    on_change=set_number_input,
+                    args=(
+                        parameter.options.get(selected_parameter_id).value,
+                        key_user_input,
+                        user_interaction,
+                    ),
                 )
 
             else:
@@ -3386,8 +3735,14 @@ class SetTabs:
                 user_input = input_col.selectbox(
                     label=parameter.display_name,
                     options=[parameter.options.get(selected_parameter_id).value],
-                    key="input_{}_{}".format(non_material_component_id, parameter_id),
+                    key=key_user_input,
                     label_visibility="collapsed",
+                    on_change=set_number_input,
+                    args=(
+                        parameter.options.get(selected_parameter_id).value,
+                        key_user_input,
+                        user_interaction,
+                    ),
                 )
             parameter.set_selected_value(user_input)
             component_parameters_ = self.LD.setup_parameter_struct(
@@ -3431,9 +3786,8 @@ class SetTabs:
         )
 
     def fill_advanced_expander(
-        self, tab, category_name, category_display_name, category_parameters
+        self, tab, tab_display_name, category_name, category_display_name, category_parameters
     ):
-
         advanced_input = tab.expander(f"Show '{category_display_name}' advanced parameters")
         tab_display_names = db_helper.get_advanced_tab_display_names(self.model_name, category_name)
         all_advanced_tabs = advanced_input.tabs(tab_display_names)
@@ -3466,7 +3820,7 @@ class SetTabs:
                     category_context_type,
                     category_context_type_iri,
                     emmo_relation,
-                    category_display_name,
+                    _,
                     _,
                     default_template_id,
                     _,
@@ -3511,13 +3865,16 @@ class SetTabs:
                     component_parameters_ = self.format_and_setup_parameters(
                         tab_advanced,
                         formatted_parameters,
+                        tab_display_name,
+                        category_display_name,
                         non_material_component_name,
+                        non_material_comp_display_name,
                         non_material_component_id,
                         non_material_parameter_set_id,
                     )
 
                     component_parameters = self.LD.setup_sub_dict(
-                        display_name=non_material_comp_display_name,
+                        name=non_material_component_name,
                         context_type=non_material_comp_context_type,
                         existence="new",
                     )
@@ -3529,12 +3886,23 @@ class SetTabs:
                     non_material_comp_relation = self.LD.get_relation(
                         non_material_component_id, "component"
                     )
-                    category_parameters = self.LD.fill_component_dict(
-                        component_parameters,
-                        "existing",
-                        dict=category_parameters,
-                        relation=non_material_comp_relation,
-                    )
+
+                    if (
+                        category_display_name == "Cell"
+                        or category_name == "negative_electrode_properties"
+                        or category_name == "positive_electrode_properties"
+                    ):
+                        category_parameters = self.LD.fill_component_dict(
+                            component_parameters, "existing", dict=category_parameters
+                        )
+                    else:
+
+                        category_parameters = self.LD.fill_component_dict(
+                            component_parameters,
+                            "existing",
+                            dict=category_parameters,
+                            relation=non_material_comp_relation,
+                        )
 
         return category_parameters
 
@@ -3542,8 +3910,10 @@ class SetTabs:
         self,
         mass_fraction_col,
         category_id,
+        category_display_name,
         material_comp_default_template_id,
         material_component_id,
+        component_display_name,
         component_parameters_,
         mass_fraction_id_dict,
         emmo_relation=None,
@@ -3578,12 +3948,51 @@ class SetTabs:
                         )
                     )
 
+                #################################################################################
+                # Set session states
+                #################################################################################
+
+                key_user_input = "key_user_input_{}_{}".format(category_id, parameter.id)
+                user_interaction = 'user_interaction_{}'.format(parameter.id)
+
+                if key_user_input not in st.session_state:
+                    st.session_state[key_user_input] = parameter.default_value
+
+                if user_interaction not in st.session_state:
+                    st.session_state[user_interaction] = False
+
+                #################################################################################
+
+                if st.session_state.upload == True and st.session_state[user_interaction] == False:
+                    name_dict = {
+                        "Negative electrode": "ne",
+                        "Positive electrode": "pe",
+                        "Active Material": "am",
+                        "Additive": "add",
+                        "Binder": "binder",
+                    }
+                    cat = getattr(self.uploaded_input_dict, name_dict[category_display_name], None)
+                    comp = getattr(cat, name_dict[component_display_name], None)
+                    par = comp.get(parameter.name)
+                    value = par.get('value')
+
+                    self.use_uploaded_dataset(
+                        input_key=key_user_input,
+                        uploaded_value=value,
+                    )
+
                 user_input = mass_fraction_col.number_input(
                     label=parameter.name,
                     value=parameter.default_value,
                     min_value=parameter.min_value,
                     max_value=parameter.max_value,
-                    key="input_{}_{}".format(category_id, parameter.id),
+                    key=key_user_input,
+                    on_change=set_number_input,
+                    args=(
+                        parameter.default_value,
+                        key_user_input,
+                        user_interaction,
+                    ),
                     # format=parameter.format,
                     format=self.set_format(parameter.default_value),
                     step=self.set_increment(parameter.default_value),
@@ -3702,7 +4111,6 @@ class RunSimulation:
             # args=(save_run, file_name),
             type="primary",
             use_container_width=True,
-            # help = "Run the simulation (after updating the parameters)."
         )
 
         results_page = col2.button(label="Results", type="primary", use_container_width=True)
@@ -3716,10 +4124,6 @@ class RunSimulation:
     def update_on_click(self, file_name):
         self.update_json_LD()
         self.update_json_battmo_input()
-
-        st.session_state.update_par = True
-
-        # save_run.success("Your parameters are saved! Run the simulation to get your results.")
 
     def update_json_LD(self):
 
@@ -3797,6 +4201,7 @@ class RunSimulation:
             st.session_state.sim_finished = True
 
     def on_error(self, ws, error):
+        print(f"Error object: {error}")
         st.error(f"WebSocket error: {error}")
         print(f"WebSocket error: {error}")
 
@@ -3809,10 +4214,11 @@ class RunSimulation:
         if st.session_state.sim_finished == True:
             # if "progress_bar" in vars(RunSimulation).values():
             st.progress(100)
-            # self.sim_start.error("WebSocket was closed: {}_{}".format(close_status_code, close_msg))
+
             self.success = DivergenceCheck(
                 self.sim_start, st.session_state.simulation_results
             ).success
+            # self.sim_start.error("WebSocket was closed: {}_{}".format(close_status_code, close_msg))
         else:
             self.sim_start.error(
                 "WebSocket was closed unexpectedly: {}_{}".format(close_status_code, close_msg)
@@ -3967,6 +4373,7 @@ class DivergenceCheck:
                 log_messages = st.session_state.log_messages
 
             else:
+
                 (
                     results,
                     *_,
@@ -3974,7 +4381,6 @@ class DivergenceCheck:
                     None
                 ).get_results_data(None, response=self.response)
 
-                # N = self.get_timesteps_setting()
                 number_of_states, log_messages = self.get_timesteps_execution(results)
 
                 st.session_state.number_of_states = number_of_states
@@ -4251,21 +4657,18 @@ class DivergenceCheck:
         if (
             self.response == False
             and st.session_state.success == False
-            and st.session_state.response != None
+            and st.session_state.battmo_api_response != None
         ):
             self.save_run.error(
                 "The data has not been retrieved succesfully, most probably due to an unsuccesful simulation"
             )
             st.session_state.success = False
-            st.session_state.transfer_results = False
-            self.success = False
+            self.success = st.session_state.success
 
         elif self.response:
             if number_of_states == 0:
-                self.success = False
-
-                st.session_state.success = True
-                st.session_state.transfer_results = False
+                st.session_state.success = False
+                self.success = st.session_state.success
 
                 if len(log_messages) > 1:
                     c = self.save_run.container(height=400)
@@ -4307,9 +4710,8 @@ class DivergenceCheck:
 
                     self.save_run.success(f"""Simulation finished successfully!""")  # \n\n
 
-                # Your results are stored under the following name: {temp_file_name}""")
                 st.session_state.success = True
-                st.session_state.transfer_results = True
+                self.success = st.session_state.success
 
                 # if self.response:
                 if not isinstance(self.response, bool):
@@ -4317,7 +4719,7 @@ class DivergenceCheck:
                     #     gui_parameters = json.load(f)
 
                     gui_parameters = st.session_state.json_linked_data_input
-
+                    # self.save_run.write(gui_parameters)
                     indicators = match_json_LD.get_indicators_from_gui_dict(gui_parameters)
 
                     with open(app_access.get_path_to_indicator_values(), "w") as f:
@@ -4343,7 +4745,7 @@ class DivergenceCheck:
                 # except:
                 #     pass
 
-        elif st.session_state.response == None:
+        elif st.session_state.battmo_api_response == None:
             pass
 
         st.session_state.response == None
@@ -4361,7 +4763,7 @@ class DownloadParameters:
 
         self.gui_button_label = "Save GUI output parameters"
         self.battmo_button_label = "Save BattMo input parameters"
-        self.gui_parameters = gui_parameters
+        self.gui_parameters = st.session_state.json_linked_data_input
         # retrieve saved parameters from json file
         # with open(app_access.get_path_to_linked_data_input()) as json_gui_parameters:
         #     self.gui_parameters = json.load(json_gui_parameters)
@@ -4389,10 +4791,6 @@ class DownloadParameters:
         # self.update_json_LD(headline, description, creator)
         self.update_json_battmo_input()
 
-        # st.session_state.update_par = True
-
-        # save_run.success("Your parameters are saved! Run the simulation to get your results.")
-
     def collect_unique_references(self, LD_dict):
 
         gui_dict = match_json_LD.GuiDict(LD_dict)
@@ -4414,18 +4812,32 @@ class DownloadParameters:
             for key, value in sub_dict.items():
                 if "reference_url" in value:
                     reference = value["reference_url"]
-                    if reference not in reference_list:
-                        reference_list.append(reference)
+                    if reference != None:
+                        if reference not in reference_list:
+                            reference_list.append(reference)
 
         reference_dict["@id"] = reference_list
 
         return reference_dict
 
+    def move_dict_by_label(self, data_list, labels):
+        # Create a new list to store the removed dictionaries
+        removed_dicts = []
+
+        for label in labels:
+            # Iterate over the original list in reverse to avoid issues while modifying the list
+            for item in data_list[:]:  # Using a copy of the list for safe iteration
+                if item.get("rdfs:label") == label:
+                    removed_dicts.append(item)
+                    data_list.remove(item)
+
+        return removed_dicts, data_list
+
     def setup_gui_schema(self, headline, description, creator):
 
         # path_to_battmo_input = app_access.get_path_to_linked_data_input()
 
-        parameters = self.gui_parameters
+        parameters = copy.deepcopy(self.gui_parameters)
 
         isBasedOn = self.collect_unique_references(parameters)
 
@@ -4445,13 +4857,195 @@ class DownloadParameters:
             schema["@graph"]["schema:description"] = description
         if len(creator[0]):
             schema["@graph"]["schema:creator"] = creator
+        # Cel properties
+        schema["@graph"]["hasProperty"] = parameters["@graph"]["hasProperty"]
 
-        schema["@graph"]["hasElectrode"] = parameters["@graph"]["hasElectrode"]
+        # Negative electrode
+        ne = parameters["@graph"]["hasNegativeElectrode"]
+        ne_properties = ne["hasProperty"]
+        ne_am_properties = ne["hasActiveMaterial"]["hasProperty"]
+        reaction_prop_labels = [
+            "number_of_electrons_transferred",
+            "activation_energy_of_reaction",
+            "reaction_rate_constant",
+        ]
+        coating_prop_labels = [
+            "coating_thickness",
+            "coating_porosity",
+            "mass_loading",
+            "bruggeman_coefficient",
+            "number_of_discrete_cells_electrode",
+        ]
+
+        coating_prop_dict_list, ne_prop_dict_list = self.move_dict_by_label(
+            ne_properties, coating_prop_labels
+        )
+
+        cc_prop_list, ne_prop_dict_list = self.move_dict_by_label(
+            ne_prop_dict_list, ["current_collector_thickness"]
+        )
+
+        reaction_prop_dict_list, ne_am_prop_dict_list = self.move_dict_by_label(
+            ne_am_properties, reaction_prop_labels
+        )
+
+        schema["@graph"]["hasNegativeElectrode"] = {}
+        schema["@graph"]["hasNegativeElectrode"]["rdfs:label"] = ne["rdfs:label"]
+        schema["@graph"]["hasNegativeElectrode"]["@type"] = ne["@type"]
+        schema["@graph"]["hasNegativeElectrode"]["hasProperty"] = ne_prop_dict_list
+
+        schema["@graph"]["hasNegativeElectrode"]["hasCoating"] = {}
+        schema["@graph"]["hasNegativeElectrode"]["hasCoating"][
+            "rdfs:label"
+        ] = "negative_electrode_coating"
+        schema["@graph"]["hasNegativeElectrode"]["hasCoating"]["@type"] = "Coating"
+        schema["@graph"]["hasNegativeElectrode"]["hasCoating"][
+            "hasProperty"
+        ] = coating_prop_dict_list
+        schema["@graph"]["hasNegativeElectrode"]["hasCoating"]["hasActiveMaterial"] = {}
+        schema["@graph"]["hasNegativeElectrode"]["hasCoating"]["hasActiveMaterial"][
+            "rdfs:label"
+        ] = ne["hasActiveMaterial"]["rdfs:label"]
+        schema["@graph"]["hasNegativeElectrode"]["hasCoating"]["hasActiveMaterial"]["@type"] = ne[
+            "hasActiveMaterial"
+        ]["@type"]
+        schema["@graph"]["hasNegativeElectrode"]["hasCoating"]["hasActiveMaterial"][
+            "hasProperty"
+        ] = ne_am_prop_dict_list
+
+        schema["@graph"]["hasNegativeElectrode"]["hasCoating"]["hasBinder"] = ne["hasBinder"]
+        schema["@graph"]["hasNegativeElectrode"]["hasCoating"]["hasConductiveAdditive"] = ne[
+            "hasConductiveAdditive"
+        ]
+
+        schema["@graph"]["hasNegativeElectrode"]["hasCurrentCollector"] = {}
+        schema["@graph"]["hasNegativeElectrode"]["hasCurrentCollector"][
+            "rdfs:label"
+        ] = "negative_electrode_current_collector"
+        schema["@graph"]["hasNegativeElectrode"]["hasCurrentCollector"]["@type"] = [
+            "CurrentCollector",
+            "Copper",
+            "Foil",
+        ]
+        schema["@graph"]["hasNegativeElectrode"]["hasCurrentCollector"][
+            "hasProperty"
+        ] = cc_prop_list
+
+        schema["@graph"]["hasNegativeElectrode"]["@reverse"] = {}
+        schema["@graph"]["hasNegativeElectrode"]["@reverse"]["hasParticipant"] = {}
+        schema["@graph"]["hasNegativeElectrode"]["@reverse"]["hasParticipant"][
+            "rdfs:label"
+        ] = "negative_electrode_reaction"
+        schema["@graph"]["hasNegativeElectrode"]["@reverse"]["hasParticipant"][
+            "@type"
+        ] = "ElectrodeReaction"
+        schema["@graph"]["hasNegativeElectrode"]["@reverse"]["hasParticipant"][
+            "hasProperty"
+        ] = reaction_prop_dict_list
+
+        # Positive electrode
+        pe = parameters["@graph"]["hasPositiveElectrode"]
+        pe_properties = pe["hasProperty"]
+        pe_am_properties = pe["hasActiveMaterial"]["hasProperty"]
+        reaction_prop_labels = [
+            "number_of_electrons_transferred",
+            "activation_energy_of_reaction",
+            "reaction_rate_constant",
+        ]
+        coating_prop_labels = [
+            "coating_thickness",
+            "coating_porosity",
+            "mass_loading",
+            "bruggeman_coefficient",
+            "number_of_discrete_cells_electrode",
+        ]
+
+        coating_prop_dict_list, pe_prop_dict_list = self.move_dict_by_label(
+            pe_properties, coating_prop_labels
+        )
+
+        cc_prop_list, pe_prop_dict_list = self.move_dict_by_label(
+            pe_prop_dict_list, ["current_collector_thickness"]
+        )
+
+        reaction_prop_dict_list, pe_am_prop_dict_list = self.move_dict_by_label(
+            pe_am_properties, reaction_prop_labels
+        )
+
+        schema["@graph"]["hasPositiveElectrode"] = {}
+        schema["@graph"]["hasPositiveElectrode"]["rdfs:label"] = pe["rdfs:label"]
+        schema["@graph"]["hasPositiveElectrode"]["@type"] = pe["@type"]
+        schema["@graph"]["hasPositiveElectrode"]["hasProperty"] = pe_prop_dict_list
+
+        schema["@graph"]["hasPositiveElectrode"]["hasCoating"] = {}
+        schema["@graph"]["hasPositiveElectrode"]["hasCoating"][
+            "rdfs:label"
+        ] = "negative_electrode_coating"
+        schema["@graph"]["hasPositiveElectrode"]["hasCoating"]["@type"] = "Coating"
+        schema["@graph"]["hasPositiveElectrode"]["hasCoating"][
+            "hasProperty"
+        ] = coating_prop_dict_list
+        schema["@graph"]["hasPositiveElectrode"]["hasCoating"]["hasActiveMaterial"] = {}
+        schema["@graph"]["hasPositiveElectrode"]["hasCoating"]["hasActiveMaterial"][
+            "rdfs:label"
+        ] = pe["hasActiveMaterial"]["rdfs:label"]
+        schema["@graph"]["hasPositiveElectrode"]["hasCoating"]["hasActiveMaterial"]["@type"] = ne[
+            "hasActiveMaterial"
+        ]["@type"]
+        schema["@graph"]["hasPositiveElectrode"]["hasCoating"]["hasActiveMaterial"][
+            "hasProperty"
+        ] = pe_am_prop_dict_list
+        schema["@graph"]["hasPositiveElectrode"]["hasCoating"]["hasBinder"] = pe["hasBinder"]
+        schema["@graph"]["hasPositiveElectrode"]["hasCoating"]["hasConductiveAdditive"] = pe[
+            "hasConductiveAdditive"
+        ]
+
+        schema["@graph"]["hasPositiveElectrode"]["hasCurrentCollector"] = {}
+        schema["@graph"]["hasPositiveElectrode"]["hasCurrentCollector"][
+            "rdfs:label"
+        ] = "negative_electrode_current_collector"
+        schema["@graph"]["hasPositiveElectrode"]["hasCurrentCollector"]["@type"] = [
+            "CurrentCollector",
+            "Copper",
+            "Foil",
+        ]
+        schema["@graph"]["hasPositiveElectrode"]["hasCurrentCollector"][
+            "hasProperty"
+        ] = cc_prop_list
+
+        schema["@graph"]["hasPositiveElectrode"]["@reverse"] = {}
+        schema["@graph"]["hasPositiveElectrode"]["@reverse"]["hasParticipant"] = {}
+        schema["@graph"]["hasPositiveElectrode"]["@reverse"]["hasParticipant"][
+            "rdfs:label"
+        ] = "negative_electrode_reaction"
+        schema["@graph"]["hasPositiveElectrode"]["@reverse"]["hasParticipant"][
+            "@type"
+        ] = "ElectrodeReaction"
+        schema["@graph"]["hasPositiveElectrode"]["@reverse"]["hasParticipant"][
+            "hasProperty"
+        ] = reaction_prop_dict_list
+
+        # Electrolyte
+
+        schema["@graph"]["hasElectrolyte"] = {}
+        schema["@graph"]["hasElectrolyte"]["rdfs:label"] = {}
+        schema["@graph"]["hasElectrolyte"]["@type"] = {}
+        schema["@graph"]["hasElectrolyte"]["hasSolvent"] = {}
+        schema["@graph"]["hasElectrolyte"]["hasSolvent"]["@type"] = "Solvent"
+        schema["@graph"]["hasElectrolyte"]["hasSolvent"]["hasConstituent"] = {}
+        schema["@graph"]["hasElectrolyte"]["hasSolute"] = {}
+        schema["@graph"]["hasElectrolyte"]["hasSolute"]["@type"] = "Solute"
+        schema["@graph"]["hasElectrolyte"]["hasSolute"]["hasProperty"] = {}
+
+        schema["@graph"]["hasElectrolyte"]["hasConstituent"] = []
+
+        schema["@graph"]["hasElectrolyte"]["hasProperty"] = {}
+
         schema["@graph"]["hasElectrolyte"] = parameters["@graph"]["hasElectrolyte"]
         schema["@graph"]["hasSeparator"] = parameters["@graph"]["hasSeparator"]
-        schema["@graph"]["hasBatteryCell"] = parameters["@graph"]["hasBatteryCell"]
         schema["@graph"]["hasBoundaryConditions"] = parameters["@graph"]["hasBoundaryConditions"]
         schema["@graph"]["hasCyclingProcess"] = parameters["@graph"]["hasCyclingProcess"]
+        schema["@graph"]["hasModel"] = parameters["@graph"]["hasModel"]
 
         # save formatted parameters in json file
         # with open(path_to_battmo_input, "w") as new_file:
@@ -4478,86 +5072,91 @@ class DownloadParameters:
     def set_submit_button(self):
 
         with st.sidebar:
-            # set Download header
-            st.markdown("### " + self.download_header)
+            self.render_buttons()
 
-            # set popover button
-            popover = st.popover(self.download_label, use_container_width=False)
+    @st.fragment()
+    def render_buttons(self):
 
-            with popover:
+        # set Download header
+        st.markdown("### " + self.download_header)
 
-                # st.markdown("###### " + "Schema headline")
-                # headline = st.text_input(label="headline", label_visibility="collapsed")
-                headline = None
-                st.markdown("###### " + "Schema description")
-                description = st.text_input(label="description", label_visibility="collapsed")
+        # set popover button
+        popover = st.popover(self.download_label, use_container_width=False)
 
-                cola, colb = st.columns(2)
-                st.markdown("###### " + "Schema creators")
-                col1, col2 = st.columns(2)
-                col1.markdown("Number of creators")
-                number = col2.number_input(
-                    label="number of creators",
-                    value=1,
-                    label_visibility="collapsed",
-                    format="%d",
-                )
-                creator = []
-                cols = st.columns(number)
-                for i in range(number):
+        with popover:
 
-                    with cols[i]:
+            # st.markdown("###### " + "Schema headline")
+            # headline = st.text_input(label="headline", label_visibility="collapsed")
+            headline = None
+            st.markdown("###### " + "Schema description")
+            description = st.text_input(label="description", label_visibility="collapsed")
 
-                        name = st.text_input(
-                            label="Name",
-                            label_visibility="visible",
-                            key="creator_name_{}".format(i + 1),
-                        )
+            cola, colb = st.columns(2)
+            st.markdown("###### " + "Schema creators")
+            col1, col2 = st.columns(2)
+            col1.markdown("Number of creators")
+            number = col2.number_input(
+                label="number of creators",
+                value=1,
+                label_visibility="collapsed",
+                format="%d",
+            )
+            creator = []
+            cols = st.columns(number)
+            for i in range(number):
 
-                        orcid = st.text_input(
-                            label="Orcid id",
-                            label_visibility="visible",
-                            key="creator_id_{}".format(i + 1),
-                        )
+                with cols[i]:
 
-                        aff_name = None
-                        # aff_name = st.text_input(
-                        #     label="Affiliation",
-                        #     label_visibility="visible",
-                        #     key="aff_name_{}".format(i + 1),
-                        # )
+                    name = st.text_input(
+                        label="Name",
+                        label_visibility="visible",
+                        key="creator_name_{}".format(i + 1),
+                    )
 
-                        creator_temp = {}
-                        if name or orcid or aff_name:
-                            creator_temp["@type"] = "schema:Person"
+                    orcid = st.text_input(
+                        label="Orcid id",
+                        label_visibility="visible",
+                        key="creator_id_{}".format(i + 1),
+                    )
 
-                            if orcid:
-                                creator_temp["@id"] = orcid
-                            if name:
-                                creator_temp["schema:name"] = name
-                            if aff_name:
-                                creator_temp["schema:affiliation"] = {}
-                                creator_temp["schema:affiliation"]["schema:name"] = aff_name
+                    aff_name = None
+                    # aff_name = st.text_input(
+                    #     label="Affiliation",
+                    #     label_visibility="visible",
+                    #     key="aff_name_{}".format(i + 1),
+                    # )
 
-                        creator.append(creator_temp)
+                    creator_temp = {}
+                    if name or orcid or aff_name:
+                        creator_temp["@type"] = "schema:Person"
 
-                st.download_button(
-                    label="Download",
-                    use_container_width=True,
-                    args=(headline, description, creator),
-                    data=self.setup_gui_schema(headline, description, creator),
-                    file_name=self.gui_file_name,
-                    mime=self.file_mime_type,
-                )
+                        if orcid:
+                            creator_temp["@id"] = orcid
+                        if name:
+                            creator_temp["schema:name"] = name
+                        if aff_name:
+                            creator_temp["schema:affiliation"] = {}
+                            creator_temp["schema:affiliation"]["schema:name"] = aff_name
+
+                    creator.append(creator_temp)
 
             st.download_button(
-                label=self.download_label_formatted_parameters,
-                on_click=self.update_on_click,
+                label="Download",
+                use_container_width=True,
                 args=(headline, description, creator),
-                data=self.formatted_parameters_file_data,
-                file_name=self.formatted_parameters_file_name,
+                data=self.setup_gui_schema(headline, description, creator),
+                file_name=self.gui_file_name,
                 mime=self.file_mime_type,
             )
+
+        st.download_button(
+            label=self.download_label_formatted_parameters,
+            on_click=self.update_on_click,
+            args=(headline, description, creator),
+            data=self.formatted_parameters_file_data,
+            file_name=self.formatted_parameters_file_name,
+            mime=self.file_mime_type,
+        )
 
 
 class LoadImages:
@@ -4691,10 +5290,10 @@ class GetResultsData:
 
         if response:
             response = io.BytesIO(response)
+
             response.seek(0)
 
             results = h5py.File(response, "r")
-
             indicators = None
             input_files = None
         else:
@@ -5203,34 +5802,34 @@ class SetIndicators:
                             "unit": pe_am_cap_unit,
                         }
 
-                    _, col1, col2, col3, _ = st.columns(5)
-                    col1.metric(
+                    # _, col1, col2, col3, _ = st.columns(5)
+                    st.metric(
                         label="Cell Mass / {}".format(cell_mass["unit"]),
                         value=int(np.round(cell_mass["value"])),
                         label_visibility="visible",
                     )
 
-                    col3.metric(
+                    st.metric(
                         label="Cell Capacity / {}".format(cell_capacity["unit"]),
                         value=int(np.round(cell_capacity["value"])),
                         label_visibility="visible",
                     )
-                    col2.metric(
+                    st.metric(
                         label="N/P ratio / {}".format(n_to_p_ratio["unit"]),
                         value=np.round(n_to_p_ratio["value"], 1),
                         label_visibility="visible",
                     )
 
-                    # if st.session_state.theme == False:
-                    #     background_color = "#F0F0F0"
-                    # elif st.session_state.theme == True:
-                    #     background_color = "#F0F0F0"
+                    if st.session_state.theme == False:
+                        background_color = "#F0F0F0"
+                    elif st.session_state.theme == True:
+                        background_color = "#F0F0F0"
 
-                    # style_metric_cards(
-                    #     border_left_color="#770737",
-                    #     background_color=background_color,
-                    #     border_color="#770737",
-                    # )
+                    style_metric_cards(
+                        border_left_color="#770737",
+                        background_color=background_color,
+                        border_color="#770737",
+                    )
 
             elif isinstance(file_names, str):
                 file_names = [file_names]

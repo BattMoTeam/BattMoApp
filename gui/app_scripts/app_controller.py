@@ -24,6 +24,9 @@ class AppController:
     def set_model_choice(self):
         return view.SetModelChoice()
 
+    def set_input_upload(self):
+        return view.SetInputUpload()
+
     def set_tabs(self, model_id):
         return view.SetTabs(self.images, model_id, self.context)
 
@@ -114,6 +117,7 @@ def setup_linked_data_structure():
 #####################################
 
 
+@st.cache_data
 def get_images():
     return view.LoadImages(app_access.get_path_to_images_dir())
 
