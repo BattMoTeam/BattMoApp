@@ -9,8 +9,8 @@ env:
   SSH_USER: lhendrix
   SSH_HOST: 51.68.188.78
   REGISTRY: ghcr.io
-  IMAGE_NAME: battmoteam/battmogui:latest
-  WORKDIR: battmogui
+  IMAGE_NAME: battmoteam/battmoapp:latest
+  WORKDIR: battmoapp
 
 jobs:
   publish:
