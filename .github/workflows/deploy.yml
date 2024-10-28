@@ -10,7 +10,7 @@ env:
   SSH_HOST: 51.68.188.78
   REGISTRY: ghcr.io
   IMAGE_NAME: battmoteam/battmoapp:latest
-  WORKDIR: battmoapp
+  WORKDIR: battmogui
 
 jobs:
   publish:
