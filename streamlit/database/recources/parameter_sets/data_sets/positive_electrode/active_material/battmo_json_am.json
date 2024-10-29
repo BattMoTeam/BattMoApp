@@ -1,9 +1,0 @@
-{
-   "Name": "positive_electrode_active_material",
-   "Header": {},
-   "component": "positive_electrode_active_material",
-   "material": false,
-   "Parameters": {
-      "mass_fraction": 0.9
-   }
-}
