@@ -22,10 +22,16 @@ services:
     restart: always
     ports:
       - "8001:8001"
-      - "8002:8002"
+      - "80:80"
+      - "443:443"
     depends_on:
-      - api
-      - gui
+      - genie
+      - streamlit
+    volumes:
+      - /etc/letsencrypt/live/app.batterymodel.com:/etc/letsencrypt/live/app.batterymodel.com:ro
+    command: /bin/bash -c "/renew-certs.sh && nginx -g 'daemon off;'"
+
+
  
   gui:
     image: ghcr.io/battmoteam/battmoapp_gui:latest
