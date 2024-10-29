@@ -21,12 +21,10 @@ services:
     container_name: nginx
     restart: always
     ports:
-      - "8001:8001"
-      - "80:80"
       - "443:443"
     depends_on:
-      - genie
-      - streamlit
+      - api
+      - gui
     volumes:
       - /etc/letsencrypt/live/app.batterymodel.com:/etc/letsencrypt/live/app.batterymodel.com:ro
     command: /bin/bash -c "/renew-certs.sh && nginx -g 'daemon off;'"
