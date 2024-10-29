@@ -76,8 +76,8 @@ services:
     container_name: gui
     restart: always
     ports:
-      - "80:80"
-    command: streamlit run app.py --global.disableWidgetStateDuplicationWarning true --server.port=80
+      - "8501:8501"
+    command: streamlit run app.py --global.disableWidgetStateDuplicationWarning true --server.port=8501
 ```
 
 Now run the following command to build the containers:
