@@ -32,12 +32,6 @@ For the Docker image that serves as a Web socket API and runs the BattMo.jl pack
 docker pull ghcr.io/battmoteam/battmoapp_api:latest
 ```
 
-And for the production server Nginx:
-
-```<bash>
-docker pull ghcr.io/battmoteam/battmogui_nginx:latest
-```
-
 Run the images in containers by using a docker compose file. Create a docker-compose.yml file with the following content:
 
 ```<docker>
@@ -57,18 +51,6 @@ services:
       - "8081:8081"
       - "8080:8080"
     command: julia --project=. -e 'include("api.jl")' --color=yes --depwarn=no --project=@. --sysimage="pre-compilation/sysimage.so" -q -i -- $$(dirname $$0)/../bootstrap.jl -s=true "$$@"
-
-  nginx:
-    image: ghcr.io/battmoteam/battmoapp_nginx:latest
-    build: ./nginx
-    container_name: nginx
-    restart: always
-    ports:
-      - "8001:8001"
-      - "8002:8002"
-    depends_on:
-      - api
-      - gui
 
   gui:
     image: ghcr.io/battmoteam/battmoapp_gui:latest
