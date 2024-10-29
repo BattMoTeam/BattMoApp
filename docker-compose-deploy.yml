@@ -21,15 +21,20 @@ services:
     container_name: nginx
     restart: always
     ports:
-      - "443:443"
       - "80:80"
-    depends_on:
-      - api
-      - gui
+      - "443:443"
     volumes:
-      - /etc/letsencrypt/live/app.batterymodel.com:/etc/letsencrypt/live/app.batterymodel.com:ro
-    command: /bin/bash -c "/renew-certs.sh && nginx -g 'daemon off;'"
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
+    command: nginx -g 'daemon off;'
 
+  certbot:
+    image: ghcr.io/battmoteam/battmoapp_certbot:latest
+    container_name: certbot
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
+    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew --webroot -w /usr/share/nginx/html --quiet; sleep 12h; done"
 
  
   gui:
