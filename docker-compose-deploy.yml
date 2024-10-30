@@ -29,7 +29,7 @@ services:
     command: nginx -g 'daemon off;'
 
   certbot:
-    image: ghcr.io/battmoteam/battmoapp_certbot:latest
+    image: certbot/certbot
     container_name: certbot
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
