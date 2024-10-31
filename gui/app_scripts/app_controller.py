@@ -21,6 +21,9 @@ class AppController:
         self.images = images
         self.context = context
 
+    def set_footer(self, page):
+        return view.SetFooter(page)
+
     def set_model_choice(self):
         return view.SetModelChoice()
 

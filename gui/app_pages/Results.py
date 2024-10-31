@@ -46,7 +46,7 @@ def show_results():
     page_name = "Results"
 
     if "success" not in st.session_state:
-        st.session_state.success = None
+        st.session_state.simulation_successful = None
 
     if "transfer_results" not in st.session_state:
         st.session_state.transfer_results = None
@@ -122,13 +122,13 @@ def show_results():
 
             app.set_download_hdf5_button(results, selected_data_sets)
 
-    elif st.session_state.success == None:
+    elif st.session_state.simulation_successful == None:
         st.error(
             "You have not executed a simulation yet. Go to the 'Simulation' page to run a simulation or upload your previous results to visualize them."
         )
 
     elif (
-        st.session_state.success == False
+        st.session_state.simulation_successful == False
         and st.session_state.transfer_results == False
         and not selected_data_sets
     ):

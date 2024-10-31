@@ -17,3 +17,5 @@ def show_protocol():
     model_id = st.session_state.selected_model
 
     gui_parameters = app.set_tabs(model_id).user_input
+
+    app.set_footer(page=None)

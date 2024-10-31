@@ -217,7 +217,7 @@
                   "@type": "ElectricConductivity",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 0.6
+                     "hasNumericalValue": 100.0
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "S\u00b7m\u207b\u00b9",
@@ -454,7 +454,7 @@
                "@type": "Thickness",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 100.0
+                  "hasNumericalValue": 85.0
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "\u03bcm",
@@ -478,7 +478,7 @@
                "@type": "MassLoading",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 17.703999999999997
+                  "hasNumericalValue": 15.0484
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "mg\u00b7cm\u207b\u00b2",
@@ -550,7 +550,7 @@
                "@type": "Capacity",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 2539.013069686394
+                  "hasNumericalValue": 2158.1611092334356
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "mAh",
@@ -1389,7 +1389,7 @@
             "@type": "NPRatio",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 1.26
+               "hasNumericalValue": 1.07
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "1",
@@ -1401,7 +1401,7 @@
             "@type": "Mass",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 38.6296738432
+               "hasNumericalValue": 37.33774424320001
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "g",

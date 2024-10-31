@@ -12,82 +12,21 @@ from app_scripts import app_view, app_access
 
 def show_upload():
 
-    gui_parameters = st.session_state.json_linked_data_input
-    app = get_app_controller()
-
     if "json_uploaded_input" not in st.session_state:
-        st.session_state.json_uploaded_input = {}
+        st.session_state.json_uploaded_input = None
 
-    if "json_battmo_formatted_input" not in st.session_state:
-        st.session_state.json_battmo_formatted_input = {}
+    if "upload" not in st.session_state:
+        st.session_state.upload = None
 
-    if "json_linked_data_input" not in st.session_state:
-        st.session_state.json_linked_data_input = {}
+    if "clear_upload" not in st.session_state:
+        st.session_state.clear_upload = None
 
-    # cont = st.container()
-
-    # _, left, middle, right = cont.columns((0.5, 1, 4, 1))
-
-    # with left:
-
-    #     # Use stylable_container to apply custom styles
-    #     left_arrow_button_css = """
-    #         button {
-    #             background-color: transparent;
-    #             border: none;
-    #             width: 0;
-    #             height: 0;
-    #             border-right: 40px solid #770737;
-    #             border-top: 25px solid transparent;
-    #             border-bottom: 25px solid transparent;
-    #             cursor: pointer;
-    #         }
-
-    #         button:hover {
-    #             border-left-color: darkgreen; /* Change color on hover */
-    #         }
-
-    #     """
-
-    #     # Use stylable_container to style only the specific arrow button
-    #     with stylable_container(
-    #         key="arrow_button_left",
-    #         css_styles=left_arrow_button_css,
-    #     ):
-    #         st.button("", key="left_button")  # Empty label because the shape is generated using CSS
-
-    # with right:
-
-    #     # Use stylable_container to apply custom styles
-    #     right_arrow_button_css = """
-    #         button {
-    #             background-color: transparent;
-    #             border: none;
-    #             width: 0;
-    #             height: 0;
-    #             border-left: 40px solid #770737;
-    #             border-top: 25px solid transparent;
-    #             border-bottom: 25px solid transparent;
-    #             cursor: pointer;
-    #         }
-
-    #         button:hover {
-    #             border-left-color: darkgreen; /* Change color on hover */
-    #         }
-
-    #     """
-
-    #     # Use stylable_container to style only the specific arrow button
-    #     with stylable_container(
-    #         key="arrow_button_right",
-    #         css_styles=right_arrow_button_css,
-    #     ):
-    #         st.button(
-    #             "", key="right_button"
-    #         )  # Empty label because the shape is generated using CSS
+    app = get_app_controller()
 
     uploaded_json = app.set_input_upload().uploaded_input_dict
 
     if uploaded_json:
 
         st.write(uploaded_json)
+
+    app.set_footer(page=None)

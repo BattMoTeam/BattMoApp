@@ -1,5 +1,6 @@
 import os
 import streamlit as st
+from streamlit_extras.bottom_container import bottom
 import sys
 
 
@@ -11,6 +12,7 @@ from app_scripts.app_controller import (
     set_page_navigation,
     set_external_links,
     set_acknowlegent_info,
+    get_app_controller,
 )
 from app_scripts import app_view
 
@@ -29,6 +31,7 @@ def show_home():
 
     st.text("")
     st.text("")
+    app = get_app_controller()
 
     # Set Introduction page heading wil title, BattMo logo, and BattMo info.
     set_heading()
@@ -36,10 +39,10 @@ def show_home():
     app_view.st_space(space_width=3)
 
     # Set page navigation
-    col = set_page_navigation()
+    # col = set_page_navigation()
 
     # Set external links to websites and documentation
-    set_external_links()
+    app.set_footer(page="Home")
 
     with st.sidebar:
         app_view.st_space(space_width=3)

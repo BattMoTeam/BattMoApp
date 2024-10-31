@@ -12,10 +12,8 @@ from app_scripts import app_view, app_access
 
 def show_build_model():
 
-    if "selected_model" not in st.session_state:
-        st.session_state.selected_model = None
-
     app = get_app_controller()
+
     model_id = app.set_model_choice().selected_model
     st.session_state.selected_model = model_id
 
@@ -55,3 +53,5 @@ def show_build_model():
 
     col3.write("Time step duration: ")
     col4.number_input("", value=30)
+
+    app.set_footer(page=None)

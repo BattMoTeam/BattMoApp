@@ -14,34 +14,6 @@ def show_cell_design():
     gui_parameters = st.session_state.json_linked_data_input
     app = get_app_controller()
 
-    # with stylable_container(
-    #     key="indicator_container",
-    #     css_styles="""
-    #         {
-    #             background-color: #F0F0F0;
-    #             color: white;
-    #             # border-radius: 20px;
-    #         }
-    #         """,
-    # ):
-
-    # cont2 = st.container()
-
-    col1, col2 = st.columns((1, 3))
-
-    with col1:
-        st.text("")
-        st.markdown("#### " + "Select cell type:")
-
-        # st.text("")
-        st.markdown("#### " + "Use a common cell design:")
-
-    with col2:
-        st.selectbox("", ("Pouch", "Cylindrical"))
-        common_design = st.toggle("", key="common design", label_visibility="hidden")
-        if common_design:
-            st.selectbox("", ("cell_example1", "cell_example2"))
-
     with stylable_container(
         key="green_button",
         css_styles="""
@@ -64,6 +36,21 @@ def show_cell_design():
             app.set_geometry_visualization(gui_parameters)
 
         st.text("")
+
+    col1, col2 = st.columns((1, 3))
+
+    with col1:
+        st.text("")
+        st.markdown("#### " + "Select cell type:")
+
+        # st.text("")
+        st.markdown("#### " + "Use a common cell design:")
+
+    with col2:
+        st.selectbox("", ("Pouch", "Cylindrical"))
+        common_design = st.toggle("", key="common design", label_visibility="hidden")
+        if common_design:
+            st.selectbox("", ("cell_example1", "cell_example2"))
 
     col3, col4 = st.columns((1, 4))
 
@@ -120,3 +107,5 @@ def show_cell_design():
         st.write("Current Collector (PE)")
         st.number_input("", value=10, key="7")
         st.number_input("", value=10, key="77")
+
+    app.set_footer(page=None)

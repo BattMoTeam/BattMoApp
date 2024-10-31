@@ -1,7 +1,6 @@
 from PIL import Image
 import pprint
 import json
-import pickle
 import io
 import h5py
 import streamlit as st
@@ -9,24 +8,21 @@ from streamlit.runtime.scriptrunner import add_script_run_ctx
 import numpy as np
 from uuid import uuid4
 import sys
-import requests
-import pdb
 from streamlit_extras.metric_cards import style_metric_cards
+from streamlit_extras.stylable_container import stylable_container
+from streamlit_extras.bottom_container import bottom
+from streamlit_extras.badges import badge
 import sympy as sp
 import matplotlib.pyplot as plt
 import os
 import plotly.express as px
 import plotly.graph_objects as go
-import streamlit_elements as el
 import ast
-import pandas as pd
 import random
 import re
 import math
-import threading
 import websocket
 import time
-import asyncio
 import base64
 import copy
 import uuid
@@ -60,6 +56,89 @@ def st_space(tab=None, space_width=1, space_number=1):
     else:
         for _ in range(space_number):
             st.markdown(space)
+
+
+#########################################
+# Classes used on multiple pages
+#########################################
+
+
+class SetFooter:
+    """
+    Used to render the footer on each page.
+    """
+
+    def __init__(self, page=None):
+
+        self.page = page
+
+        # Path to the EU logo
+        self.image_path = os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg")
+
+        self.render_footer()
+
+    def image_to_base64(self, image_path):
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode()
+
+    def render_eu_logo(self):
+        # Convert image to base64
+        image_base64 = self.image_to_base64(self.image_path)
+
+        # Embed the image in HTML
+        st.html(
+            f'<img src="data:image/jpeg;base64,{image_base64}" id="flag_of_europe" style="width: 80px;">'
+        )
+
+    def render_theme_toggle(self):
+        with stylable_container(
+            key="indicator_container",
+            css_styles="""
+                {
+                    background-color: #F0F0F0;
+                    color: black;
+                    border-radius: 10px;
+                    border: 4px solid #770737;
+                    height: 25px;
+                    padding: 5px; /* Padding to give some space inside */
+
+                }
+                """,
+        ):
+
+            cont = st.container(key="bottom_container")
+
+            with cont:
+                cola, colb = st.columns((1, 10))
+                cola.text("")
+                theme = colb.toggle("Dark theme", label_visibility="visible")
+
+        st.session_state.theme = theme
+
+    def render_footer(self):
+
+        if self.page == "Home":
+
+            with bottom():
+
+                col1, col2 = st.columns((7, 1.5))
+
+                with col2:
+                    self.render_theme_toggle()
+
+                # with col1:
+                SetExternalLinks()
+        else:
+            with bottom():
+
+                _, col1, col2 = st.columns((7, 1.5, 1))
+
+                with col2:
+
+                    self.render_eu_logo()
+
+                with col1:
+                    self.render_theme_toggle()
 
 
 #########################################
@@ -221,9 +300,14 @@ class SetExternalLinks:
     def __init__(self):
 
         self.batterymodel = "[BatteryModel.com](https://batterymodel.com/)"
-        self.zenodo = "[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6362783.svg)](https://doi.org/10.5281/zenodo.6362783)"
-        self.github = "[![Repo](https://badgen.net/badge/icon/GitHub?icon=github&label)](https://github.com/BattMoTeam/BattMo)"
-        self.documentation = "[![Repo](https://badgen.net/badge/Doc/BattMo-app)](https://battmoteam.github.io/BattMo/gui.html)"
+        self.zenodo = "[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.6362783-770737)](https://doi.org/10.5281/zenodo.6362783)"
+        self.github = "[![GitHub](https://img.shields.io/badge/GitHub-770737?logo=github&logoColor=white)](https://github.com/BattMoTeam/BattMo)"
+        self.documentation = "[![Docs](https://img.shields.io/badge/Docs-BattMo--app-770737)](https://battmoteam.github.io/BattMo/gui.html)"
+
+        self.batterymodel_url = "https://batterymodel.com/"
+        self.zenodo_url = "https://doi.org/10.5281/zenodo.6362783"
+        self.github_url = "https://github.com/BattMoTeam/BattMo"
+        self.documentation_url = "https://battmoteam.github.io/BattMo/gui.html"
 
         self.set_external_links()
 
@@ -235,6 +319,14 @@ class SetExternalLinks:
         doi_col.markdown(self.zenodo)
         github_col.markdown(self.github)
         doc_col.markdown(self.documentation)
+        # with website_col:
+        #     badge(type="buymeacoffee", name="batterymodel.com", url=self.batterymodel_url)
+        # with doi_col:
+        #     badge(type="buymeacoffee", name="DOI", url=self.zenodo_url)
+        # with github_col:
+        #     badge(type="github", name="github", url=self.github_url)
+        # with doc_col:
+        #     badge(type="buymeacoffee", name="Doc", url=self.documentation_url)
         st.divider()
 
 
@@ -267,10 +359,21 @@ class SetModelChoice:
 
     def set_dropdown(self):
         models_as_dict = db_helper.get_models_as_dict()
+        if st.session_state.upload == True:
+            default_model = st.session_state.selected_model
+            # default_model = next(
+            #     (model_id for model_id in models_as_dict if models_as_dict[model_id] == st.session_state.selected_model),
+            #     None
+            # )
+
+        else:
+            default_model = 0
+
         selected_model_id = st.selectbox(
             label="model choice",
             options=[model_id for model_id in models_as_dict],
             format_func=lambda x: models_as_dict.get(x),
+            index=default_model,
             key="model_choice",
             label_visibility="collapsed",
         )
@@ -4052,7 +4155,7 @@ class RunSimulation:
         # self.gui_file_name = "gui_output_parameters.json"
         # self.file_mime_type = "application/json"
         # self.progress_bar = st.progress(st.session_state.simulation_progress)
-        self.success = st.session_state.success
+        self.success = st.session_state.simulation_successful
         self.api_url = "ws://api:8081"
         self.json_input_folder = "BattMoJulia"
         self.json_input_file = "battmo_formatted_input.json"
@@ -4154,7 +4257,7 @@ class RunSimulation:
         try:
             if message == "Simulation failed or timed out.":
                 st.error("Simulation failed or timed out.")
-                st.session_state.sim_finished = True
+                st.session_state.simulation_completed = True
             else:
                 try:
                     parsed_message = json.loads(message)
@@ -4187,8 +4290,7 @@ class RunSimulation:
                             self.sim_start.info(message)
 
                     else:
-                        st.session_state.response = True
-                        st.session_state.sim_finished = True
+                        st.session_state.simulation_completed = True
                         # message_h5 = h5py.File(message, "r")
                         st.session_state.simulation_results = message
 
@@ -4198,20 +4300,19 @@ class RunSimulation:
 
         except EOFError as e:
             st.error(f"WebSocket message handling error: {e}")
-            st.session_state.sim_finished = True
+            st.session_state.simulation_completed = True
 
     def on_error(self, ws, error):
         print(f"Error object: {error}")
         st.error(f"WebSocket error: {error}")
         print(f"WebSocket error: {error}")
 
-        st.session_state.response = False
-        st.session_state.sim_finished = True
+        st.session_state.simulation_completed = True
         st.session_state.simulation_results = False
 
     def on_close(self, ws, close_status_code, close_msg):
 
-        if st.session_state.sim_finished == True:
+        if st.session_state.simulation_completed == True:
             # if "progress_bar" in vars(RunSimulation).values():
             st.progress(100)
 
@@ -4287,9 +4388,12 @@ class RunSimulation:
                 self.run_simulation()
                 time.sleep(1)
 
-        if st.session_state.success == True:
+        if st.session_state.simulation_successful == True:
             self.set_results_button()
-        elif st.session_state.success == False or st.session_state.sim_finished == False:
+        elif (
+            st.session_state.simulation_successful == False
+            or st.session_state.simulation_completed == False
+        ):
             self.set_close_button()
 
     @st.fragment()
@@ -4326,7 +4430,7 @@ class RunSimulation:
 #     # Set the Content-Type header to application/json
 #     headers = {"Content-Type": "application/json"}
 
-#     while st.session_state.stop_simulation != True and st.session_state.sim_finished != True:
+#     while st.session_state.stop_simulation != True and st.session_state.simulation_completed != True:
 
 #         response_start = requests.post(self.api_url, json=json_data)
 
@@ -4351,7 +4455,7 @@ class RunSimulation:
 
 
 #         st.session_state.update_par = False
-#         st.session_state.sim_finished = True
+#         st.session_state.simulation_completed = True
 class DivergenceCheck:
     """
     Checks if the simulation is fully executed. If not it provides a warning to the user.
@@ -4362,29 +4466,21 @@ class DivergenceCheck:
 
         self.response = response
         self.save_run = save_run
-        self.success = st.session_state.success
+        self.success = st.session_state.simulation_successful
         self.check_for_divergence()
 
     def check_for_divergence(self):
 
         if self.response != None:
-            if type(self.response) == bool:
-                number_of_states = st.session_state.number_of_states
-                log_messages = st.session_state.log_messages
 
-            else:
+            (
+                results,
+                *_,
+            ) = app_controller.get_results_data(
+                None
+            ).get_results_data(None, response=self.response)
 
-                (
-                    results,
-                    *_,
-                ) = app_controller.get_results_data(
-                    None
-                ).get_results_data(None, response=self.response)
-
-                number_of_states, log_messages = self.get_timesteps_execution(results)
-
-                st.session_state.number_of_states = number_of_states
-                st.session_state.log_messages = log_messages
+            number_of_states, log_messages = self.get_timesteps_execution(results)
 
             self.divergence_check_logging(number_of_states, log_messages)
 
@@ -4656,19 +4752,19 @@ class DivergenceCheck:
 
         if (
             self.response == False
-            and st.session_state.success == False
+            and st.session_state.simulation_successful == False
             and st.session_state.battmo_api_response != None
         ):
             self.save_run.error(
                 "The data has not been retrieved succesfully, most probably due to an unsuccesful simulation"
             )
-            st.session_state.success = False
-            self.success = st.session_state.success
+            st.session_state.simulation_successful = False
+            self.success = st.session_state.simulation_successful
 
         elif self.response:
             if number_of_states == 0:
-                st.session_state.success = False
-                self.success = st.session_state.success
+                st.session_state.simulation_successful = False
+                self.success = st.session_state.simulation_successful
 
                 if len(log_messages) > 1:
                     c = self.save_run.container(height=400)
@@ -4710,8 +4806,8 @@ class DivergenceCheck:
 
                     self.save_run.success(f"""Simulation finished successfully!""")  # \n\n
 
-                st.session_state.success = True
-                self.success = st.session_state.success
+                st.session_state.simulation_successful = True
+                self.success = st.session_state.simulation_successful
 
                 # if self.response:
                 if not isinstance(self.response, bool):
@@ -4747,8 +4843,6 @@ class DivergenceCheck:
 
         elif st.session_state.battmo_api_response == None:
             pass
-
-        st.session_state.response == None
 
 
 class DownloadParameters:

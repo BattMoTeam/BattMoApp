@@ -8,6 +8,7 @@ import app_pages as pg
 from PIL import Image
 from app_scripts import app_access
 import base64
+from app_scripts.app_session_states import init_session_states
 
 # from streamlit_extras.container import style_container
 
@@ -133,64 +134,14 @@ else:
     pg.show_materials_and_models()
 
 
-if "theme" not in st.session_state:
-    st.session_state.theme = False
+#################################
+# Initiate all session states
+#################################
 
-with bottom():
-
-    _, col1, col2 = st.columns((7, 1.5, 1))
-
-    with col2:
-        # flag_image = Image.open(
-        #     os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg")
-        # )
-        # st.image(os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg"))
-
-        def image_to_base64(image_path):
-            with open(image_path, "rb") as image_file:
-                return base64.b64encode(image_file.read()).decode()
-
-        # Path to the image
-        image_path = os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg")
-
-        # Convert image to base64
-        image_base64 = image_to_base64(image_path)
-
-        # Embed the image in HTML
-        st.html(
-            f'<img src="data:image/jpeg;base64,{image_base64}" id="flag_of_europe" style="width: 80px;">'
-        )
-
-    with col1:
-        with stylable_container(
-            key="indicator_container",
-            css_styles="""
-                {
-                    background-color: #F0F0F0;
-                    color: black;
-                    border-radius: 10px;
-                    border: 4px solid #770737;
-                    height: 25px;
-                    padding: 5px; /* Padding to give some space inside */
-
-                }
-                """,
-        ):
-
-            cont = st.container(key="bottom_container")
-            # cont.markdown("*Dark theme*")
-
-            with cont:
-                cola, colb = st.columns((1, 10))
-                cola.text("")
-                theme = colb.toggle("Dark theme", label_visibility="visible")
-
-        st.session_state.theme = theme
-
-    # style_container()
+init_session_states()
 
 
-if theme == True:
+if st.session_state.theme == True:
     st.markdown(
         """
     <style>
@@ -202,7 +153,7 @@ if theme == True:
     """,
         unsafe_allow_html=True,
     )
-elif theme == False:
+elif st.session_state.theme == False:
     st.markdown(
         """
     <style>

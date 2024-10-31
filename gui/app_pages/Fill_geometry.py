@@ -23,3 +23,5 @@ def show_fill_geometry():
 
         page_name = "Cell_design"
         app.set_indicators(page_name)
+
+    app.set_footer(page=None)
