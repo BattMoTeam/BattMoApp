@@ -43,6 +43,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.html(
+    "<script async src='http://localhost/umami.js' data-website-id='adcac53d-bc65-4ca3-9f98-be5c7c4ee75d'></script>"
+)
+
 ##############################
 # Remember user changed values
 for k, v in st.session_state.items():
