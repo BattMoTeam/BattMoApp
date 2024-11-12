@@ -45,7 +45,10 @@ st.markdown(
 )
 
 components.html(
-    "<script async src='https://eu.umami.is/script.js' data-website-id='adcac53d-bc65-4ca3-9f98-be5c7c4ee75d'></script>"
+    """
+    <script async src="https://app.batterymodel.com/umami/script.js" data-website-id="adcac53d-bc65-4ca3-9f98-be5c7c4ee75d"></script>
+    """,
+    height=0,
 )
 
 ##############################
