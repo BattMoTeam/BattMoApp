@@ -4,6 +4,7 @@ from streamlit_navigation_bar import st_navbar
 import app_pages as pg
 from PIL import Image
 from app_scripts import app_access
+import streamlit.components.v1 as components
 
 
 ##############################
@@ -43,7 +44,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.html(
+components.html(
     "<script async src='https://eu.umami.is/script.js' data-website-id='adcac53d-bc65-4ca3-9f98-be5c7c4ee75d'></script>"
 )
 
