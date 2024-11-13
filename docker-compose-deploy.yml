@@ -13,6 +13,8 @@ services:
     ports:
       - "8081:8081"
       - "8080:8080"
+    networks:
+      - app-network
     command: julia --project=. -e 'include("api.jl")' --color=yes --depwarn=no --project=@. --sysimage="pre-compilation/sysimage.so" -q -i -- $$(dirname $$0)/../bootstrap.jl -s=true "$$@"
 
   nginx:
@@ -23,6 +25,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    networks:
+      - app-network
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
@@ -31,6 +35,8 @@ services:
   certbot:
     image: certbot/certbot
     container_name: certbot
+    networks:
+      - app-network
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
@@ -43,6 +49,8 @@ services:
     restart: always
     ports:
       - "8501:8501"
+    networks:
+      - app-network
     command: streamlit run app.py --global.disableWidgetStateDuplicationWarning true --server.port=8501
 
   umami:
@@ -55,6 +63,8 @@ services:
       HASH_SALT: ${HASH_SALT}
     ports:
       - "3000:3000"
+    networks:
+      - app-network
     depends_on:
       - umami-db
 
@@ -66,9 +76,15 @@ services:
       POSTGRES_USER: umami
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: umami
+    networks:
+      - app-network
     volumes:
       - umami_db_data:/var/lib/postgresql/data
 
 # Define volumes at the root level, outside of services
 volumes:
   umami_db_data:
+
+networks:
+  app-network:
+    driver: bridge
