@@ -51,9 +51,6 @@ st.markdown(
 #     height=0,
 # )
 
-components.html(
-    '<script async defer data-website-id="adcac53d-bc65-4ca3-9f98-be5c7c4ee75d" src="<https://app.batterymodel.com/umami.js>"></script>'
-)
 
 ##############################
 # Remember user changed values

@@ -12,6 +12,8 @@ services:
     ports:
       - "8081:8081"
       - "8080:8080"
+    networks:
+      - app-network
     volumes:
       - ./api/scripts:/api/scripts
       - ./api/api.jl:/api/api.jl
@@ -29,6 +31,8 @@ services:
     restart: always
     ports:
       - "8501:8501"
+    networks:
+      - app-network
     volumes:
       - ./gui:/app
 
@@ -41,6 +45,8 @@ services:
     restart: always
     ports:
       - "80:80"
+    networks:
+      - app-network
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
@@ -53,9 +59,11 @@ services:
     environment:
       DATABASE_URL: postgres://umami:password@umami-db/umami
       DATABASE_TYPE: postgres
-      HASH_SALT: your_hash_salt  # Replace this with a secure, random hash salt
+      HASH_SALT: ${HASH_SALT}  # Replace this with a secure, random hash salt
     ports:
       - "3000:3000"
+    networks:
+      - app-network
     depends_on:
       - umami-db
 
@@ -65,11 +73,17 @@ services:
     restart: always
     environment:
       POSTGRES_USER: umami
-      POSTGRES_PASSWORD: password  # Replace with a strong password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # Replace with a strong password
       POSTGRES_DB: umami
+    networks:
+      - app-network
     volumes:
       - umami_db_data:/var/lib/postgresql/data
 
 # Define volumes at the root level, outside of services
 volumes:
   umami_db_data:
+
+networks:
+  app-network:
+    driver: bridge

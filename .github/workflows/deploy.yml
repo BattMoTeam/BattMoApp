@@ -58,7 +58,11 @@ jobs:
       - name: Pull and Run Containers with Deploy File
         run: |
           ssh -p ${{ secrets.SSH_PORT }} ${{ env.SSH_USER }}@${{ env.SSH_HOST }} "cd ${{ env.WORKDIR }} && \
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+          HASH_SALT=${{ secrets.HASH_SALT }} \
           docker compose -f docker-compose-deploy.yml pull && \
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+          HASH_SALT=${{ secrets.HASH_SALT }} \
           docker compose -f docker-compose-deploy.yml up -d"
 
       - name: Cleanup

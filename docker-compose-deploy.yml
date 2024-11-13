@@ -52,7 +52,7 @@ services:
     environment:
       DATABASE_URL: postgres://umami:password@umami-db/umami
       DATABASE_TYPE: postgres
-      HASH_SALT: your_hash_salt  # Replace this with a secure, random hash salt
+      HASH_SALT: ${HASH_SALT}
     ports:
       - "3000:3000"
     depends_on:
@@ -64,7 +64,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: umami
-      POSTGRES_PASSWORD: password  # Replace with a strong password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: umami
     volumes:
       - umami_db_data:/var/lib/postgresql/data

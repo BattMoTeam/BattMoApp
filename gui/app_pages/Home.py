@@ -1,6 +1,7 @@
 import os
 import streamlit as st
 import sys
+import streamlit.components.v1 as components
 
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -13,6 +14,10 @@ from app_scripts.app_controller import (
     set_acknowlegent_info,
 )
 from app_scripts import app_view
+
+components.html(
+    '<script async defer data-website-id="adcac53d-bc65-4ca3-9f98-be5c7c4ee75d" src="<https://app.batterymodel.com/umami.js>"></script>'
+)
 
 
 # ##############################
