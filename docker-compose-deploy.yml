@@ -27,6 +27,8 @@ services:
       - "443:443"
     networks:
       - app-network
+    depends on:
+      - umami
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
@@ -58,6 +60,7 @@ services:
     container_name: umami
     restart: always
     environment:
+      BASE_URL: https://app.batterymodel.com/umami
       DATABASE_URL: postgres://umami:password@umami-db/umami
       DATABASE_TYPE: postgres
       HASH_SALT: ${HASH_SALT}
