@@ -16,7 +16,7 @@ from app_scripts.app_controller import (
 from app_scripts import app_view
 
 components.html(
-    '<script async defer data-website-id="adcac53d-bc65-4ca3-9f98-be5c7c4ee75d" src="<https://app.batterymodel.com/umami.js>"></script>'
+    '<script async defer data-website-id="213d7c39-2f27-43d9-822e-7e0e855273db" src="<https://app.batterymodel.com/umami.js>"></script>'
 )
 
 
