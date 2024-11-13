@@ -15,11 +15,13 @@ from app_scripts.app_controller import (
 )
 from app_scripts import app_view
 
+# components.html(
+#     '<script defer src="https://app.batterymodel.com/umami/script.js" data-website-id="213d7c39-2f27-43d9-822e-7e0e855273db"></script>'
+# )
+
 components.html(
-    '<script defer src="https://app.batterymodel.com/umami/script.js" data-website-id="213d7c39-2f27-43d9-822e-7e0e855273db"></script>'
+    '<script defer src="https://cloud.umami.is/script.js" data-website-id="adcac53d-bc65-4ca3-9f98-be5c7c4ee75d"></script>'
 )
-
-
 # ##############################
 # # Remember user changed values
 for k, v in st.session_state.items():
