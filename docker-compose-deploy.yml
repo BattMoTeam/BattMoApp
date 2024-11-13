@@ -53,38 +53,38 @@ services:
       - app-network
     command: streamlit run app.py --global.disableWidgetStateDuplicationWarning true --server.port=8501
 
-  # umami:
-  #   image: docker.umami.is/umami-software/umami:postgresql-latest
-  #   container_name: umami
-  #   restart: always
-  #   environment:
-  #     BASE_URL: https://app.batterymodel.com/umami
-  #     DATABASE_URL: postgres://umami:password@umami-db/umami
-  #     DATABASE_TYPE: postgres
-  #     HASH_SALT: ${HASH_SALT}
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - app-network
-  #   depends_on:
-  #     - umami-db
+  umami:
+    image: docker.umami.is/umami-software/umami:postgresql-latest
+    container_name: umami
+    restart: always
+    environment:
+      # BASE_PATH: https://app.batterymodel.com/umami
+      DATABASE_URL: postgres://umami:password@umami-db/umami
+      DATABASE_TYPE: postgres
+      HASH_SALT: ${HASH_SALT}
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - umami-db
 
-  # umami-db:
-  #   image: postgres:13
-  #   container_name: umami-db
-  #   restart: always
-  #   environment:
-  #     POSTGRES_USER: umami
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #     POSTGRES_DB: umami
-  #   networks:
-  #     - app-network
-  #   volumes:
-  #     - umami_db_data:/var/lib/postgresql/data
+  umami-db:
+    image: postgres:13
+    container_name: umami-db
+    restart: always
+    environment:
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: umami
+    networks:
+      - app-network
+    volumes:
+      - umami_db_data:/var/lib/postgresql/data
 
 # Define volumes at the root level, outside of services
-# volumes:
-#   umami_db_data:
+volumes:
+  umami_db_data:
 
 networks:
   app-network:
