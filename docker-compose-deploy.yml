@@ -27,8 +27,6 @@ services:
       - "443:443"
     networks:
       - app-network
-    depends on:
-      - umami
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
