@@ -5,6 +5,7 @@ import app_pages as pg
 from PIL import Image
 from app_scripts import app_access
 import streamlit.components.v1 as components
+import streamlit_analytics2 as streamlit_analytics
 
 
 ##############################
@@ -74,4 +75,7 @@ streamlit_nav = st.navigation(
     pages=[home_page, simulation_page, results_page, materials_models_page]
 )
 
-streamlit_nav.run()
+with streamlit_analytics.track():
+    streamlit_nav.run()
+
+    streamlit_analytics.track(save_to_json="user_data.json")

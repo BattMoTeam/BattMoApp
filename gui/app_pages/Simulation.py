@@ -124,6 +124,7 @@ if "stop_simulation" not in st.session_state:
 
 page_name = "Simulation"
 
+
 log_memory_usage()
 
 app = get_app_controller()
@@ -159,7 +160,6 @@ if st.session_state.success and st.session_state.transfer_results:
     st.session_state.success = None
     st.session_state.sim_finished = None
 
-
 st.session_state.response = None
 
 with st.sidebar:
@@ -167,6 +167,7 @@ with st.sidebar:
 
     st.divider()
     set_acknowlegent_info()
+
 
 ############################################
 # Can be used to check the structure of gui_parameters in the terminal
