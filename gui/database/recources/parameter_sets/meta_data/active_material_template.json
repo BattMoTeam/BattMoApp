@@ -3,7 +3,7 @@
    "Name": "active_material_template",
    "Parameters": {
       "maximum_concentration": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "MaximumConcentration",
@@ -19,7 +19,7 @@
          "display_name": "Maximum concentration"
       },
       "mass_fraction": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "basis",
          "context_type": "MassFraction",
@@ -35,7 +35,7 @@
          "display_name": "Mass Fraction"
       },
       "volumetric_surface_area": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "VolumetricSurfaceArea",
@@ -51,7 +51,7 @@
          "display_name": "Volumetric surface area"
       },
       "density": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "Density",
@@ -67,7 +67,7 @@
          "display_name": "Density"
       },
       "specific_heat_capacity": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "SpecificHeatCapacity",
@@ -83,7 +83,7 @@
          "display_name": "Specific heat capacity"
       },
       "thermal_conductivity": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "advanced",
          "context_type": "ThermalConductivity",
@@ -99,7 +99,7 @@
          "display_name": "Thermal conductivity"
       },
       "electronic_conductivity": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "ElectricConductivity",
@@ -115,7 +115,7 @@
          "display_name": "Electronic conductivity"
       },
       "number_of_electrons_transferred": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "NumberOfEntities",
@@ -131,7 +131,7 @@
          "display_name": "Number of electrons transferred"
       },
       "activation_energy_of_reaction": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "Energy",
@@ -147,7 +147,7 @@
          "display_name": "Activation energy of reaction"
       },
       "reaction_rate_constant": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "ReactionRateConstant",
@@ -163,7 +163,7 @@
          "display_name": "Reaction rate constant"
       },
       "maximum_lithium_stoichiometry": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "StoichiometricNumberOfSubstance",
@@ -179,7 +179,7 @@
          "display_name": "Maximum lithium stoichiometry"
       },
       "minimum_lithium_stoichiometry": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "StoichiometricNumberOfSubstance",
@@ -195,7 +195,7 @@
          "display_name": "Minimum lithium stoichiometry"
       },
       "activation_energy_of_diffusion": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "ActivationEnergy",
@@ -211,7 +211,7 @@
          "display_name": "Activation energy of diffusion"
       },
       "diffusion_pre_exponential_factor": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "max_value": 1,
@@ -225,7 +225,7 @@
          "display_name": "Diffusion pre exponential factor"
       },
       "particle_radius": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "ParticleRadius",
@@ -241,7 +241,7 @@
          "display_name": "Particle radius"
       },
       "number_of_discrete_cells_particle_radius": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "advanced",
          "context_type": "NumberOfEntities",
@@ -257,7 +257,7 @@
          "display_name": "Number of discrete cells particle radius"
       },
       "open_circuit_potential": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": ["OpenCircuitVoltage","Expression"],
@@ -270,7 +270,7 @@
          "display_name": "Open circuit potential"
       },
       "specific_capacity": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "N/A",
          "context_type": "SpecificCapacity",

@@ -9,11 +9,19 @@
          "default_template": "model_template"
       },
       "P3D": {
-        "context_type":["battinfo:p2dModel", "schema:SoftwareApplication"],
+        "context_type":["battinfo:p3dModel", "schema:SoftwareApplication"],
         "context_id":"https://battmoteam.github.io/BattMo/index.html",
         "label": "P3D model",
         "description": "",
-        "is_shown_to_user": false,
+        "is_shown_to_user": true,
+        "default_template": "model_template"
+     },
+     "P4D": {
+        "context_type":["battinfo:p4dModel", "schema:SoftwareApplication"],
+        "context_id":"https://battmoteam.github.io/BattMo/index.html",
+        "label": "P4D model",
+        "description": "",
+        "is_shown_to_user": true,
         "default_template": "model_template"
      }
 

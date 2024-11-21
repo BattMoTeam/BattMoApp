@@ -1,14 +1,14 @@
 {
     "tabs": {
         "electrodes": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "context_type": "Electrode",
             "display_name": "Electrodes",
             "description": ""
         },
         "negative_electrode": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "context_type": "NegativeElectrode",
             "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_c94c041b_8ea6_43e7_85cc_d2bce7785b4c",
@@ -16,7 +16,7 @@
             "description": ""
         },
         "positive_electrode": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "context_type": "PositiveElectrode",
             "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_aff732a9_238a_4734_977c_b2ba202af126",
@@ -24,7 +24,7 @@
             "description": ""
         },
         "electrolyte": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis_advanced",
             "display_name": "Electrolyte",
             "context_type": "Electrolyte",
@@ -32,7 +32,7 @@
             "description": ""
         },
         "separator": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis_advanced",
             "display_name": "Separator",
             "context_type": "Separator",
@@ -40,7 +40,7 @@
             "description": ""
         },
         "cell": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis_advanced",
             "display_name": "Cell",
             "context_type": "battery:BatteryCell",
@@ -48,7 +48,7 @@
             "description": ""
         },
         "boundary_conditions": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis_advanced",
             "display_name": "Boundary conditions",
             "context_type": "battery:BoundaryConditions",
@@ -57,7 +57,7 @@
         },
         
         "protocol": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis_advanced",
             "display_name": "Protocol",
             "context_type": "CyclingProcess",

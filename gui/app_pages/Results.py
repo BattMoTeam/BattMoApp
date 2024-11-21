@@ -134,6 +134,8 @@ def show_results():
     ):
         st.error("Your simulation was not succesful unfortunately, give it another try.")
 
-    with st.sidebar:
-        st.divider()
-        set_acknowlegent_info()
+    app.set_footer(page=None)
+
+    # with st.sidebar:
+    #     st.divider()
+    #     set_acknowlegent_info()

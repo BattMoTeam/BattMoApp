@@ -25,16 +25,20 @@ from app_scripts.app_controller import (
     set_model_description,
     set_material_description,
     set_acknowlegent_info,
+    get_app_controller,
 )
 
 
 def show_materials_and_models():
+    app = get_app_controller()
     st.text("")
     st.text("")
     set_model_description()
 
     set_material_description()
 
-    with st.sidebar:
-        app_view.st_space(space_width=3)
-        set_acknowlegent_info()
+    app.set_footer(page=None)
+
+    # with st.sidebar:
+    #     app_view.st_space(space_width=3)
+    #     set_acknowlegent_info()

@@ -24,6 +24,12 @@ class AppController:
     def set_footer(self, page):
         return view.SetFooter(page)
 
+    def set_build_model(self):
+        return view.BuildModel()
+
+    def set_build_geometry(self):
+        return view.BuildGeometry()
+
     def set_model_choice(self):
         return view.SetModelChoice()
 

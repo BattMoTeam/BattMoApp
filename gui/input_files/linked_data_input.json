@@ -217,7 +217,7 @@
                   "@type": "ElectricConductivity",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 100.0
+                     "hasNumericalValue": 6.0
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "S\u00b7m\u207b\u00b9",

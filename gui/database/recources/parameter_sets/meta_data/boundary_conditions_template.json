@@ -3,7 +3,7 @@
     "Name": "boundary_conditions_template",
     "Parameters": {
         "ambient_temperature": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "par_class": "non_material",
             "difficulty": "basis",
             "context_type": "AmbientThermodynamicTemperature",
@@ -19,7 +19,7 @@
             "display_name": "Ambient temperature"
         },
         "initial_temperature": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "par_class": "non_material",
             "difficulty": "basis",
             "context_type": "InititalThermodynamicTemperature",
@@ -51,7 +51,7 @@
             "display_name": "Reference temperature"
         },
         "external_heat_transfer_coefficient": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "par_class": "non_material",
             "difficulty": "advanced",
             "context_type": "CoefficientOfHeatTransfer",

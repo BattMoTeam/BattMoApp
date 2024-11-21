@@ -29,4 +29,7 @@ def show_upload():
 
         st.write(uploaded_json)
 
+    # else:
+    #     get_default_parameter_dict()
+
     app.set_footer(page=None)

@@ -1,7 +1,7 @@
 {
     "materials":{
         "Graphite_SiOx_Chen2020":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "reference_name": "Chen, C, et al. 2020",
@@ -17,7 +17,7 @@
 
         },
         "Graphite_Safari2009":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "reference_name": "Safari, M, et al. 2009",
@@ -49,7 +49,7 @@
         },
         
         "user_defined_ne_am":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "display_name": "User defined",
@@ -60,7 +60,7 @@
 
         },
         "PVDF":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "context_type": "PolyvinylideneFluoride",
@@ -74,7 +74,7 @@
 
         },
         "CMC":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "context_type": "CarboxymethylCellulose",
@@ -88,7 +88,7 @@
 
         },
         "user_defined_pe_b":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "display_name": "User defined",
@@ -99,7 +99,7 @@
 
         },
         "user_defined_ne_b":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "display_name": "User defined",
@@ -110,7 +110,7 @@
 
         },
         "carbon_black":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "context_type": "CarbonBlack",
@@ -124,7 +124,7 @@
 
         },
         "user_defined_pe_ad":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "display_name": "User defined",
@@ -135,7 +135,7 @@
 
         },
         "user_defined_ne_ad":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "display_name": "User defined",
@@ -147,7 +147,7 @@
         },
         
         "NMC811_Chen2020":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "reference_name": "Chen, C, et al. 2020",
@@ -165,7 +165,7 @@
         },
 
         "LiFePO4_Xu2015":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "reference_name": "Xu, M, et al. 2015",
@@ -183,7 +183,7 @@
         },
 
         "LiFePO4_Gerver2011":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "reference_name": "Gerver, Rachel E., et al. 2011",
@@ -200,7 +200,7 @@
 
         },
         "NMC111_Safari2009":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "reference_name": "Safari, M, et al. 2009",
@@ -217,7 +217,7 @@
 
         },
         "user_defined_pe_am":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "display_name": "User defined",
@@ -228,7 +228,7 @@
 
         },
         "ceramic_coated_polyolefin_Chen2020":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "reference_name": "Chen, C, et al. 2020",
@@ -244,7 +244,7 @@
 
         },
         "celgard2500_Xu2015":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "reference_name": "Xu, M, et al. 2015",
@@ -263,7 +263,7 @@
         
 
         "user_defined_sep":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "display_name": "User defined",
@@ -274,7 +274,7 @@
 
         },
         "aluminium":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "context_type": "AluminumCurrentCollector",
@@ -286,7 +286,7 @@
 
         },
         "copper":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "context_type": "CopperCurrentCollector",
@@ -298,7 +298,7 @@
 
         },
         "LiPF6_Chen2020":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "reference_name": "Chen, C, et al. 2020",
@@ -313,7 +313,7 @@
 
         },
         "LiPF6_Xu2015":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "reference_name": "Xu, M, et al. 2015",
@@ -329,7 +329,7 @@
         },
         
         "user_defined_elyte":{
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "is_shown_to_user": true,
             "display_name": "User defined",

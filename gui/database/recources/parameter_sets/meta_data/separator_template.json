@@ -3,7 +3,7 @@
    "Name": "separator_template",
    "Parameters": {
       "specific_heat_capacity": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "SpecificHeatCapacity",
@@ -19,7 +19,7 @@
          "display_name": "Specific heat capacity"
       },
       "thermal_conductivity": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "ThermalConductivity",
@@ -35,7 +35,7 @@
          "display_name": "Thermal conductivity"
       },
       "density": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "Density",
@@ -50,24 +50,8 @@
          "unit_iri": "https://w3id.org/emmo#GramPerCubicMetre",
          "display_name": "Density"
       },
-      "thickness": {
-         "model_name": ["P2D","P3D"],
-         "par_class": "non_material",
-         "difficulty": "basis",
-         "context_type": "Thickness",
-         "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
-         "max_value": 100,
-         "min_value": 0.1,
-         "description": "the thickness of the separator",
-         "is_shown_to_user": true,
-         "type": "float",
-         "unit": "\u03BCm",
-         "unit_name": "emmo:MicroMetre",
-         "unit_iri": "https://w3id.org/emmo#MicroMetre",
-         "display_name": "Separator full template"
-      },
       "porosity": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "basis",
          "context_type": "Porosity",
@@ -83,7 +67,7 @@
          "display_name": "Porosity"
       },
       "bruggeman_coefficient": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "advanced",
          "context_type": "BruggemanCoefficient",
@@ -97,22 +81,6 @@
          "unit_name": "emmo:UnitOne",
          "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
          "display_name": "Bruggeman coefficient"
-      },
-      "number_of_discrete_cells_separator": {
-         "model_name": ["P2D","P3D"],
-         "par_class": "non_material",
-         "difficulty": "advanced",
-         "context_type": "NumberOfEntities",
-         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
-         "max_value": 30,
-         "min_value": 1,
-         "description": "number of discrete cells used in the domain",
-         "is_shown_to_user": true,
-         "type": "int",
-         "unit": "1",
-         "unit_name": "emmo:UnitOne",
-         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
-         "display_name": "Number of discrete cells"
       }
    }
 }

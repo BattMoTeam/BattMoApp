@@ -2,8 +2,32 @@
    "Type": "template",
    "Name": "protocol_template",
    "Parameters": {
+      "use_ramp_up": {
+         "context_type": ["LinearCurrentRamp"],
+         "model_name": ["P2D","P3D","P4D"],
+         "label": "useRampup",
+         "description": "simulation option to use a ramp up time at the beginning of the simulation",
+         "type": "bool",
+         "is_shown_to_user": false
+      },
+
+      "number_of_ramp_up_steps": {
+         "model_name": ["P2D","P3D","P4D"],
+         "par_class": "non_material",
+         "difficulty": "advanced",
+         "max_value": 100,
+         "min_value": 0,
+         "context_type": ["LinearCurrentRamp", "NumberOfEntities"],
+         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
+         "description": "duration of the switch between changing from rest, discharging, or charging",
+         "type": "int",
+         "is_shown_to_user": true,
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978"
+      },
       "initial_step_type": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "basis",
          "description": "",
@@ -12,7 +36,7 @@
          "display_name": "Initial step type"
       },
       "initial_state_of_charge": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "basis",
          "context_type": "StateOfCharge",
@@ -28,7 +52,7 @@
          "display_name": "Initial state of charge"
       },
       "number_of_cycles": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "basis",
          "context_type": "NumberOfEntities",
@@ -44,7 +68,7 @@
          "display_name": "Number of cycles"
       },
       "d_rate": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "basis",
          "context_type": "DischargingCRate",
@@ -60,7 +84,7 @@
          "display_name": "Crate"
       },
       "c_rate": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "basis",
          "context_type": "CRate",
@@ -76,7 +100,7 @@
          "display_name": "Crate"
       },
       "lower_cutoff_voltage": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "basis",
          "context_type": "LowerVoltageLimit",
@@ -92,7 +116,7 @@
          "display_name": "Lower cutoff voltage"
       },
       "upper_cutoff_voltage": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "basis",
          "context_type": "UpperVoltageLimit",
@@ -108,7 +132,7 @@
          "display_name": "Upper cutoff coltage"
       },
       "d_idt_limit": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "advanced",
          "max_value": 0.1,
@@ -120,7 +144,7 @@
          "display_name": "d idt limit"
       },
       "d_edt_limit": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "advanced",
          "max_value": 0.1,
@@ -134,7 +158,7 @@
          "display_name": "d edt limit"
       },
       "time_step_duration": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "advanced",
          "max_value": 1000,
@@ -148,21 +172,7 @@
          "unit_name": "emmo:Second",
          "unit_iri": "https://w3id.org/emmo/domain/emmo#Second"
       },
-      "number_of_ramp_up_steps": {
-         "model_name": ["P2D","P3D"],
-         "par_class": "non_material",
-         "difficulty": "advanced",
-         "max_value": 100,
-         "min_value": 0,
-         "context_type": ["LinearCurrentRamp", "NumberOfEntities"],
-         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
-         "description": "duration of the switch between changing from rest, discharging, or charging",
-         "type": "int",
-         "is_shown_to_user": true,
-         "unit": "1",
-         "unit_name": "emmo:UnitOne",
-         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978"
-      },
+      
       "total_time": {
          "context_type": ["Duration"],
          "context_type_iri": "https://w3id.org/emmo#EMMO_0adabf6f_7404_44cb_9f65_32d83d8101a3",

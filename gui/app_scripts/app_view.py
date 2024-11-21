@@ -58,6 +58,21 @@ def st_space(tab=None, space_width=1, space_number=1):
             st.markdown(space)
 
 
+def create_label_index_mapping(data):
+    """
+    Creates a dictionary with 'rdfs:label' values as keys and their respective
+    index in the list as values.
+
+    :param data: List of dictionaries containing 'rdfs:label' keys.
+    :return: Dictionary with 'rdfs:label' as keys and list indices as values.
+    """
+    label_index_mapping = {}
+    for index, item in enumerate(data):
+        if "rdfs:label" in item:
+            label_index_mapping[item["rdfs:label"]] = index
+    return label_index_mapping
+
+
 #########################################
 # Classes used on multiple pages
 #########################################
@@ -331,6 +346,247 @@ class SetExternalLinks:
 
 
 #########################################
+# Class to setup Build Model page
+#########################################
+
+
+class BuildModel:
+    """
+    Rendering of the 'Build Model' page.
+    """
+
+    def __init__(self):
+
+        # Basis model selection
+        self.header_1 = "Basis model"
+        self.selected_model_name = None
+        self.selected_model_id = None
+        self.set_model_choice()
+
+        self.header_2 = "Include sub-models"
+        self.set_sub_model_options()
+
+    def set_model_choice(self):
+
+        st.subheader(self.header_1)
+        self.set_dropdown()
+
+    def set_sub_model_options(self):
+
+        st.subheader(self.header_2)
+
+        json_model = SetupLinkedDataStruct().setup_json_linked_data_model(
+            model_name=self.selected_model_name
+        )
+
+        index_dict = create_label_index_mapping(json_model["BuildModel"])
+
+        col1, col2 = st.columns((1, 10))
+
+        with col1:
+            cc = st.toggle(
+                "",
+                key="cc_model_toggle",
+                help="Not recommended for P2D model",
+                value=bool(
+                    json_model["BuildModel"][index_dict["include_current_collector"]][
+                        "hasNumericalPart"
+                    ]["hasNumericalValue"]
+                ),
+            )
+            thermal = st.toggle(
+                "",
+                key="thermal_model_toggle",
+                value=bool(
+                    json_model["BuildModel"][index_dict["use_thermal"]]["hasNumericalPart"][
+                        "hasNumericalValue"
+                    ]
+                ),
+            )
+            solid = st.toggle(
+                "",
+                key="solid_model_toggle",
+                value=bool(
+                    json_model["BuildModel"][index_dict["use_solid_diffusion_model"]][
+                        "hasNumericalPart"
+                    ]["hasNumericalValue"]
+                ),
+            )
+
+            st.text("")
+            st.text("")
+            st.text("")
+            st.text("")
+            st.text("")
+
+        with col2:
+            st.write("Current Collector model")
+            st.write("Thermal model")
+            st.write("Solid Diffusion model")
+            if solid:
+                solid_select = st.selectbox("Select Solid Diffusion model", ("full", "simple"))
+            else:
+                solid_select = None
+
+        json_model["BuildModel"][index_dict["use_solid_diffusion_model"]]["hasNumericalPart"][
+            "hasNumericalValue"
+        ] = int(solid)
+        json_model["BuildModel"][index_dict["use_thermal"]]["hasNumericalPart"][
+            "hasNumericalValue"
+        ] = int(thermal)
+        json_model["BuildModel"][index_dict["include_current_collector"]]["hasNumericalPart"][
+            "hasNumericalValue"
+        ] = int(cc)
+
+        if solid_select:
+            json_model["BuildModel"][index_dict["solid_diffusion_model_type"]]["hasStringPart"][
+                "hasStringValue"
+            ] = solid_select
+
+        st.session_state.json_linked_data_model = json_model
+
+    def set_dropdown(self):
+        models_as_dict = db_helper.get_models_as_dict()
+        if st.session_state.upload == True:
+            default_model = st.session_state.selected_model
+            # default_model = next(
+            #     (model_id for model_id in models_as_dict if models_as_dict[model_id] == st.session_state.selected_model),
+            #     None
+            # )
+
+        else:
+            default_model = 0
+
+        selected_model_id = st.selectbox(
+            label="model choice",
+            options=[model_id for model_id in models_as_dict],
+            format_func=lambda x: models_as_dict.get(x),
+            index=default_model,
+            key="model_choice",
+            label_visibility="collapsed",
+        )
+        self.selected_model_id = selected_model_id
+        st.session_state.selected_model = self.selected_model_id
+        self.selected_model_name = models_as_dict.get(selected_model_id)
+        print(self.selected_model_name)
+
+
+#########################################
+# Class to setup Build Geometry page
+#########################################
+
+
+class BuildGeometry:
+    """
+    Rendering of the 'Build Geometry' page.
+    """
+
+    def __init__(self):
+
+        self.set_visualization()
+        self.render_parameters()
+
+    def set_visualization(self):
+
+        gui_parameters = st.session_state.json_linked_data_input
+
+        with stylable_container(
+            key="green_button",
+            css_styles="""
+                {
+                    background-color: #FFFFFF;
+                    color: white;
+                    # border-radius: 20px;
+                }
+                """,
+        ):
+
+            cont1 = st.container()
+
+        _, col1, _ = cont1.columns((0.5, 1.5, 0.5))
+
+        with col1:
+            geom1, geom2 = st.tabs(("Cell design", "Geometry used for the simulation"))
+            st.text("")
+            with geom1:
+                SetGeometryVisualization(gui_parameters)
+
+            st.text("")
+
+    def render_parameters(self):
+        col1, col2 = st.columns((1, 3))
+
+        with col1:
+            st.text("")
+            st.markdown("#### " + "Select cell type:")
+
+            # st.text("")
+            st.markdown("#### " + "Use a common cell design:")
+
+        with col2:
+            st.selectbox("", ("Pouch", "Cylindrical"))
+            common_design = st.toggle("", key="common design", label_visibility="hidden")
+            if common_design:
+                st.selectbox("", ("cell_example1", "cell_example2"))
+
+        col3, col4 = st.columns((1, 4))
+
+        with col3:
+            st.text("")
+            st.text("")
+            st.write("Cell length")
+            st.text("")
+            st.text("")
+            st.write("Cell width")
+
+        with col4:
+            st.number_input("", value=100, key="1")
+            st.number_input("", value=100, key="2")
+
+        st.text("")
+        st.text("")
+
+        col, cola, colb, colc, cold, cole = st.columns(6)
+
+        with col:
+            st.text("")
+            st.text("")
+            st.text("")
+            st.text("")
+            st.text("")
+            st.write("Thicknesses:")
+            st.text("")
+            st.text("")
+
+            st.write("Number of discrete cells:")
+
+        with cola:
+            st.write("Current Collector (NE)")
+            st.number_input("", value=10, key="3")
+            st.number_input("", value=10, key="33")
+
+        with colb:
+            st.write("Negative Electrode")
+            st.number_input("", value=10, key="4")
+            st.number_input("", value=10, key="44")
+
+        with colc:
+            st.write("Separator")
+            st.number_input("", value=10, key="5")
+            st.number_input("", value=10, key="55")
+
+        with cold:
+            st.write("Positive Electrode")
+            st.number_input("", value=10, key="6")
+            st.number_input("", value=10, key="66")
+
+        with cole:
+            st.write("Current Collector (PE)")
+            st.number_input("", value=10, key="7")
+            st.number_input("", value=10, key="77")
+
+
+#########################################
 # Classes used on the Simulation page
 #########################################
 
@@ -414,6 +670,11 @@ class SetupLinkedDataStruct:
         self.hasModel = "hasModel"
 
         self.context = "https://w3id.org/emmo/domain/battery/context"
+
+    @st.cache_data
+    def setup_json_linked_data_model(_self, model_name):
+        dict = {"BuildModel": db_helper.get_model_parameters_as_dict(model_name)}
+        return dict
 
     @st.cache_data
     def setup_linked_data_dict(_self, model_id, model_name):

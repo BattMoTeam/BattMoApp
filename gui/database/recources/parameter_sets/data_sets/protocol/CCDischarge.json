@@ -14,6 +14,7 @@
        "d_idt_limit": 0.01,
        "d_edt_limit": 0.01,
        "time_step_duration": 30,
-       "number_of_ramp_up_steps": 5
+       "number_of_ramp_up_steps": 5,
+       "use_ramp_up": true
     }
  }

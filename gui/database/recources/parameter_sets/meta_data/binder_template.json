@@ -3,7 +3,7 @@
    "Name": "binder_template",
    "Parameters": { 
       "density": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "Density",
@@ -19,7 +19,7 @@
          "display_name": "Density"
       },
       "specific_heat_capacity": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "SpecificHeatCapacity",
@@ -35,7 +35,7 @@
          "display_name": "Specific heat capacity"
       },
       "thermal_conductivity": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "basis",
          "context_type": "ThermalConductivity",
@@ -51,7 +51,7 @@
          "display_name": "Thermal conductivity"
       },
       "electronic_conductivity": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "material",
          "difficulty": "advanced",
          "context_type": "ElectricConductivity",
@@ -67,7 +67,7 @@
          "display_name": "Electronic conductivity"
       },
       "mass_fraction": {
-         "model_name": ["P2D","P3D"],
+         "model_name": ["P2D","P3D","P4D"],
          "par_class": "non_material",
          "difficulty": "basis",
          "context_type": "MassFraction",

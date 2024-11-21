@@ -1,0 +1,24 @@
+{
+    "cell_types": {
+        "pouch": {
+            "model_name": ["P2D","P3D","P4D"],
+            "difficulty": "basis_advanced",
+            "tab_name": "cell",
+            "context_type": "battery:BatteryCell",
+            "context_type_iri": "https://w3id.org/emmo/domain/battery#battery_68ed592a_7924_45d0_a108_94d6275d57f0",
+            "description": "",
+            "display_name": "Pouch",
+            "default_template": "pouch_cell_template"
+        },
+        "cylindrical": {
+            "model_name": ["P2D","P3D","P4D"],
+            "difficulty": "basis_advanced",
+            "tab_name": "cell",
+            "context_type": "battery:BatteryCell",
+            "context_type_iri": "https://w3id.org/emmo/domain/battery#battery_68ed592a_7924_45d0_a108_94d6275d57f0",
+            "description": "",
+            "display_name": "Cylindrical",
+            "default_template": "cylindrical_cell_template"
+        }
+    }
+}

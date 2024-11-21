@@ -1,7 +1,7 @@
 {
     "components":{
         "negative_electrode_active_material": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": true,
             "context_type": "ActiveMaterial",
@@ -13,7 +13,7 @@
             "default_template": "active_material_template"
         },
         "negative_electrode_binder": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": true,
             "context_type": "Binder",
@@ -24,7 +24,7 @@
             "default_template": "binder_template"
         },
         "negative_electrode_additive": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": true,
             "context_type": "ConductiveAdditive",
@@ -36,7 +36,7 @@
         },
 
         "positive_electrode_active_material": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": true,
             "context_type": "ActiveMaterial",
@@ -48,7 +48,7 @@
             "default_template": "active_material_template"
         },
         "positive_electrode_binder": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": true,
             "context_type": "Binder",
@@ -59,7 +59,7 @@
             "default_template": "binder_template"
         },
         "positive_electrode_additive": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": true,
             "context_type": "ConductiveAdditive",
@@ -70,7 +70,7 @@
             "default_template": "additive_template"
         },
         "electrolyte_materials": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": true,
             "context_type": "Electrolyte",
@@ -82,7 +82,7 @@
         },
 
         "electrolyte_properties": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": false,
             "context_type": "Electrolyte",
@@ -93,7 +93,7 @@
             "default_template": "electrolyte_template"
         },
         "electrolyte_advanced": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": false,
             "context_type": "Electrolyte",
@@ -104,7 +104,7 @@
             "default_template": "electrolyte_template"
         },
         "positive_electrode_properties": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": false,
             "context_type": "PositiveElectrode",
@@ -115,7 +115,7 @@
             "default_template": "electrode_properties_template"
         },
         "negative_electrode_properties": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": false,
             "context_type": "NegativeElectrode",
@@ -126,7 +126,7 @@
             "default_template": "electrode_properties_template"
         },
         "protocol_properties": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis_advanced",
             "material": false,
             "context_type": "CyclingProcess",
@@ -137,7 +137,7 @@
             "default_template": "protocol_template"
         },
         "cell_properties": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis_advanced",
             "material": false,
             "context_type": "battery:BatteryCell",
@@ -148,7 +148,7 @@
             "default_template": "cell_template"
         },
         "separator_materials": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": true,
             "context_type": "Separator",
@@ -159,7 +159,7 @@
             "default_template": "separator_template"
         },
         "separator_properties": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": false,
             "context_type": "Separator",
@@ -170,7 +170,7 @@
             "default_template": "separator_template"
         },
         "separator_advanced": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": false,
             "context_type": "Separator",
@@ -181,7 +181,7 @@
             "default_template": "separator_template"
         },
         "boundary_conditions": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis_advanced",
             "material": false,
             "context_type": "BoundaryConditions",
@@ -192,7 +192,7 @@
             "default_template": "boundary_conditions_template"
         },
         "electrode_properties": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "basis",
             "material": false,
             "context_type": "Electrode",
@@ -202,7 +202,7 @@
             "default_template": "electrode_properties_template"
         },
         "negative_electrode_current_collector_materials": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": true,
             "context_type": "CurrentCollector",
@@ -213,7 +213,7 @@
             "default_template": "current_collector_template"
         },
         "positive_electrode_current_collector_materials": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": true,
             "context_type": "CurrentCollector",
@@ -224,7 +224,7 @@
             "default_template": "current_collector_template"
         },
         "negative_electrode_active_material_advanced": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": true,
             "context_type": "ActiveMaterial",
@@ -236,7 +236,7 @@
             "default_template": "active_material_template"
         },
         "negative_electrode_binder_advanced": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": true,
             "context_type": "Binder",
@@ -247,7 +247,7 @@
             "default_template": "binder_template"
         },
         "negative_electrode_additive_advanced": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": true,
             "context_type": "ConductiveAdditive",
@@ -259,7 +259,7 @@
         },
 
         "positive_electrode_active_material_advanced": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": true,
             "context_type": "ActiveMaterial",
@@ -271,7 +271,7 @@
             "default_template": "active_material_template"
         },
         "positive_electrode_binder_advanced": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": true,
             "context_type": "Binder",
@@ -282,7 +282,7 @@
             "default_template": "binder_template"
         },
         "positive_electrode_additive_advanced": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": true,
             "context_type": "ConductiveAdditive",
@@ -294,7 +294,7 @@
 
         },
         "positive_electrode_properties_advanced": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": false,
             "context_type": "PositiveElectrode",
@@ -305,7 +305,7 @@
             "default_template": "electrode_properties_template"
         },
         "negative_electrode_properties_advanced": {
-            "model_name": ["P2D","P3D"],
+            "model_name": ["P2D","P3D","P4D"],
             "difficulty": "advanced",
             "material": false,
             "context_type": "NegativeElectrode",

@@ -593,7 +593,6 @@ def get_models_as_dict():
 
 def get_model_name_from_id(model_id):
     model = sql_model().select(values="name", where="id = '{}'".format(model_id))
-
     return model[0][0]
 
 

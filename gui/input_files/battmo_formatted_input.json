@@ -12,7 +12,7 @@
          "ActiveMaterial": {
             "massFraction": 0.9,
             "density": 2260.0,
-            "electronicConductivity": 100.0,
+            "electronicConductivity": 6.0,
             "specificHeatCapacity": 632.0,
             "thermalConductivity": 1.04,
             "Interface": {

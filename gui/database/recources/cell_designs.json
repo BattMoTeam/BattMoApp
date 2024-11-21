@@ -1,0 +1,19 @@
+{
+    "cell_designs":{
+        "LGM50":{
+            "cell_type": "cylindrical",
+            "model_name": ["P2D","P3D","P4D"],
+            "difficulty": "basis",
+            "is_shown_to_user": true,
+            "reference_name": "Chen, C, et al. 2020",
+            "reference": "Chen, Chang\u2013Hui, et al. \u0022Development of experimental techniques for parameterization of multi\u2013scale lithium\u2013ion battery models.\u0022 Journal of The Electrochemical Society 167.8 (2020): 080534.",
+            "reference_url": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta",
+            "context_type": ["LGM50","battery:BatteryCell"],
+            "context_type_iri": "https://w3id.org/emmo/domain/battery#battery_68ed592a_7924_45d0_a108_94d6275d57f0",
+            "display_name": "LGM50",
+            "description": "",
+            "default_material": true
+
+        }
+    }
+}
