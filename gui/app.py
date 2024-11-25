@@ -76,8 +76,14 @@ st.markdown(
 with st.sidebar:
     page = option_menu(
         None,
-        ["Home", "Simulate", "Analyze", "Materials and models"],
-        icons=['house', 'battery-charging', 'graph-up', 'layers'],
+        [
+            "Home",
+            "Parameter Sets",
+            "Build Cell",
+            "Simulate",
+            "Analyze",
+        ],  # , "Materials and models"],
+        icons=['house', 'card-list', 'battery', 'battery-charging', 'graph-up'],  # , 'layers'],
         menu_icon="cast",
         default_index=0,
         # styles={
@@ -87,21 +93,54 @@ with st.sidebar:
 
 if page == "Home":
     pg.show_home()
+elif page == "Build Cell":
+
+    bar = option_menu(
+        None,
+        [
+            "Negative Electrode",
+            "Positive Electrode",
+            "Electrolyte",
+            "Separator",
+            "Cell Design",
+        ],
+        icons=[
+            'dash',
+            'plus',
+            '',
+            'distribute-horizontal',
+            'battery',
+        ],
+        menu_icon="cast",
+        default_index=0,
+        orientation="horizontal",
+    )
+
+    if bar == "Negative Electrode":
+        pg.show_fill_geometry()
+    elif bar == "Positive Electrode":
+        pg.show_fill_geometry()
+    elif bar == "Electrolyte":
+        pg.show_fill_geometry()
+    elif bar == "Separator":
+        pg.show_fill_geometry()
+
+    elif bar == "Cell Design":
+        pg.show_cell_design()
+
 
 elif page == "Simulate":
 
     bar = option_menu(
         None,
         [
-            "Upload",
-            "Build Model",
-            "Build Geometry",
-            "Fill Geometry",
+            # "Upload",
+            "Model Setup",
+            "Boundary Conditions",
             "Protocol",
-            "Simulation",
+            "Run",
         ],
         icons=[
-            'box-arrow-in-down',
             'toggles',
             'battery',
             'battery-full',
@@ -113,18 +152,13 @@ elif page == "Simulate":
         orientation="horizontal",
     )
 
-    if bar == "Upload":
-        pg.show_upload()
-    elif bar == "Build Model":
+    if bar == "Model Setup":
         pg.show_build_model()
-
-    elif bar == "Build Geometry":
-        pg.show_cell_design()
-    elif bar == "Fill Geometry":
+    elif bar == "Boundary Conditions":
         pg.show_fill_geometry()
     elif bar == "Protocol":
         pg.show_protocol()
-    elif bar == "Simulation":
+    elif bar == "Run":
         pg.show_simulation()
 
 elif page == "Analyze":

@@ -24,11 +24,11 @@ class AppController:
     def set_footer(self, page):
         return view.SetFooter(page)
 
-    def set_build_model(self):
-        return view.BuildModel()
+    def set_model_setup(self):
+        return view.ModelSetup()
 
-    def set_build_geometry(self):
-        return view.BuildGeometry()
+    def set_cell_design(self):
+        return view.CellDesign()
 
     def set_model_choice(self):
         return view.SetModelChoice()

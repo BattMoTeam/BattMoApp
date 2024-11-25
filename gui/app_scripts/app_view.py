@@ -12,6 +12,7 @@ from streamlit_extras.metric_cards import style_metric_cards
 from streamlit_extras.stylable_container import stylable_container
 from streamlit_extras.bottom_container import bottom
 from streamlit_extras.badges import badge
+from streamlit_extras.colored_header import colored_header
 import sympy as sp
 import matplotlib.pyplot as plt
 import os
@@ -191,7 +192,7 @@ class SetHeading:
         # Title and subtitle
         # logo_col, title_col = st.columns([1, 5])
         # logo_col.image(self.logo)
-        st.title(self.title)
+        st.header(self.title, divider="orange")
         # st.text(self.subtitle)
 
     def set_description(self):
@@ -346,13 +347,13 @@ class SetExternalLinks:
 
 
 #########################################
-# Class to setup Build Model page
+# Class to setup Model setup page
 #########################################
 
 
-class BuildModel:
+class ModelSetup:
     """
-    Rendering of the 'Build Model' page.
+    Rendering of the 'Model setup' page.
     """
 
     def __init__(self):
@@ -379,7 +380,7 @@ class BuildModel:
             model_name=self.selected_model_name
         )
 
-        index_dict = create_label_index_mapping(json_model["BuildModel"])
+        index_dict = create_label_index_mapping(json_model["ModelSetup"])
 
         col1, col2 = st.columns((1, 10))
 
@@ -389,7 +390,7 @@ class BuildModel:
                 key="cc_model_toggle",
                 help="Not recommended for P2D model",
                 value=bool(
-                    json_model["BuildModel"][index_dict["include_current_collector"]][
+                    json_model["ModelSetup"][index_dict["include_current_collector"]][
                         "hasNumericalPart"
                     ]["hasNumericalValue"]
                 ),
@@ -398,7 +399,7 @@ class BuildModel:
                 "",
                 key="thermal_model_toggle",
                 value=bool(
-                    json_model["BuildModel"][index_dict["use_thermal"]]["hasNumericalPart"][
+                    json_model["ModelSetup"][index_dict["use_thermal"]]["hasNumericalPart"][
                         "hasNumericalValue"
                     ]
                 ),
@@ -407,7 +408,7 @@ class BuildModel:
                 "",
                 key="solid_model_toggle",
                 value=bool(
-                    json_model["BuildModel"][index_dict["use_solid_diffusion_model"]][
+                    json_model["ModelSetup"][index_dict["use_solid_diffusion_model"]][
                         "hasNumericalPart"
                     ]["hasNumericalValue"]
                 ),
@@ -428,18 +429,18 @@ class BuildModel:
             else:
                 solid_select = None
 
-        json_model["BuildModel"][index_dict["use_solid_diffusion_model"]]["hasNumericalPart"][
+        json_model["ModelSetup"][index_dict["use_solid_diffusion_model"]]["hasNumericalPart"][
             "hasNumericalValue"
         ] = int(solid)
-        json_model["BuildModel"][index_dict["use_thermal"]]["hasNumericalPart"][
+        json_model["ModelSetup"][index_dict["use_thermal"]]["hasNumericalPart"][
             "hasNumericalValue"
         ] = int(thermal)
-        json_model["BuildModel"][index_dict["include_current_collector"]]["hasNumericalPart"][
+        json_model["ModelSetup"][index_dict["include_current_collector"]]["hasNumericalPart"][
             "hasNumericalValue"
         ] = int(cc)
 
         if solid_select:
-            json_model["BuildModel"][index_dict["solid_diffusion_model_type"]]["hasStringPart"][
+            json_model["ModelSetup"][index_dict["solid_diffusion_model_type"]]["hasStringPart"][
                 "hasStringValue"
             ] = solid_select
 
@@ -472,13 +473,13 @@ class BuildModel:
 
 
 #########################################
-# Class to setup Build Geometry page
+# Class to setup Cell design page
 #########################################
 
 
-class BuildGeometry:
+class CellDesign:
     """
-    Rendering of the 'Build Geometry' page.
+    Rendering of the 'Cell design' page.
     """
 
     def __init__(self):
@@ -506,10 +507,10 @@ class BuildGeometry:
         _, col1, _ = cont1.columns((0.5, 1.5, 0.5))
 
         with col1:
-            geom1, geom2 = st.tabs(("Cell design", "Geometry used for the simulation"))
+            # geom1, geom2 = st.tabs(("Cell design", "Geometry used for the simulation"))
             st.text("")
-            with geom1:
-                SetGeometryVisualization(gui_parameters)
+            # with geom1:
+            SetGeometryVisualization(gui_parameters)
 
             st.text("")
 
@@ -673,7 +674,7 @@ class SetupLinkedDataStruct:
 
     @st.cache_data
     def setup_json_linked_data_model(_self, model_name):
-        dict = {"BuildModel": db_helper.get_model_parameters_as_dict(model_name)}
+        dict = {"ModelSetup": db_helper.get_model_parameters_as_dict(model_name)}
         return dict
 
     @st.cache_data
@@ -1069,6 +1070,7 @@ class SetInputUpload:
     def __init__(self):
 
         # File input feature
+        self.header = "Upload parameter set"
         self.info = "Upload here your JSON LD input parameter file to automatically fill the parameter inputs."
         self.help = "You can only upload the JSON LD format"
 
@@ -1089,6 +1091,9 @@ class SetInputUpload:
 
     def set_file_input(self):
         """Function that create a file input at the Simulation page"""
+
+        st.markdown("#### " + self.header)
+        st.text("")
 
         # upload_col, update_col = st.columns((3, 1))
         uploaded_file = st.file_uploader(
@@ -1130,7 +1135,12 @@ class SetInputUpload:
         # update_col.text(" ")
         # update_col.text(" ")
 
-        st.button("CLEAR", on_click=self.set_sessions_state_clear_upload, use_container_width=True)
+        st.button(
+            "CLEAR",
+            on_click=self.set_sessions_state_clear_upload,
+            use_container_width=True,
+            type="secondary",
+        )
 
 
 class SetTabs:
@@ -5123,7 +5133,7 @@ class DownloadParameters:
         # with open(app_access.get_path_to_linked_data_input()) as json_gui_parameters:
         #     self.gui_parameters = json.load(json_gui_parameters)
 
-        self.download_header = "Download parameters"
+        self.download_header = "Download parameter set"
         self.download_label = "JSON LD format"
         self.gui_file_data = json.dumps(self.gui_parameters, indent=2)
         self.gui_file_name = "JSON_ld_parameters.json"
@@ -5426,14 +5436,14 @@ class DownloadParameters:
 
     def set_submit_button(self):
 
-        with st.sidebar:
-            self.render_buttons()
+        # with st.sidebar:
+        self.render_buttons()
 
     @st.fragment()
     def render_buttons(self):
 
         # set Download header
-        st.markdown("### " + self.download_header)
+        st.markdown("#### " + self.download_header)
 
         # set popover button
         popover = st.popover(self.download_label, use_container_width=False)
@@ -5582,7 +5592,7 @@ class SetModelDescription:
         P2D_model = db_helper.get_model_parameters_as_dict("P2D")
         P2D_model_description = db_helper.get_model_description(self.model)[0][0]
 
-        st.title("The available models")
+        st.markdown("#### " + "The available models")
 
         model = st.expander(self.model)
 
@@ -9257,7 +9267,7 @@ class SetMaterialDescription:
 
         materials = db_helper.get_all_default_material()
 
-        st.title("The available materials")
+        st.markdown("#### " + "The available materials")
 
         display_names = []
         for material_values in materials:

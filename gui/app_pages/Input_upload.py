@@ -12,15 +12,6 @@ from app_scripts import app_view, app_access
 
 def show_upload():
 
-    if "json_uploaded_input" not in st.session_state:
-        st.session_state.json_uploaded_input = None
-
-    if "upload" not in st.session_state:
-        st.session_state.upload = None
-
-    if "clear_upload" not in st.session_state:
-        st.session_state.clear_upload = None
-
     app = get_app_controller()
 
     uploaded_json = app.set_input_upload().uploaded_input_dict

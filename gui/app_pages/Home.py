@@ -13,6 +13,7 @@ from app_scripts.app_controller import (
     set_external_links,
     set_acknowlegent_info,
     get_app_controller,
+    set_model_description,
 )
 from app_scripts import app_view
 
@@ -29,6 +30,18 @@ st.session_state.update(st.session_state)
 
 def show_home():
 
+    st.html(
+        """
+            <style>
+
+            /* Specific styling for headers within the container */
+                h1, h2, h3, h4, h5, h6 {
+                    color: #770737; /* Make header text white */
+                }
+
+            </style>
+            """
+    )
     st.text("")
     st.text("")
     app = get_app_controller()
@@ -37,6 +50,8 @@ def show_home():
     set_heading()
 
     app_view.st_space(space_width=3)
+
+    set_model_description()
 
     # Set page navigation
     # col = set_page_navigation()
