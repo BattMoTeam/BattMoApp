@@ -1,0 +1,73 @@
+{
+    "$id": "file://./electrolyte_template.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "electrolyte_template object",
+    "type": "object",
+    "required":["name", "is_material","is_cell_type", "parameters"],
+    "properties": {
+        "name": {
+            "type": "string",
+            " description": "The name of the template"
+        },
+        "is_material": {
+            "type": "bool",
+            "description":"Whether the template represents a material or not.",
+            "enum": [true, false]
+        },
+        "is_cell_type": {
+            "type": "bool",
+            "description":"Whether the template represents a cell type or not.",
+            "enum": [true, false]
+        },
+        "parameters":{
+            "type": "dict",
+            "description": "A dict with parameters and their meta data.",
+            "additionalProperties": false,
+            "minProperties": 9,
+            "properties":{
+                "specific_heat_capacity":{
+                    "$ref": "parameter.schema.json"
+                },
+                "thermal_conductivity":{
+                    "$ref": "parameter.schema.json"
+                },
+                "density":{
+                    "$ref": "parameter.schema.json"
+                },
+                "charge_carrier_name":{
+                    "$ref": "parameter.schema.json"
+                },
+                "charge_carrier_charge_number":{
+                    "$ref": "parameter.schema.json"
+                },
+                "charge_carrier_transference_number":{
+                    "$ref": "parameter.schema.json"
+                },
+                "counter_ion_name":{
+                    "$ref": "parameter.schema.json"
+                },
+                "counter_ion_charge_number":{
+                    "$ref": "parameter.schema.json"
+                },
+                "counter_ion_transference_number":{
+                    "$ref": "parameter.schema.json"
+                },
+                "bruggeman_coefficient":{
+                    "$ref": "parameter.schema.json"
+                },
+                "concentration":{
+                    "$ref": "parameter.schema.json"
+                },
+                "EC_DMC_ratio":{
+                    "$ref": "parameter.schema.json"
+                },
+                "conductivity":{
+                    "$ref": "parameter.schema.json"
+                },
+                "diffusion_coefficient":{
+                    "$ref": "parameter.schema.json"
+                }
+                
+            }
+    }   }
+}

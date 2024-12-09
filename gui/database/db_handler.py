@@ -105,6 +105,7 @@ class ParameterSetHandler(db.BaseHandler):
         )
 
     def get_id_by_name_and_category_and_model_name(self, name, component_id, model_name):
+        print(name)
         res = self.select_one(
             values="*",
             where="name = '%s' and component_id Like %d and model_name = '%s'"

@@ -1,0 +1,41 @@
+{
+    "$id": "file://./negative_electrode_category.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "negative_electrode_category object",
+    "type": "object",
+    "required": ["display_name", "context_type", "context_type_iri"],
+    "properties": {
+        "display_name": {
+            "type": "string",
+            "description": "The name that is rendered in the app"
+        },
+        "context_type":{
+            "type": ["string", "list"],
+            "description": "The ontology context type of the object."
+        },
+        "context_type_iri": {
+            "type": "string",
+            "description": "The iri of the ontology context type."
+        },
+        "templates": {
+            "type": "dict",
+            "description": "",
+            "properties": {
+                "active_material_template": {
+                "$ref": "active_material_template.schema.json"
+                },
+                "binder_template": {
+                "$ref": "binder_template.schema.json"
+                },
+                "additive_template": {
+                "$ref": "additive_template.schema.json"
+                },
+                "electrode_properties_template": {
+                "$ref": "electrode_properties_template.schema.json"
+                }
+
+            }
+        }
+    }
+
+}

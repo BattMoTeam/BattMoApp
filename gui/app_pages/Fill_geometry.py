@@ -16,7 +16,7 @@ def show_fill_geometry():
 
     model_id = st.session_state.selected_model
 
-    gui_parameters = app.set_tabs(model_id).user_input
+    gui_parameters = app.set_tabs(model_id, None).user_input
 
     with st.sidebar:
         st.text("")

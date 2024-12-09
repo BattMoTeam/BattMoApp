@@ -1,0 +1,13 @@
+{
+    "$id": "file://./NavigationPage.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "NavigationPage object",
+    "type": "object",
+    "properties": {
+        "DisplayName":{
+            "type": "string",
+            "description": "Name that is visualized in the navigation tab"
+        }
+    }
+
+}

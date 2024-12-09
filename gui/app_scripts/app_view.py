@@ -43,22 +43,6 @@ from app_scripts import app_calculations as calc
 #####################################
 
 
-def st_space(tab=None, space_width=1, space_number=1):
-    """
-    function meant to be a shortcut for adding space in streamlit. Not important.
-    """
-    space = ""
-    for _ in range(space_width):
-        space += "#"
-
-    if tab:
-        for _ in range(space_number):
-            tab.markdown(space)
-    else:
-        for _ in range(space_number):
-            st.markdown(space)
-
-
 def create_label_index_mapping(data):
     """
     Creates a dictionary with 'rdfs:label' values as keys and their respective
@@ -77,6 +61,43 @@ def create_label_index_mapping(data):
 #########################################
 # Classes used on multiple pages
 #########################################
+
+
+class PageDesign:
+    """
+    Used to do design changes.
+    """
+
+    def __init__(self):
+        pass
+
+    def st_space(self, tab=None, space_width=1, space_number=1):
+        """
+        function meant to be a shortcut for adding space in streamlit. Not important.
+        """
+        space = ""
+        for _ in range(space_width):
+            space += "#"
+
+        if tab:
+            for _ in range(space_number):
+                tab.markdown(space)
+        else:
+            for _ in range(space_number):
+                st.markdown(space)
+
+    def color_headers(self):
+        header_html = """
+            <style>
+
+            /* Specific styling for headers within the container */
+                h1, h2, h3, h4, h5, h6 {
+                    color: #770737; /* Make header text white */
+                }
+
+            </style>
+            """
+        st.html(header_html)
 
 
 class SetFooter:
@@ -107,29 +128,34 @@ class SetFooter:
         )
 
     def render_theme_toggle(self):
-        with stylable_container(
-            key="indicator_container",
-            css_styles="""
-                {
-                    background-color: #F0F0F0;
-                    color: black;
-                    border-radius: 10px;
-                    border: 4px solid #770737;
-                    height: 25px;
-                    padding: 5px; /* Padding to give some space inside */
 
-                }
-                """,
+        def theming():
+            if st.session_state['themebutton'] == 'light':
+                # Switch to dark theme
+                st._config.set_option(f'theme.base', "dark")
+                st._config.set_option(f'theme.backgroundColor', "black")
+                st._config.set_option(f'theme.primaryColor', "#770737")
+                st._config.set_option(f'theme.secondaryBackgroundColor', "#262730")
+                st._config.set_option(f'theme.textColor', "white")
+                st.session_state['themebutton'] = 'dark'
+            else:
+                # Switch to light theme
+                st._config.set_option(f'theme.base', "light")
+                st._config.set_option(f'theme.backgroundColor', "white")
+                st._config.set_option(f'theme.primaryColor', "#770737")
+                st._config.set_option(f'theme.secondaryBackgroundColor', "#F0F0F0")
+                st._config.set_option(f'theme.textColor', "#000000")
+                st.session_state['themebutton'] = 'light'
+
+        if st.button(
+            ":sun_with_face:/:first_quarter_moon_with_face:", help="Switch theme", type="primary"
         ):
+            theming()
+            st.rerun()
 
-            cont = st.container(key="bottom_container")
-
-            with cont:
-                cola, colb = st.columns((1, 10))
-                cola.text("")
-                theme = colb.toggle("Dark theme", label_visibility="visible")
-
-        st.session_state.theme = theme
+    def set_sessions_state_clear_upload(self):
+        st.session_state.upload = False
+        st.session_state.clear_upload = True
 
     def render_footer(self):
 
@@ -137,34 +163,74 @@ class SetFooter:
 
             with bottom():
 
-                col1, col2 = st.columns((7, 1.5))
+                col1, col2 = st.columns((8, 0.7))
 
                 with col2:
                     self.render_theme_toggle()
 
                 # with col1:
                 SetExternalLinks()
-        else:
+        elif self.page == "Input_upload" or self.page == "Parameter_sets":
             with bottom():
 
-                _, col1, col2 = st.columns((7, 1.5, 1))
+                col1, col2, col3 = st.columns((7, 0.7, 0.5))
 
-                with col2:
+                with col1:
+                    upload = st.session_state.upload
+                    if upload == True:
+                        st.write(":heavy_check_mark: JSON LD file is uploaded and used")
+
+                    else:
+                        st.write(":red_circle: No JSON LD file uploaded")
+
+                with col3:
 
                     self.render_eu_logo()
 
+                with col2:
+                    st.text("")
+                    self.render_theme_toggle()
+
+        else:
+            with bottom():
+
+                col1, col2, _, col3, col4 = st.columns((1, 1, 5, 0.7, 0.5))
+
                 with col1:
+                    upload = st.session_state.upload
+                    if upload == True:
+                        st.write(":heavy_check_mark: JSON LD file is uploaded and used")
+
+                        clear = st.button(
+                            "Clear Upload",
+                            on_click=self.set_sessions_state_clear_upload,
+                            use_container_width=False,
+                            type="secondary",
+                        )
+                    else:
+                        st.write(":red_circle: No JSON LD file uploaded")
+
+                with col2:
+                    # DownloadParameters(st.session_state.json_linked_data_input)
+                    st.text("")
+
+                with col4:
+
+                    self.render_eu_logo()
+
+                with col3:
+                    st.text("")
                     self.render_theme_toggle()
 
 
 #########################################
-# Classes used on the Introduction page
+# Classes used on the Home page
 #########################################
 
 
 class SetHeading:
     """
-    Only used in the "Introduction" page, nothing important here, opened for complete modification.
+    Only used in the "Home" page, nothing important here, opened for complete modification.
     """
 
     def __init__(self, logo):
@@ -190,8 +256,7 @@ class SetHeading:
 
     def set_title_and_logo(self):
         # Title and subtitle
-        # logo_col, title_col = st.columns([1, 5])
-        # logo_col.image(self.logo)
+
         st.header(self.title, divider="orange")
         # st.text(self.subtitle)
 
@@ -1092,7 +1157,7 @@ class SetInputUpload:
     def set_file_input(self):
         """Function that create a file input at the Simulation page"""
 
-        st.markdown("#### " + self.header)
+        st.header(self.header, divider="orange")
         st.text("")
 
         # upload_col, update_col = st.columns((3, 1))
@@ -1143,6 +1208,51 @@ class SetInputUpload:
         )
 
 
+class RenderCategories:
+    def __init__(self, model_id, page_category):
+        self.model_id = model_id
+        self.model_name = db_helper.get_model_name_from_id(model_id)
+        self.page_category = page_category
+
+        # Set page title
+        self.title = db_helper.get_basis_category_display_name_from_name(self.page_category)
+        self.set_title()
+
+        # initialize formatter
+        self.formatter = FormatParameters()
+        self.LD = SetupLinkedDataStruct()
+
+        self.render_categories()
+
+    def set_title(self):
+        st.header(self.title, divider="orange")
+
+    def render_categories(self):
+        category = db_helper.get_basis_category_from_name(self.page_category)
+        cell_parameters = {}
+        # category_parameters = self.LD.setup_sub_dict(
+        #     name=db_helper.get_basis_categories_names(db_tab_id)[i][0],
+        #     context_type=db_helper.get_categories_context_type(db_tab_id)[i][0],
+        #     existence="new",
+        # )
+
+        (
+            category_id,
+            category_name,
+            _,
+            _,
+            category_context_type,
+            category_context_type_iri,
+            emmo_relation,
+            category_display_name,
+            _,
+            default_template_id,
+            _,
+        ) = category
+
+        print(category_name)
+
+
 class SetTabs:
     """
     - Rendering of almost all the Define Parameter tab
@@ -1167,12 +1277,13 @@ class SetTabs:
         careful to optimize this section because it's rerun by streamlit at every click for every single parameter.
     """
 
-    def __init__(self, images, model_id, context):
+    def __init__(self, images, model_id, page_category, context):
         # image dict stored for easier access
         self.image_dict = images
         self.model_id = model_id
         self.model_name = db_helper.get_model_name_from_id(model_id)
 
+        self.page_category = page_category
         # retrieve corresponding templates (not implemented yet)
         # self.model_templates = db_helper.get_templates_by_id(model_id)
 
@@ -1348,29 +1459,88 @@ class SetTabs:
             # tab_name = db_helper.get_tab_name_by_id(db_tab_id)
             tab_display_name = db_helper.get_basis_tabs_display_names(self.model_name)[index]
             tab_name = db_helper.get_basis_tab_names(self.model_name)[index]
+            st.write(tab_name)
+            if tab == self.page_category:
+                tab_parameters = self.LD.setup_sub_dict(
+                    name=tab_name,
+                    context_type=tab_context_type,
+                    existence="new",
+                )
 
-            tab_parameters = self.LD.setup_sub_dict(
-                name=tab_name,
-                context_type=tab_context_type,
-                existence="new",
-            )
+                tab_relation = self.LD.get_relation(db_tab_id, "tab")
 
-            tab_relation = self.LD.get_relation(db_tab_id, "tab")
+                # logo and title
+                self.set_logo_and_title(tab, index)
 
-            # logo and title
-            self.set_logo_and_title(tab, index)
+                # get tab's categories
+                categories = db_helper.get_basis_categories_from_tab_id(db_tab_id)
 
-            # get tab's categories
-            categories = db_helper.get_basis_categories_from_tab_id(db_tab_id)
+                if len(categories) > 1:  # create one sub tab per category
 
-            if len(categories) > 1:  # create one sub tab per category
+                    all_category_display_names = [a[7] for a in categories]
+                    all_sub_tabs = tab.tabs(all_category_display_names)
+                    i = 0
+                    mass_loadings = {}
 
-                all_category_display_names = [a[7] for a in categories]
-                all_sub_tabs = tab.tabs(all_category_display_names)
-                i = 0
-                mass_loadings = {}
+                    for category in categories:
+                        (
+                            category_id,
+                            category_name,
+                            _,
+                            _,
+                            category_context_type,
+                            category_context_type_iri,
+                            emmo_relation,
+                            category_display_name,
+                            _,
+                            default_template_id,
+                            _,
+                        ) = category
 
-                for category in categories:
+                    for category in categories:
+
+                        category_parameters = self.LD.setup_sub_dict(
+                            name=db_helper.get_basis_categories_names(db_tab_id)[i][0],
+                            context_type=db_helper.get_categories_context_type(db_tab_id)[i][0],
+                            existence="new",
+                        )
+
+                        (
+                            category_id,
+                            category_name,
+                            _,
+                            _,
+                            category_context_type,
+                            category_context_type_iri,
+                            emmo_relation,
+                            category_display_name,
+                            _,
+                            default_template_id,
+                            _,
+                        ) = category
+
+                        category_relation = self.LD.get_relation(category_id, "category")
+
+                        category_parameters, emmo_relation, mass_loadings = self.fill_category(
+                            category_id=category_id,
+                            category_display_name=category_display_name,
+                            category_name=category_name,
+                            tab_display_name=tab_display_name,
+                            emmo_relation=emmo_relation,
+                            default_template_id=default_template_id,
+                            tab=all_sub_tabs[i],
+                            category_parameters=category_parameters,
+                            mass_loadings=mass_loadings,
+                        )
+                        i += 1
+
+                        # tab_parameters[category_relation] = category_parameters
+                        cell_parameters[category_relation] = category_parameters
+
+                else:  # no sub tab is needed
+
+                    category_parameters = {}
+
                     (
                         category_id,
                         category_name,
@@ -1383,104 +1553,46 @@ class SetTabs:
                         _,
                         default_template_id,
                         _,
-                    ) = category
+                    ) = categories[0]
 
-                for category in categories:
+                    if category_name == "protocol":
 
-                    category_parameters = self.LD.setup_sub_dict(
-                        name=db_helper.get_basis_categories_names(db_tab_id)[i][0],
-                        context_type=db_helper.get_categories_context_type(db_tab_id)[i][0],
-                        existence="new",
-                    )
+                        # different way of filling parameters for protocol section, the idea is to choose the name of the
+                        # protocol and then the parameters are filled. Could be done also for the Cell tab
+                        category_parameters = self.fill_category_protocol(
+                            tab_display_name,
+                            category_id=category_id,
+                            category_display_name=category_display_name,
+                            category_name=category_name,
+                            emmo_relation=emmo_relation,
+                            default_template_id=default_template_id,
+                            tab=tab,
+                            category_parameters=category_parameters,
+                        )
 
-                    (
-                        category_id,
-                        category_name,
-                        _,
-                        _,
-                        category_context_type,
-                        category_context_type_iri,
-                        emmo_relation,
-                        category_display_name,
-                        _,
-                        default_template_id,
-                        _,
-                    ) = category
-
-                    category_relation = self.LD.get_relation(category_id, "category")
-
-                    category_parameters, emmo_relation, mass_loadings = self.fill_category(
-                        category_id=category_id,
-                        category_display_name=category_display_name,
-                        category_name=category_name,
-                        tab_display_name=tab_display_name,
-                        emmo_relation=emmo_relation,
-                        default_template_id=default_template_id,
-                        tab=all_sub_tabs[i],
-                        category_parameters=category_parameters,
-                        mass_loadings=mass_loadings,
-                    )
-                    i += 1
-
-                    # tab_parameters[category_relation] = category_parameters
-                    cell_parameters[category_relation] = category_parameters
-
-            else:  # no sub tab is needed
-
-                category_parameters = {}
-
-                (
-                    category_id,
-                    category_name,
-                    _,
-                    _,
-                    category_context_type,
-                    category_context_type_iri,
-                    emmo_relation,
-                    category_display_name,
-                    _,
-                    default_template_id,
-                    _,
-                ) = categories[0]
-
-                if category_name == "protocol":
-
-                    # different way of filling parameters for protocol section, the idea is to choose the name of the
-                    # protocol and then the parameters are filled. Could be done also for the Cell tab
-                    category_parameters = self.fill_category_protocol(
-                        tab_display_name,
-                        category_id=category_id,
-                        category_display_name=category_display_name,
-                        category_name=category_name,
-                        emmo_relation=emmo_relation,
-                        default_template_id=default_template_id,
-                        tab=tab,
-                        category_parameters=category_parameters,
-                    )
-
-                    cell_parameters[tab_relation] = category_parameters[tab_relation]
-                    # cell_parameters = LD.fill_sub_dict(cell_parameters, tab_relation, protocol_parameters,"new",relation_dict_2=tab_relation)
-
-                else:
-
-                    category_parameters, _, _ = self.fill_category(
-                        category_id=category_id,
-                        category_display_name=category_display_name,
-                        category_name=category_name,
-                        tab_display_name=tab_display_name,
-                        emmo_relation=emmo_relation,
-                        default_template_id=default_template_id,
-                        tab=tab,
-                        category_parameters=category_parameters,
-                        mass_loadings=None,
-                    )
-
-                    if category_display_name == "Cell":
-                        cell_parameters.update(category_parameters)
-                    else:
                         cell_parameters[tab_relation] = category_parameters[tab_relation]
+                        # cell_parameters = LD.fill_sub_dict(cell_parameters, tab_relation, protocol_parameters,"new",relation_dict_2=tab_relation)
 
-                    # cell_parameters = LD.fill_sub_dict(cell_parameters, tab_relation, category_parameters,"new",relation_dict_2=tab_relation)
+                    else:
+
+                        category_parameters, _, _ = self.fill_category(
+                            category_id=category_id,
+                            category_display_name=category_display_name,
+                            category_name=category_name,
+                            tab_display_name=tab_display_name,
+                            emmo_relation=emmo_relation,
+                            default_template_id=default_template_id,
+                            tab=tab,
+                            category_parameters=category_parameters,
+                            mass_loadings=None,
+                        )
+
+                        if category_display_name == "Cell":
+                            cell_parameters.update(category_parameters)
+                        else:
+                            cell_parameters[tab_relation] = category_parameters[tab_relation]
+
+                        # cell_parameters = LD.fill_sub_dict(cell_parameters, tab_relation, category_parameters,"new",relation_dict_2=tab_relation)
 
             # cell is fully defined, its parameters are saved in the user_input dict
             self.user_input = self.LD.fill_linked_data_dict(self.user_input, cell_parameters)
@@ -5512,6 +5624,7 @@ class DownloadParameters:
                 data=self.setup_gui_schema(headline, description, creator),
                 file_name=self.gui_file_name,
                 mime=self.file_mime_type,
+                type="secondary",
             )
 
         st.download_button(
@@ -5521,6 +5634,7 @@ class DownloadParameters:
             data=self.formatted_parameters_file_data,
             file_name=self.formatted_parameters_file_name,
             mime=self.file_mime_type,
+            type="secondary",
         )
 
 
@@ -5588,44 +5702,46 @@ class SetModelDescription:
         self.set_model_description()
 
     def set_model_description(self):
-        models_as_dict = db_helper.get_models_as_dict()
-        P2D_model = db_helper.get_model_parameters_as_dict("P2D")
-        P2D_model_description = db_helper.get_model_description(self.model)[0][0]
 
-        st.markdown("#### " + "The available models")
+        with st.expander("Model library"):
+            models_as_dict = db_helper.get_models_as_dict()
+            P2D_model = db_helper.get_model_parameters_as_dict("P2D")
+            P2D_model_description = db_helper.get_model_description(self.model)[0][0]
 
-        model = st.expander(self.model)
+            st.markdown("#### " + "The available models")
 
-        with model:
+            model = st.expander(self.model)
 
-            st.markdown("""**Includes** """)
-            st.markdown(
-                "- Thermal effects = <span style='color: blue;'>"
-                + str(bool(P2D_model[0][self.hasNumericalPart][self.hasNumericalValue]))
-                + "</span>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                "- Current collector = <span style='color: blue;'>"
-                + str(bool(P2D_model[1][self.hasNumericalPart][self.hasNumericalValue]))
-                + "</span>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                "- Solid Diffusion model = <span style='color: blue;'>"
-                + str(bool(P2D_model[2][self.hasNumericalPart][self.hasNumericalValue]))
-                + "</span>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                "- Solid Diffusion model type = <span style='color: blue;'>"
-                + str(P2D_model[3][self.hasStringPart][self.hasStringValue])
-                + "</span>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(" ")
-            st.markdown("**Description**")
-            st.markdown(P2D_model_description)
+            with model:
+
+                st.markdown("""**Includes** """)
+                st.markdown(
+                    "- Thermal effects = <span style='color: blue;'>"
+                    + str(bool(P2D_model[0][self.hasNumericalPart][self.hasNumericalValue]))
+                    + "</span>",
+                    unsafe_allow_html=True,
+                )
+                st.markdown(
+                    "- Current collector = <span style='color: blue;'>"
+                    + str(bool(P2D_model[1][self.hasNumericalPart][self.hasNumericalValue]))
+                    + "</span>",
+                    unsafe_allow_html=True,
+                )
+                st.markdown(
+                    "- Solid Diffusion model = <span style='color: blue;'>"
+                    + str(bool(P2D_model[2][self.hasNumericalPart][self.hasNumericalValue]))
+                    + "</span>",
+                    unsafe_allow_html=True,
+                )
+                st.markdown(
+                    "- Solid Diffusion model type = <span style='color: blue;'>"
+                    + str(P2D_model[3][self.hasStringPart][self.hasStringValue])
+                    + "</span>",
+                    unsafe_allow_html=True,
+                )
+                st.markdown(" ")
+                st.markdown("**Description**")
+                st.markdown(P2D_model_description)
 
 
 class GetResultsData:
@@ -6185,15 +6301,12 @@ class SetIndicators:
                         label_visibility="visible",
                     )
 
-                    if st.session_state.theme == False:
-                        background_color = "#F0F0F0"
-                    elif st.session_state.theme == True:
-                        background_color = "#F0F0F0"
-
+                    background_color = st._config.get_option(f'theme.backgroundColor')
+                    primary_color = st._config.get_option(f'theme.primaryColor')
                     style_metric_cards(
-                        border_left_color="#770737",
+                        border_left_color=primary_color,
                         background_color=background_color,
-                        border_color="#770737",
+                        border_color=primary_color,
                     )
 
             elif isinstance(file_names, str):
@@ -6379,15 +6492,13 @@ class SetIndicators:
                             label_visibility="visible",
                         )
 
-                        if st.session_state.theme == False:
-                            background_color = "#FFFFFF"
-                        elif st.session_state.theme == True:
-                            background_color = "#F0F0F0"
+                        background_color = st._config.get_option('theme.backgroundColor')
+                        primary_color = st._config.get_option(f'theme.primaryColor')
 
                         style_metric_cards(
-                            border_left_color="#770737",
+                            border_left_color=primary_color,
                             background_color=background_color,
-                            border_color="#770737",
+                            border_color=primary_color,
                         )
 
                     elif self.page_name == "Results":
@@ -6507,15 +6618,13 @@ class SetIndicators:
                             label_visibility="visible",
                         )
 
-                        if st.session_state.theme == False:
-                            background_color = "#FFFFFF"
-                        elif st.session_state.theme == True:
-                            background_color = "#F0F0F0"
+                        background_color = st._config.get_option(f'theme.backgroundColor')
+                        primary_color = st._config.get_option(f'theme.primaryColor')
 
                         style_metric_cards(
-                            border_left_color="#770737",
+                            border_left_color=primary_color,
                             background_color=background_color,
-                            border_color="#770737",
+                            border_color=primary_color,
                         )
 
                     else:
@@ -9338,7 +9447,7 @@ class SetMaterialDescription:
                             st.markdown("**Reference**:")
                             st.write("[{}]({})".format(reference, reference_link))
                         st.markdown("**Parameter values**:")
-
+                        st.write(name)
                         parameter_set_id = db_helper.get_parameter_set_id_by_name(name)
 
                         parameter_values = tuple(

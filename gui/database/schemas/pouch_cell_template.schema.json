@@ -1,0 +1,91 @@
+{
+    "$id": "file://./pouch_cell_template.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "pouch_cell_template object",
+    "type": "object",
+    "required":["name", "is_material","is_cell_type", "parameters"],
+    "properties": {
+        "name": {
+            "type": "string",
+            " description": "The name of the template"
+        },
+        "is_material": {
+            "type": "bool",
+            "description":"Whether the template represents a material or not.",
+            "enum": [true, false]
+        },
+        "is_cell_type": {
+            "type": "bool",
+            "description":"Whether the template represents a cell type or not.",
+            "enum": [true, false]
+        },
+        "parameters":{
+            "type": "dict",
+            "description": "A dict with parameters and their meta data.",
+            "additionalProperties": false,
+            "minProperties": 20,
+            "properties":{
+                "length":{
+                    "$ref": "parameter.schema.json"
+                },
+                "width":{
+                    "$ref": "parameter.schema.json"
+                },
+                "negative_electrode_coating_thickness":{
+                    "$ref": "parameter.schema.json"
+                },
+                "negative_electrode_number_of_discrete_cells_electrode":{
+                    "$ref": "parameter.schema.json"
+                },
+                "negative_electrode_current_collector_thickness":{
+                    "$ref": "parameter.schema.json"
+                },
+                "negative_electrode_number_of_discrete_cells_current_collector":{
+                    "$ref": "parameter.schema.json"
+                },
+                "positive_electrode_coating_thickness":{
+                    "$ref": "parameter.schema.json"
+                },
+                "positive_electrode_number_of_discrete_cells_electrode":{
+                    "$ref": "parameter.schema.json"
+                },
+                "positive_electrode_current_collector_thickness":{
+                    "$ref": "parameter.schema.json"
+                },
+                "positive_electrode_number_of_discrete_cells_current_collector":{
+                    "$ref": "parameter.schema.json"
+                },
+                "separator_thickness":{
+                    "$ref": "parameter.schema.json"
+                },
+                "number_of_discrete_cells_separator":{
+                    "$ref": "parameter.schema.json"
+                },
+                "number_parallel_electrode_pairs_within_cell":{
+                    "$ref": "parameter.schema.json"
+                },
+                "external_surface_area":{
+                    "$ref": "parameter.schema.json"
+                },
+                "packing_mass":{
+                    "$ref": "parameter.schema.json"
+                },
+                "nominal_cell_capacity":{
+                    "$ref": "parameter.schema.json"
+                },
+                "cell_mass":{
+                    "$ref": "parameter.schema.json"
+                },
+                "discharge_energy":{
+                    "$ref": "parameter.schema.json"
+                },
+                "specific_energy":{
+                    "$ref": "parameter.schema.json"
+                },
+                "round_trip_efficiency":{
+                    "$ref": "parameter.schema.json"
+                }
+            }
+        }
+    }
+}

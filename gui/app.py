@@ -1,14 +1,11 @@
 import streamlit as st
 import os
+import json
 from streamlit_option_menu import option_menu
-from streamlit_extras.stylable_container import stylable_container
-from streamlit_extras.bottom_container import bottom
-from streamlit_extras.colored_header import colored_header
 import app_pages as pg
 from PIL import Image
-from app_scripts import app_access
-import base64
 from app_scripts.app_session_states import init_session_states
+from app_scripts.app_access import *
 
 # from streamlit_extras.container import style_container
 
@@ -57,145 +54,59 @@ st.markdown(
 )
 
 
-# home_page = st.Page("app_pages/Home.py", title="Home", default=True)  # , icon="🏠")
+with open(os.path.join(get_path_to_database_recources_dir(), "pages.json"), 'r') as f:
+    json_data = json.load(f)
 
-# simulation_page = st.Page("app_pages/Simulation.py", title="Simulation")  # , icon="🔋")
-
-# results_page = st.Page("app_pages/Results.py", title="Results")  # , icon="📈")
-
-# materials_models_page = st.Page(
-#     "app_pages/Materials_and_models.py", title="Materials and models"
-# )  # , icon="🍪")
+pages_data = json_data["pages"]
 
 
-# streamlit_nav = st.navigation(
-#     pages=[home_page, simulation_page, results_page, materials_models_page]
-# )
+# Helper function to execute a function by name
+def execute_function(function_name):
+    if hasattr(pg, function_name):
+        getattr(pg, function_name)()
 
-# streamlit_nav.run()
+
+# Main navigation
 with st.sidebar:
-    page = option_menu(
+    main_pages = []
+    main_icons = []
+    sub_menus = {}
+
+    for key, page in pages_data.items():
+        main_pages.append(page["display_name"])
+        main_icons.append(page.get("bootstrap_icon", ""))
+        if "sub_pages" in page:
+            sub_menus[page["display_name"]] = page["sub_pages"]
+
+    selected_page = option_menu(
         None,
-        [
-            "Home",
-            "Parameter Sets",
-            "Build Cell",
-            "Simulate",
-            "Analyze",
-        ],  # , "Materials and models"],
-        icons=['house', 'card-list', 'battery', 'battery-charging', 'graph-up'],  # , 'layers'],
+        main_pages,
+        icons=main_icons,
         menu_icon="cast",
         default_index=0,
-        # styles={
-        #     "container": {"background-color": "transparent"},
-        # },
     )
 
-if page == "Home":
-    pg.show_home()
-elif page == "Build Cell":
+# Show the corresponding page
+for key, page in pages_data.items():
+    if selected_page == page["display_name"]:
+        if "execute" in page:
+            execute_function(page["execute"])
+        elif "sub_pages" in page:
+            # Submenu navigation
+            sub_page_data = sub_menus[page["display_name"]]
+            sub_page_names = [sp["display_name"] for sp in sub_page_data.values()]
+            sub_page_icons = [sp["bootstrap_icon"] for sp in sub_page_data.values()]
+            sub_page_functions = [sp["execute"] for sp in sub_page_data.values()]
 
-    bar = option_menu(
-        None,
-        [
-            "Negative Electrode",
-            "Positive Electrode",
-            "Electrolyte",
-            "Separator",
-            "Cell Design",
-        ],
-        icons=[
-            'dash',
-            'plus',
-            '',
-            'distribute-horizontal',
-            'battery',
-        ],
-        menu_icon="cast",
-        default_index=0,
-        orientation="horizontal",
-    )
+            sub_selected = option_menu(
+                None,
+                sub_page_names,
+                menu_icon="cast",
+                icons=sub_page_icons,
+                default_index=0,
+                orientation="horizontal",
+            )
 
-    if bar == "Negative Electrode":
-        pg.show_fill_geometry()
-    elif bar == "Positive Electrode":
-        pg.show_fill_geometry()
-    elif bar == "Electrolyte":
-        pg.show_fill_geometry()
-    elif bar == "Separator":
-        pg.show_fill_geometry()
-
-    elif bar == "Cell Design":
-        pg.show_cell_design()
-
-
-elif page == "Simulate":
-
-    bar = option_menu(
-        None,
-        [
-            # "Upload",
-            "Model Setup",
-            "Boundary Conditions",
-            "Protocol",
-            "Run",
-        ],
-        icons=[
-            'toggles',
-            'battery',
-            'battery-full',
-            'recycle',
-            'battery-charging',
-        ],
-        menu_icon="cast",
-        default_index=0,
-        orientation="horizontal",
-    )
-
-    if bar == "Model Setup":
-        pg.show_build_model()
-    elif bar == "Boundary Conditions":
-        pg.show_fill_geometry()
-    elif bar == "Protocol":
-        pg.show_protocol()
-    elif bar == "Run":
-        pg.show_simulation()
-
-elif page == "Analyze":
-    pg.show_results()
-
-else:
-    pg.show_materials_and_models()
-
-
-#################################
-# Initiate all session states
-#################################
-
-init_session_states()
-
-
-if st.session_state.theme == True:
-    st.markdown(
-        """
-    <style>
-    body {
-        background-color: #ED820E;
-        color: white;
-    }
-    </style>
-    """,
-        unsafe_allow_html=True,
-    )
-elif st.session_state.theme == False:
-    st.markdown(
-        """
-    <style>
-    body {
-        background-color: #ffffff;
-        color: black;
-    }
-    </style>
-    """,
-        unsafe_allow_html=True,
-    )
+            for sp_key, sp in sub_page_data.items():
+                if sub_selected == sp["display_name"]:
+                    execute_function(sp["execute"])

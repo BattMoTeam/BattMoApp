@@ -1,0 +1,26 @@
+{
+    "$id": "file://./Electrodes.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Electrodes page",
+    "type": "object",
+    "properties":{
+        "DisplayName":{
+            "type": "string",
+            "description": "Name that is visualized in the navigation tab"
+        },
+        "Title":{
+            "type": "string",
+            "description": "Page title"
+        },
+        "NegativeElectrode":{
+            "$ref": "NegativeElectrode.schema.json",
+            "description": "Negative Electrode category"
+        },
+        "PositiveElectrode":{
+            "$ref": "PositiveElectrode.schema.json",
+            "description": "Positive Electrode category"
+        }
+
+                }
+           
+}

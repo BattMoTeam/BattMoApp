@@ -1,0 +1,35 @@
+{
+    "$id": "file://./BattmoApp.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "BattmoApp design",
+    "type": "object",
+    "properties": {
+        
+        "Home":{
+            "$ref": "Home.schema.json",
+            "description": "Home page"
+            
+        },
+        "ParameterSets":{
+            "$ref": "ParameterSets.schema.json",
+            "description": "Parameter Sets page"
+            
+        },
+        "BuildCell": {
+            "$ref": "BuildCell.schema.json",
+            "description": "Build Cell page"
+            
+        },
+        "Simulate": {
+            "$ref": "Simulate.schema.json",
+            "description": "Simulate page"
+        },
+        "Analyze": {
+            "$ref": "Analyze.schema.json",
+            "description": "Analyze page"
+        }
+
+    }
+
+
+}

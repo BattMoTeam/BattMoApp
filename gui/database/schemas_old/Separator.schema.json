@@ -1,0 +1,7 @@
+{
+    "$id": "file://./Separator.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Separator page",
+    "type": "object"
+
+}

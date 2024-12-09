@@ -1,0 +1,27 @@
+{
+    "$id": "file://./Simulate.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Simulate page",
+    "type": "object",
+    "properties":{
+
+        "ModelSetup":{
+            "$ref": "ModelSetup.schema.json",
+            "description": "Upload page"
+        },
+        "BoundaryConditions":{
+            "$ref": "BoundaryConditions.schema.json",
+            "description": "Boundary Conditions page"
+        },
+        "Protocol":{
+            "$ref": "Protocol.schema.json",
+            "description": "Protocol page"
+        },
+        "Run":{
+            "$ref": "Run.schema.json",
+            "description": "Run page"
+        }
+    }
+
+
+}

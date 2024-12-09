@@ -145,7 +145,7 @@
             "display_name": "Cell properties",
             "category_name": "cell",
             "description": "",
-            "default_template": "cell_template"
+            "default_template": "pouch_cell_template"
         },
         "separator_materials": {
             "model_name": ["P2D","P3D","P4D"],

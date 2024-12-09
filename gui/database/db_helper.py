@@ -194,6 +194,24 @@ def get_basis_categories_from_tab_id(tab_id):
 
 
 @st.cache_data
+def get_basis_category_from_name(name):
+    res = sql_category().select(
+        values="*",
+        where="name='%s' AND (difficulty = 'basis' OR difficulty = 'basis_advanced')" % name,
+    )
+    return res
+
+
+@st.cache_data
+def get_basis_category_display_name_from_name(name):
+    res = sql_category().select(
+        values="display_name",
+        where="name='%s' AND (difficulty = 'basis' OR difficulty = 'basis_advanced')" % name,
+    )
+    return res
+
+
+@st.cache_data
 def get_basis_categories_display_names(tab_id):
     res = sql_category().select(
         values="display_name",

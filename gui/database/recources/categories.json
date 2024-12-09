@@ -28,7 +28,7 @@
             "tab_name": "cell",
             "description": "",
             "display_name": "Cell",
-            "default_template": "cell_template"
+            "default_template": "pouch_cell_template"
         },
         "electrolyte": {
             "model_name": ["P2D","P3D","P4D"],

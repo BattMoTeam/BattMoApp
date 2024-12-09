@@ -1,0 +1,7 @@
+{
+    "$id": "file://./BoundaryConditions.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Boundary Conditions page",
+    "type": "object"
+
+}

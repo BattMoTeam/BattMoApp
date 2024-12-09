@@ -1,0 +1,57 @@
+{
+    "$id": "file://./electrode_properties_template.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "electrode_properties_template object",
+    "type": "object",
+    "required":["name", "is_material","is_cell_type", "parameters"],
+    "properties": {
+        "name": {
+            "type": "string",
+            " description": "The name of the template"
+        },
+        "is_material": {
+            "type": "bool",
+            "description":"Whether the template represents a material or not.",
+            "enum": [true, false]
+        },
+        "is_cell_type": {
+            "type": "bool",
+            "description":"Whether the template represents a cell type or not.",
+            "enum": [true, false]
+        },
+        "parameters":{
+            "type": "dict",
+            "description": "A dict with parameters and their meta data.",
+            "additionalProperties": false,
+            "minProperties": 9,
+            "properties":{
+                "coating_porosity":{
+                    "$ref": "parameter.schema.json"
+                },
+                "mass_loading":{
+                    "$ref": "parameter.schema.json"
+                },
+                "bruggeman_coefficient":{
+                    "$ref": "parameter.schema.json"
+                },
+                "electrode_capacity":{
+                    "$ref": "parameter.schema.json"
+                },
+                "active_material_mass_fraction":{
+                    "$ref": "parameter.schema.json"
+                },
+                "binder_mass_fraction":{
+                    "$ref": "parameter.schema.json"
+                },
+                "additive_mass_fraction":{
+                    "$ref": "parameter.schema.json"
+                },
+                "number_of_discrete_cells_particle_radius":{
+                    "$ref": "parameter.schema.json"
+                },
+                "specific_capacity":{
+                    "$ref": "parameter.schema.json"
+                }
+            }
+    }   }
+}

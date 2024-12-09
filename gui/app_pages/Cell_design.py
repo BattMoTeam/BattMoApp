@@ -1,17 +1,26 @@
 import streamlit as st
 import sys
 import os
-from streamlit_extras.stylable_container import stylable_container
 
-# set config before import to avoid streamlit error
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from app_scripts.app_controller import get_app_controller, log_memory_usage, set_acknowlegent_info
-from app_scripts import app_view, app_access
+
+# set config is done before import to avoid streamlit error
+from app_scripts.app_controller import (
+    get_app_controller,
+)
+
+# ##############################
+# # Remember user changed values
+for k, v in st.session_state.items():
+    st.session_state[k] = v
+
+# Remember widget actions when switching between pages (for example: selectbox choice)
+st.session_state.update(st.session_state)
+# ##############################
 
 
 def show_cell_design():
 
-    gui_parameters = st.session_state.json_linked_data_input
     app = get_app_controller()
 
     app.set_cell_design()

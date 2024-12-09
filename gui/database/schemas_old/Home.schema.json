@@ -1,0 +1,17 @@
+{
+    "$id": "file://./Home.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Home page",
+    "type": "object",
+    "properties": {
+        "DisplayName":{
+            "type": "string",
+            "description": "Name that is visualized in the navigation tab"
+        },
+        "Title":{
+            "type": "string",
+            "description": "Page title"
+        }
+    }
+
+}

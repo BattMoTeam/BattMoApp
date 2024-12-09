@@ -1,0 +1,88 @@
+{
+    "pages": {
+        "home":{
+            "display_name": "Home",
+            "bootstrap_icon": "house",
+            "execute": "show_home"
+        },
+        "parameter_sets":{
+            "display_name": "Parameter Sets",
+            "bootstrap_icon": "card-list",
+            "sub_pages": {
+                "upload": {
+                    "display_name": "Upload",
+                    "bootstrap_icon": "upload",
+                    "execute": "show_upload"
+                },
+                "library": {
+                    "display_name": "Library",
+                    "bootstrap_icon": "book",
+                    "execute": "show_library"
+                }
+            }
+        },
+        "build_cell":{
+            "display_name": "Build Cell",
+            "bootstrap_icon": "battery",
+            "sub_pages": {
+                "negative_electrode": {
+                    "display_name": "Negative Electrode",
+                    "bootstrap_icon": "dash",
+                    "execute": "show_negative_electrode"
+                },
+                "positive_electrode": {
+                    "display_name": "Positive Electrode",
+                    "bootstrap_icon": "plus",
+                    "execute": "show_positive_electrode"
+                },
+                "electrolyte": {
+                    "display_name": "Electrolyte",
+                    "bootstrap_icon": "",
+                    "execute": "show_electrolyte"
+                },
+                "Separator": {
+                    "display_name": "Separator",
+                    "bootstrap_icon": "distribute-horizontal",
+                    "execute": "show_separator"
+                },
+                "cell_design": {
+                    "display_name": "Cell Design",
+                    "bootstrap_icon": "battery",
+                    "execute": "show_cell_design"
+                }
+            }
+        },
+        "simulation_setup":{
+            "display_name": "Simulation Setup",
+            "bootstrap_icon": "battery-half",
+            "sub_pages": {
+                "model_setup": {
+                    "display_name": "Model Setup",
+                    "bootstrap_icon": "toggles",
+                    "execute": "show_model_setup"
+                },
+                "boundary_conditions": {
+                    "display_name": "Boundary Conditions",
+                    "bootstrap_icon": "battery",
+                    "execute": "show_boundary_conditions"
+                },
+                "protocol": {
+                    "display_name": "Protocol",
+                    "bootstrap_icon": "recycle",
+                    "execute": "show_protocol"
+                }
+                
+            }
+        },
+        "run": {
+            "display_name": "Run",
+            "bootstrap_icon": "battery-charging",
+            "execute": "show_run"
+                },
+        "analyze":{
+            "display_name": "Analyze",
+            "bootstrap_icon": "graph-up",
+            "execute": "show_analyze"
+        }
+    }
+}

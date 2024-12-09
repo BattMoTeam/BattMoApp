@@ -1,0 +1,15 @@
+{"BattmoApp":{
+    "Home":{
+        "DisplayName": "Home",
+        "Title": "hallo"
+    },
+    "BuildCell":{
+        "DisplayName": "Build Cell",
+        "Electrolyte":{
+            
+        }
+    }
+
+
+    }
+}

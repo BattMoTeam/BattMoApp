@@ -24,6 +24,18 @@ class AppController:
     def set_footer(self, page):
         return view.SetFooter(page)
 
+    def set_heading(self):
+        return view.SetHeading(get_logo())
+
+    def set_material_description(self):
+        return view.SetMaterialDescription()
+
+    def set_model_description(self):
+        return view.SetModelDescription()
+
+    def set_page_design(self):
+        return view.PageDesign()
+
     def set_model_setup(self):
         return view.ModelSetup()
 
@@ -36,8 +48,11 @@ class AppController:
     def set_input_upload(self):
         return view.SetInputUpload()
 
-    def set_tabs(self, model_id):
-        return view.SetTabs(self.images, model_id, self.context)
+    def set_tabs(self, model_id, page_category):
+        return view.SetTabs(self.images, model_id, page_category, self.context)
+
+    def render_categories(self, model_id, page_category):
+        return view.RenderCategories(model_id, page_category)
 
     def set_json_viewer(self, json_data, label=None):
         if label:
@@ -84,24 +99,12 @@ def get_app_controller():
     return AppController(get_image_dict(), get_context())
 
 
-def set_heading():
-    return view.SetHeading(get_logo())
-
-
 def set_page_navigation():
     return view.SetPageNavigation()
 
 
 def set_external_links():
     return view.SetExternalLinks()
-
-
-def set_model_description():
-    return view.SetModelDescription()
-
-
-def set_material_description():
-    return view.SetMaterialDescription()
 
 
 def get_results_data(file_names, response=None):

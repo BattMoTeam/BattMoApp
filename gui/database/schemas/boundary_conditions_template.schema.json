@@ -1,0 +1,43 @@
+{
+    "$id": "file://./boundary_conditions_template.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "boundary_conditions_template object",
+    "type": "object",
+    "required":["name", "is_material","is_cell_type", "parameters"],
+    "properties": {
+        "name": {
+            "type": "string",
+            " description": "The name of the template"
+        },
+        "is_material": {
+            "type": "bool",
+            "description":"Whether the template represents a material or not.",
+            "enum": [true, false]
+        },
+        "is_cell_type": {
+            "type": "bool",
+            "description":"Whether the template represents a cell type or not.",
+            "enum": [true, false]
+        },
+        "parameters":{
+            "type": "dict",
+            "description": "A dict with parameters and their meta data.",
+            "additionalProperties": false,
+            "minProperties": 4,
+            "properties":{
+                "ambient_temperature":{
+                    "$ref": "parameter.schema.json"
+                },
+                "initial_temperature":{
+                    "$ref": "parameter.schema.json"
+                },
+                "reference_temperature":{
+                    "$ref": "parameter.schema.json"
+                },
+                "external_heat_transfer_coefficient":{
+                    "$ref": "parameter.schema.json"
+                }
+            }
+        }
+    }
+}

@@ -11,7 +11,7 @@ services:
     restart: always
     ports:
       - "8081:8081"
-      - "8080:8080"
+      - "8080:8082"
     volumes:
       - ./api/scripts:/api/scripts
       - ./api/api.jl:/api/api.jl

@@ -8,14 +8,11 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # set config is done before import to avoid streamlit error
 from app_scripts.app_controller import (
-    set_heading,
-    set_page_navigation,
-    set_external_links,
     set_acknowlegent_info,
     get_app_controller,
-    set_model_description,
 )
 from app_scripts import app_view
+from app_scripts.app_session_states import init_session_states
 
 
 # ##############################
@@ -29,29 +26,18 @@ st.session_state.update(st.session_state)
 
 
 def show_home():
-
-    st.html(
-        """
-            <style>
-
-            /* Specific styling for headers within the container */
-                h1, h2, h3, h4, h5, h6 {
-                    color: #770737; /* Make header text white */
-                }
-
-            </style>
-            """
-    )
-    st.text("")
-    st.text("")
     app = get_app_controller()
 
-    # Set Introduction page heading wil title, BattMo logo, and BattMo info.
-    set_heading()
+    # Initiate all session states
+    init_session_states()
 
-    app_view.st_space(space_width=3)
+    # Set header color
+    app.set_page_design().color_headers()
 
-    set_model_description()
+    # Set Home page heading with title and info.
+    app.set_heading()
+
+    app.set_page_design().st_space(space_width=3)
 
     # Set page navigation
     # col = set_page_navigation()
@@ -60,7 +46,7 @@ def show_home():
     app.set_footer(page="Home")
 
     with st.sidebar:
-        app_view.st_space(space_width=3)
+        app.set_page_design().st_space(space_width=3)
 
         # Set funding acknowledgement
         set_acknowlegent_info()

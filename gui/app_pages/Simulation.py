@@ -65,8 +65,6 @@ def show_simulation():
 
     # app.set_geometry_visualization(gui_parameters)
 
-    app.download_parameters(st.session_state.json_linked_data_input)
-
     success = app.run_simulation(st.session_state.json_linked_data_input).success
 
     if st.session_state.simulation_completed == True:

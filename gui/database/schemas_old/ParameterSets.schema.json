@@ -1,0 +1,18 @@
+{
+    "$id": "file://./ParameterSets.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "Parameter Sets page",
+    "type": "object",
+    "properties":{
+        "Upload":{
+            "$ref": "Upload.schema.json",
+            "description": "Upload page"
+        },
+        "Library":{
+            "$ref": "Library.schema.json",
+            "description": "Library page"
+        }
+    }
+      
+
+}

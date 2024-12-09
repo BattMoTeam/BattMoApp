@@ -65,22 +65,6 @@
          "unit_name": "emmo:SiemensPerMetre",
          "unit_iri": "https://w3id.org/emmo#SiemensPerMetre",
          "display_name": "Electronic conductivity"
-      },
-      "mass_fraction": {
-         "model_name": ["P2D","P3D","P4D"],
-         "par_class": "non_material",
-         "difficulty": "basis",
-         "context_type": "MassFraction",
-         "context_type_iri": "https://w3id.org/emmo#EMMO_a8eb87b5_4d10_4137_a75c_e04ee59ca095",
-         "max_value": 0.5,
-         "min_value": 0.0,
-         "description": "Mass fraction of the material",
-         "is_shown_to_user": true,
-         "type": "float",
-         "unit": "1",
-         "unit_name": "emmo:UnitOne",
-         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
-         "display_name": "Mass Fraction"
       }
    }
 }

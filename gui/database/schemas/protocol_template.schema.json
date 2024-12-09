@@ -1,0 +1,67 @@
+{
+    "$id": "file://./model_template.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "description": "model_template object",
+    "type": "object",
+    "required":["name", "is_material","is_cell_type", "parameters"],
+    "properties": {
+        "name": {
+            "type": "string",
+            " description": "The name of the template"
+        },
+        "is_material": {
+            "type": "bool",
+            "description":"Whether the template represents a material or not.",
+            "enum": [true, false]
+        },
+        "is_cell_type": {
+            "type": "bool",
+            "description":"Whether the template represents a cell type or not.",
+            "enum": [true, false]
+        },
+        "parameters":{
+            "type": "dict",
+            "description": "A dict with parameters and their meta data.",
+            "additionalProperties": false,
+            "minProperties": 12,
+            "properties":{
+                "use_ramp_up":{
+                    "$ref": "parameter.schema.json"
+                },
+                "number_of_ramp_up_steps":{
+                    "$ref": "parameter.schema.json"
+                },
+                "initial_step_type":{
+                    "$ref": "parameter.schema.json"
+                },
+                "initial_state_of_charge":{
+                    "$ref": "parameter.schema.json"
+                },
+                "number_of_cycles":{
+                    "$ref": "parameter.schema.json"
+                },
+                "d_rate":{
+                    "$ref": "parameter.schema.json"
+                },
+                "c_rate":{
+                    "$ref": "parameter.schema.json"
+                },
+                "lower_cutoff_voltage":{
+                    "$ref": "parameter.schema.json"
+                },
+                "upper_cutoff_voltage":{
+                    "$ref": "parameter.schema.json"
+                },
+                "d_idt_limit":{
+                    "$ref": "parameter.schema.json"
+                },
+                "d_edt_limit":{
+                    "$ref": "parameter.schema.json"
+                },
+                "time_step_duration":{
+                    "$ref": "parameter.schema.json"
+                }
+                
+            }
+    }   }
+}

@@ -48,9 +48,8 @@ class BaseHandler:
 
                 cur.execute(query, tuple(string_values))
             finally:
-                cur.close()
                 con.commit()
-                con.close()
+
             return cur.lastrowid
 
     def thread_safe_db_access(_self, query, params=None, fetch=None):
@@ -165,6 +164,8 @@ class BaseHandler:
         """
         columns_and_values: {"value": 1.1, "value_type": "float"}
         """
+        if isinstance(id, tuple):
+            id = id[0]
         sql_set = []
         for column in columns_and_values:
 

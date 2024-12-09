@@ -11,8 +11,8 @@ def init_session_states():
 
     # Type: string
     # Description: The theme of the browser (light or dark)
-    if "theme" not in st.session_state:
-        st.session_state.theme = None
+    if "themebutton" not in st.session_state:
+        st.session_state['themebutton'] = "light"
 
     # Type: string
     # Description: a UUID for the user session
@@ -27,7 +27,7 @@ def init_session_states():
         st.session_state["temporary_directory"] = temp_dir
 
     #################################
-    # Input upload session states
+    # Upload session states
     #################################
 
     # Type: JSON
