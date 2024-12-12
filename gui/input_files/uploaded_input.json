@@ -3,28 +3,15 @@
    "@graph": {
       "@id": "https://www.batterymodel.org/parameters/m309c-ed93mdp3d",
       "@type": "BatteryCell",
-      "schema:isBasedOn": {
-         "@id": [
-            "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta",
-            "https://www.sciencedirect.com/science/article/pii/S0360544214013437#sec2.6.1"
-         ]
-      },
+      "schema:isBasedOn": [
+         {
+            "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+         }
+      ],
       "hasProperty": [
          {
-            "rdfs:label": "packing_mass",
-            "@type": "Mass",
-            "hasNumericalPart": {
-               "@type": "Real",
-               "hasNumericalValue": 11.0
-            },
-            "hasMeasurementUnit": {
-               "hasSymbolValue": "g",
-               "@type": "emmo:Gram"
-            }
-         },
-         {
             "rdfs:label": "number_parallel_electrode_pairs_within_cell",
-            "@type": "XXX",
+            "@type": "NumberOfEntities",
             "hasNumericalPart": {
                "@type": "Real",
                "hasNumericalValue": 1
@@ -35,23 +22,11 @@
             }
          },
          {
-            "rdfs:label": "external_surface_area",
-            "@type": null,
-            "hasNumericalPart": {
-               "@type": "Real",
-               "hasNumericalValue": 0.0379
-            },
-            "hasMeasurementUnit": {
-               "hasSymbolValue": "m\u00b2",
-               "@type": "emmo:SquareMetre"
-            }
-         },
-         {
             "rdfs:label": "n_to_p_ratio",
             "@type": "NPRatio",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 1.65
+               "hasNumericalValue": 1.07
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "1",
@@ -63,7 +38,7 @@
             "@type": "Mass",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 35.30139096320001
+               "hasNumericalValue": 37.33774424320001
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "g",
@@ -75,50 +50,44 @@
             "@type": "NominalCapacity",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 1386.068262945273
+               "hasNumericalValue": 2017.6430124379945
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "mAh",
                "@type": "emmo:AmpereHour"
             }
-         },
-         {
-            "rdfs:label": "round_trip_efficiency",
-            "@type": "EnergyEfficiency",
-            "hasNumericalPart": {
-               "@type": "Real",
-               "hasNumericalValue": null
-            },
-            "hasMeasurementUnit": {
-               "hasSymbolValue": "1",
-               "@type": "emmo:UnitOne"
-            }
-         },
-         {
-            "rdfs:label": "specific_energy",
-            "@type": "SpecificEnergyDischarging",
-            "hasNumericalPart": {
-               "@type": "Real",
-               "hasNumericalValue": null
-            },
-            "hasMeasurementUnit": {
-               "hasSymbolValue": "Wh\u00b7kg\u207b\u00b9",
-               "@type": "emmo:WattHourPerKilogram"
-            }
-         },
-         {
-            "rdfs:label": "discharge_energy",
-            "@type": "DischargeEnergy",
-            "hasNumericalPart": {
-               "@type": "Real",
-               "hasNumericalValue": null
-            },
-            "hasMeasurementUnit": {
-               "hasSymbolValue": "Wh",
-               "@type": "emmo:WattHour"
-            }
          }
       ],
+      "hasCase": {
+         "rdfs:label": "battery_cell_case",
+         "@type": "Case",
+         "hasProperty": [
+            {
+               "rdfs:label": "packing_mass",
+               "@type": "Mass",
+               "hasNumericalPart": {
+                  "@type": "Real",
+                  "hasNumericalValue": 11.0
+               },
+               "hasMeasurementUnit": {
+                  "hasSymbolValue": "g",
+                  "@type": "emmo:Gram"
+               }
+            },
+            {
+               "rdfs:label": "external_surface_area",
+               "@type": "SurfaceArea",
+               "hasNumericalPart": {
+                  "@type": "Real",
+                  "hasNumericalValue": 0.0379
+               },
+               "hasMeasurementUnit": {
+                  "hasSymbolValue": "m\u00b2",
+                  "@type": "emmo:SquareMetre"
+               }
+            }
+         ]
+      },
       "hasNegativeElectrode": {
          "rdfs:label": "negative_electrode",
          "@type": "NegativeElectrode",
@@ -152,7 +121,7 @@
                "@type": "Capacity",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 2285.111762717755
+                  "hasNumericalValue": 2158.1611092334356
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "mAh",
@@ -169,7 +138,7 @@
                   "@type": "Thickness",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 90.0
+                     "hasNumericalValue": 85.0
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "\u03bcm",
@@ -193,7 +162,7 @@
                   "@type": "MassLoading",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 15.933599999999998
+                     "hasNumericalValue": 15.0484
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "mg\u00b7cm\u207b\u00b2",
@@ -245,7 +214,7 @@
                         "@type": "emmo:MolePerCubicMetre"
                      },
                      "schema:citation": {
-                        "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -260,7 +229,7 @@
                         "@type": "emmo:Metre"
                      },
                      "schema:citation": {
-                        "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -275,7 +244,7 @@
                         "@type": "emmo:GramPerCubicMetre"
                      },
                      "schema:citation": {
-                        "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -290,7 +259,7 @@
                         "@type": "emmo:JoulePerKiloGramKelvin"
                      },
                      "schema:citation": {
-                        "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -305,7 +274,7 @@
                         "@type": "emmo:UnitOne"
                      },
                      "schema:citation": {
-                        "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -320,7 +289,7 @@
                         "@type": "emmo:UnitOne"
                      },
                      "schema:citation": {
-                        "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -338,7 +307,7 @@
                         "cmax"
                      ],
                      "schema:citation": {
-                        "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -346,7 +315,7 @@
                      "@type": "ElectricConductivity",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 200.0
+                        "hasNumericalValue": 100.0
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "S\u00b7m\u207b\u00b9",
@@ -367,7 +336,7 @@
                   },
                   {
                      "rdfs:label": "diffusion_pre_exponential_factor",
-                     "@type": null,
+                     "@type": "DiffusionCoefficient",
                      "hasNumericalPart": {
                         "@type": "Real",
                         "hasNumericalValue": 3.9e-14
@@ -607,7 +576,7 @@
                "hasProperty": [
                   {
                      "rdfs:label": "number_of_electrons_transferred",
-                     "@type": "NumberOfEntities",
+                     "@type": "NumberOfElectronsTransferred",
                      "hasNumericalPart": {
                         "@type": "Real",
                         "hasNumericalValue": 1
@@ -617,12 +586,12 @@
                         "@type": "emmo:UnitOne"
                      },
                      "schema:citation": {
-                        "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
                      "rdfs:label": "activation_energy_of_reaction",
-                     "@type": "Energy",
+                     "@type": "ActivationEnergy",
                      "hasNumericalPart": {
                         "@type": "Real",
                         "hasNumericalValue": 35000.0
@@ -632,7 +601,7 @@
                         "@type": "emmo:JoulePerMole"
                      },
                      "schema:citation": {
-                        "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -647,7 +616,7 @@
                         "@type": "emmo:MolePerSquareMetrePerSecond"
                      },
                      "schema:citation": {
-                        "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   }
                ]
@@ -687,7 +656,7 @@
                "@type": "Capacity",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 1386.068262945273
+                  "hasNumericalValue": 2017.6430124379945
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "mAh",
@@ -728,7 +697,7 @@
                   "@type": "MassLoading",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 16.971711999999997
+                     "hasNumericalValue": 23.948511999999994
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "mg\u00b7cm\u207b\u00b2",
@@ -773,14 +742,14 @@
                      "@type": "MaximumConcentration",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 26390.0
+                        "hasNumericalValue": 51765.0
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "mol\u00b7m\u207b\u00b3",
                         "@type": "emmo:MolePerCubicMetre"
                      },
                      "schema:citation": {
-                        "@id": "https://www.sciencedirect.com/science/article/pii/S0360544214013437#sec2.6.1"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -788,14 +757,14 @@
                      "@type": "VolumetricSurfaceArea",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 1878260.0
+                        "hasNumericalValue": 382183.9
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "m\u00b2m\u207b\u00b3",
                         "@type": "emmo:Metre"
                      },
                      "schema:citation": {
-                        "@id": "https://www.sciencedirect.com/science/article/pii/S0360544214013437#sec2.6.1"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -803,14 +772,14 @@
                      "@type": "Density",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 3450.0
+                        "hasNumericalValue": 4950.0
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "kg\u00b7m\u207b\u00b3",
                         "@type": "emmo:GramPerCubicMetre"
                      },
                      "schema:citation": {
-                        "@id": "https://www.sciencedirect.com/science/article/pii/S0360544214013437#sec2.6.1"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -818,14 +787,14 @@
                      "@type": "StoichiometricNumberOfSubstance",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 0.14778
+                        "hasNumericalValue": 0.2661
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "1",
                         "@type": "emmo:UnitOne"
                      },
                      "schema:citation": {
-                        "@id": "https://www.sciencedirect.com/science/article/pii/S0360544214013437#sec2.6.1"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -833,14 +802,14 @@
                      "@type": "StoichiometricNumberOfSubstance",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 0.999
+                        "hasNumericalValue": 0.9084
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "1",
                         "@type": "emmo:UnitOne"
                      },
                      "schema:citation": {
-                        "@id": "https://www.sciencedirect.com/science/article/pii/S0360544214013437#sec2.6.1"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -849,17 +818,16 @@
                      "hasStringPart": {
                         "@type": "String",
                         "hasStringValue": {
-                           "functionname": "computeOCP_LFP_Xu2015",
-                           "function": null
+                           "functionname": "computeOCP_NMC811_Chen2020",
+                           "function": "-0.8090 * (c/cmax) + 4.4875 - 0.0428 * tanh(18.5138*((c/cmax) - 0.5542)) - 17.7326 * tanh(15.7890*((c/cmax) - 0.3117)) + 17.5842 * tanh(15.9308*((c/cmax) - 0.3120))"
                         }
                      },
                      "hasVariable": [
                         "c",
-                        "T",
                         "cmax"
                      ],
                      "schema:citation": {
-                        "@id": "https://www.sciencedirect.com/science/article/pii/S0360544214013437#sec2.6.1"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -900,7 +868,7 @@
                   },
                   {
                      "rdfs:label": "diffusion_pre_exponential_factor",
-                     "@type": null,
+                     "@type": "DiffusionCoefficient",
                      "hasNumericalPart": {
                         "@type": "Real",
                         "hasNumericalValue": 3.9e-14
@@ -963,7 +931,7 @@
                      "@type": "SpecificCapacity",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 174.50710467704346
+                        "hasNumericalValue": 180.01966126454545
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "mAh\u00b7g\u207b\u00b9",
@@ -1112,10 +1080,10 @@
             }
          },
          "hasCurrentCollector": {
-            "rdfs:label": "negative_electrode_current_collector",
+            "rdfs:label": "positive_electrode_current_collector",
             "@type": [
                "CurrentCollector",
-               "Copper",
+               "Aluminium",
                "Foil"
             ],
             "hasProperty": [
@@ -1135,12 +1103,12 @@
          },
          "@reverse": {
             "hasParticipant": {
-               "rdfs:label": "negative_electrode_reaction",
+               "rdfs:label": "positive_electrode_reaction",
                "@type": "ElectrodeReaction",
                "hasProperty": [
                   {
                      "rdfs:label": "number_of_electrons_transferred",
-                     "@type": "NumberOfEntities",
+                     "@type": "NumberOfElectronsTransferred",
                      "hasNumericalPart": {
                         "@type": "Real",
                         "hasNumericalValue": 1
@@ -1150,22 +1118,22 @@
                         "@type": "emmo:UnitOne"
                      },
                      "schema:citation": {
-                        "@id": "https://www.sciencedirect.com/science/article/pii/S0360544214013437#sec2.6.1"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
                      "rdfs:label": "activation_energy_of_reaction",
-                     "@type": "Energy",
+                     "@type": "ActivationEnergy",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 4000.0
+                        "hasNumericalValue": 17800.0
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "J\u00b7mol\u207b\u00b9\u00b7",
                         "@type": "emmo:JoulePerMole"
                      },
                      "schema:citation": {
-                        "@id": "https://www.sciencedirect.com/science/article/pii/S0360544214013437#sec2.6.1"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -1173,14 +1141,14 @@
                      "@type": "ReactionRateConstant",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 3.626e-11
+                        "hasNumericalValue": 3.545e-11
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "mol\u00b7m\u207b\u00b2\u00b7s\u207b\u00b9",
                         "@type": "emmo:MolePerSquareMetrePerSecond"
                      },
                      "schema:citation": {
-                        "@id": "https://www.sciencedirect.com/science/article/pii/S0360544214013437#sec2.6.1"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   }
                ]
@@ -1192,6 +1160,107 @@
          "@type": [
             "Electrolyte",
             "LithiumHexaFluoroPhosphateElectrolyte"
+         ],
+         "hasSolute": {
+            "@type": "LithiumHexafluorophosphate",
+            "hasProperty": [
+               {
+                  "rdfs:label": "concentration",
+                  "@type": "IonConcentration",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 1000.0
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "mol\u00b7L\u207b",
+                     "@type": "emmo:MolPerLiter"
+                  }
+               }
+            ]
+         },
+         "hasConstituent": [
+            {
+               "@type": [
+                  "ChargeCarrier",
+                  "Lithium"
+               ],
+               "hasProperty": [
+                  {
+                     "rdfs:label": "charge_carrier_name",
+                     "@type": "ChargeCarrierIon",
+                     "hasStringPart": {
+                        "@type": "String",
+                        "hasStringValue": "Li"
+                     },
+                     "schema:citation": {
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                     }
+                  },
+                  {
+                     "rdfs:label": "charge_carrier_charge_number",
+                     "@type": "ChargeNumber",
+                     "hasNumericalPart": {
+                        "@type": "Real",
+                        "hasNumericalValue": 1
+                     },
+                     "hasMeasurementUnit": {
+                        "hasSymbolValue": "1",
+                        "@type": "emmo:UnitOne"
+                     },
+                     "schema:citation": {
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                     }
+                  },
+                  {
+                     "rdfs:label": "charge_carrier_transference_number",
+                     "@type": "IonTransportNumber",
+                     "hasNumericalPart": {
+                        "@type": "Real",
+                        "hasNumericalValue": 0.2594
+                     },
+                     "hasMeasurementUnit": {
+                        "hasSymbolValue": "1",
+                        "@type": "emmo:UnitOne"
+                     },
+                     "schema:citation": {
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                     }
+                  }
+               ]
+            },
+            {
+               "@type": [
+                  "HexaFluoroPhosphate"
+               ],
+               "hasProperty": [
+                  {
+                     "rdfs:label": "counter_ion_name",
+                     "@type": "ChargeCarrierIon",
+                     "hasStringPart": {
+                        "@type": "String",
+                        "hasStringValue": "PF6"
+                     },
+                     "schema:citation": {
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                     }
+                  },
+                  {
+                     "rdfs:label": "counter_ion_transference_number",
+                     "@type": "IonTransportNumber",
+                     "hasNumericalPart": {
+                        "@type": "Real",
+                        "hasNumericalValue": 0.7406
+                     },
+                     "hasMeasurementUnit": {
+                        "hasSymbolValue": "1",
+                        "@type": "UnitOne"
+                     },
+                     "schema:citation": {
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                     }
+                  }
+               ]
+            }
          ],
          "hasProperty": [
             {
@@ -1206,7 +1275,7 @@
                   "@type": "emmo:JoulePerKiloGramKelvin"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1221,7 +1290,7 @@
                   "@type": "emmo:WattPerMetreKelvin"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1236,74 +1305,7 @@
                   "@type": "emmo:GramPerCubicMetre"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
-               }
-            },
-            {
-               "rdfs:label": "charge_carrier_name",
-               "@type": "ChargeCarrierIon",
-               "hasStringPart": {
-                  "@type": "String",
-                  "hasStringValue": "Li"
-               },
-               "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
-               }
-            },
-            {
-               "rdfs:label": "charge_carrier_charge_number",
-               "@type": "ChargeNumber",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 1
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "1",
-                  "@type": "emmo:UnitOne"
-               },
-               "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
-               }
-            },
-            {
-               "rdfs:label": "charge_carrier_transference_number",
-               "@type": "IonTransportNumber",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 0.2594
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "1",
-                  "@type": "emmo:UnitOne"
-               },
-               "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
-               }
-            },
-            {
-               "rdfs:label": "counter_ion_name",
-               "@type": "ChargeCarrierIon",
-               "hasStringPart": {
-                  "@type": "String",
-                  "hasStringValue": "PF6"
-               },
-               "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
-               }
-            },
-            {
-               "rdfs:label": "counter_ion_transference_number",
-               "@type": "IonTransportNumber",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 0.7406
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "1",
-                  "@type": "UnitOne"
-               },
-               "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1320,7 +1322,7 @@
                   "c"
                ],
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1337,24 +1339,12 @@
                   "c"
                ],
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
-               }
-            },
-            {
-               "rdfs:label": "concentration",
-               "@type": "IonConcentration",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 1000.0
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "mol\u00b7L\u207b",
-                  "@type": "emmo:MolPerLiter"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
                "rdfs:label": "bruggeman_coefficient",
-               "@type": null,
+               "@type": "BruggemanCoefficient",
                "hasNumericalPart": {
                   "@type": "Real",
                   "hasNumericalValue": 1.5
@@ -1385,7 +1375,7 @@
                   "@type": "emmo:JoulePerKiloGramKelvin"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1400,7 +1390,7 @@
                   "@type": "emmo:WattPerMetreKelvin"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1415,7 +1405,7 @@
                   "@type": "emmo:GramPerCubicMetre"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1468,190 +1458,6 @@
             }
          ]
       },
-      "hasBoundaryConditions": {
-         "rdfs:label": "boundary_conditions",
-         "@type": "BoundaryConditions",
-         "hasProperty": [
-            {
-               "rdfs:label": "ambient_temperature",
-               "@type": "AmbientThermodynamicTemperature",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 298.15
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "K",
-                  "@type": "emmo:Kelvin"
-               }
-            },
-            {
-               "rdfs:label": "initial_temperature",
-               "@type": "InititalThermodynamicTemperature",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 298.15
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "K",
-                  "@type": "emmo:Kelvin"
-               }
-            },
-            {
-               "rdfs:label": "external_heat_transfer_coefficient",
-               "@type": "CoefficientOfHeatTransfer",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 1000.0
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "W\u00b7m\u207b\u00b2\u00b7K\u207b\u00b9",
-                  "@type": "emmo:WattPerSquareMetreKelvin"
-               }
-            }
-         ]
-      },
-      "hasCyclingProcess": {
-         "rdfs:label": "protocol_properties",
-         "@type": "CyclingProcess",
-         "hasProperty": [
-            {
-               "rdfs:label": "initial_step_type",
-               "@type": null,
-               "hasStringPart": {
-                  "@type": "String",
-                  "hasStringValue": "charging"
-               }
-            },
-            {
-               "rdfs:label": "initial_state_of_charge",
-               "@type": "StateOfCharge",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 0.01
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "1",
-                  "@type": "emmo:UnitOne"
-               }
-            },
-            {
-               "rdfs:label": "number_of_cycles",
-               "@type": "NumberOfEntities",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 1
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "1",
-                  "@type": "emmo:UnitOne"
-               }
-            },
-            {
-               "rdfs:label": "d_rate",
-               "@type": "DischargingCRate",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 1.0
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "1",
-                  "@type": "emmo:UnitOne"
-               }
-            },
-            {
-               "rdfs:label": "c_rate",
-               "@type": "CRate",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 1.0
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "1",
-                  "@type": "emmo:UnitOne"
-               }
-            },
-            {
-               "rdfs:label": "lower_cutoff_voltage",
-               "@type": "LowerVoltageLimit",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 2.4
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "V",
-                  "@type": "emmo:Volt"
-               }
-            },
-            {
-               "rdfs:label": "upper_cutoff_voltage",
-               "@type": "UpperVoltageLimit",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 3.6
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "V",
-                  "@type": "emmo:Volt"
-               }
-            },
-            {
-               "rdfs:label": "protocol_name",
-               "@type": "Cycling",
-               "hasStringPart": {
-                  "@type": "String",
-                  "hasStringValue": "CCCV"
-               }
-            },
-            {
-               "rdfs:label": "d_idt_limit",
-               "@type": null,
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 0.001
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "A\u00b7s\u207b\u00b9",
-                  "@type": null
-               }
-            },
-            {
-               "rdfs:label": "d_edt_limit",
-               "@type": null,
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 0.01
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "V\u00b7s\u207b\u00b9",
-                  "@type": "emmo:VoltPerSecond"
-               }
-            },
-            {
-               "rdfs:label": "time_step_duration",
-               "@type": "StepDuration",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 30.0
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "s",
-                  "@type": "emmo:Second"
-               }
-            },
-            {
-               "rdfs:label": "number_of_ramp_up_steps",
-               "@type": "['LinearCurrentRamp', 'NumberOfEntities']",
-               "hasNumericalPart": {
-                  "@type": "Real",
-                  "hasNumericalValue": 5
-               },
-               "hasMeasurementUnit": {
-                  "hasSymbolValue": "1",
-                  "@type": "emmo:UnitOne"
-               }
-            }
-         ]
-      },
       "hasModel": {
          "@type": "P2DModel",
          "hasProperty": [
@@ -1694,6 +1500,199 @@
                   "@type": "Boolean",
                   "hasNumericalValue": 1
                }
+            },
+            {
+               "rdfs:label": "ambient_temperature",
+               "@type": "AmbientThermodynamicTemperature",
+               "hasNumericalPart": {
+                  "@type": "Real",
+                  "hasNumericalValue": 298.15
+               },
+               "hasMeasurementUnit": {
+                  "hasSymbolValue": "K",
+                  "@type": "emmo:Kelvin"
+               }
+            },
+            {
+               "rdfs:label": "initial_temperature",
+               "@type": "InititalThermodynamicTemperature",
+               "hasNumericalPart": {
+                  "@type": "Real",
+                  "hasNumericalValue": 298.15
+               },
+               "hasMeasurementUnit": {
+                  "hasSymbolValue": "K",
+                  "@type": "emmo:Kelvin"
+               }
+            },
+            {
+               "rdfs:label": "external_heat_transfer_coefficient",
+               "@type": "CoefficientOfHeatTransfer",
+               "hasNumericalPart": {
+                  "@type": "Real",
+                  "hasNumericalValue": 1000.0
+               },
+               "hasMeasurementUnit": {
+                  "hasSymbolValue": "W\u00b7m\u207b\u00b2\u00b7K\u207b\u00b9",
+                  "@type": "emmo:WattPerSquareMetreKelvin"
+               }
+            },
+            {
+               "rdfs:label": "initial_state_of_charge",
+               "@type": "StateOfCharge",
+               "hasNumericalPart": {
+                  "@type": "Real",
+                  "hasNumericalValue": 0.01
+               },
+               "hasMeasurementUnit": {
+                  "hasSymbolValue": "1",
+                  "@type": "emmo:UnitOne"
+               }
+            }
+         ]
+      },
+      "@reverse": {
+         "hasParticipant": {
+            "@type": "Cycling",
+            "hasProperty": [
+               {
+                  "rdfs:label": "initial_step_type",
+                  "@type": "Parameter",
+                  "hasStringPart": {
+                     "@type": "String",
+                     "hasStringValue": "charging"
+                  }
+               },
+               {
+                  "rdfs:label": "number_of_cycles",
+                  "@type": "NumberOfEntities",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 1
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "1",
+                     "@type": "emmo:UnitOne"
+                  }
+               },
+               {
+                  "rdfs:label": "time_step_duration",
+                  "@type": "StepDuration",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 30.0
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "s",
+                     "@type": "emmo:Second"
+                  }
+               },
+               {
+                  "rdfs:label": "number_of_ramp_up_steps",
+                  "@type": "['LinearCurrentRamp', 'NumberOfEntities']",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 5
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "1",
+                     "@type": "emmo:UnitOne"
+                  }
+               }
+            ]
+         },
+         "hasTask": [
+            {
+               "@type": "ConstantCurrentCharging",
+               "hasMeasurementParameter": [
+                  {
+                     "rdfs:label": "c_rate",
+                     "@type": "CRate",
+                     "hasNumericalPart": {
+                        "@type": "Real",
+                        "hasNumericalValue": 1.0
+                     },
+                     "hasMeasurementUnit": {
+                        "hasSymbolValue": "1",
+                        "@type": "emmo:UnitOne"
+                     }
+                  },
+                  {
+                     "rdfs:label": "upper_cutoff_voltage",
+                     "@type": "UpperVoltageLimit",
+                     "hasNumericalPart": {
+                        "@type": "Real",
+                        "hasNumericalValue": 4.1
+                     },
+                     "hasMeasurementUnit": {
+                        "hasSymbolValue": "V",
+                        "@type": "emmo:Volt"
+                     }
+                  }
+               ]
+            },
+            {
+               "@type": "FloatCharging",
+               "hasMeasurementParameter": [
+                  {
+                     "rdfs:label": "di_dt_limit",
+                     "@type": "CurrentLimit",
+                     "hasNumericalPart": {
+                        "@type": "Real",
+                        "hasNumericalValue": 0.001
+                     },
+                     "hasMeasurementUnit": {
+                        "hasSymbolValue": "A\u00b7s\u207b\u00b9",
+                        "@type": "emmo:AmperePerSecond"
+                     }
+                  }
+               ]
+            },
+            {
+               "@type": "ConstantCurrentDischarging",
+               "hasMeasurementParameter": [
+                  {
+                     "rdfs:label": "d_rate",
+                     "@type": "DischargingCRate",
+                     "hasNumericalPart": {
+                        "@type": "Real",
+                        "hasNumericalValue": 1.0
+                     },
+                     "hasMeasurementUnit": {
+                        "hasSymbolValue": "1",
+                        "@type": "emmo:UnitOne"
+                     }
+                  },
+                  {
+                     "rdfs:label": "lower_cutoff_voltage",
+                     "@type": "LowerVoltageLimit",
+                     "hasNumericalPart": {
+                        "@type": "Real",
+                        "hasNumericalValue": 2.4
+                     },
+                     "hasMeasurementUnit": {
+                        "hasSymbolValue": "V",
+                        "@type": "emmo:Volt"
+                     }
+                  }
+               ]
+            },
+            {
+               "@type": "Resting",
+               "hasMeasurementParameter": [
+                  {
+                     "rdfs:label": "de_dt_limit",
+                     "@type": "VoltageLimit",
+                     "hasNumericalPart": {
+                        "@type": "Real",
+                        "hasNumericalValue": 0.01
+                     },
+                     "hasMeasurementUnit": {
+                        "hasSymbolValue": "V\u00b7s\u207b\u00b9",
+                        "@type": "emmo:VoltPerSecond"
+                     }
+                  }
+               ]
             }
          ]
       }

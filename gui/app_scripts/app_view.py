@@ -35,7 +35,7 @@ import uuid
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app_scripts.app_parameter_model import *
 from database import db_helper, db_handler
-from app_scripts import app_access, match_json_LD, match_json_upload, app_controller
+from app_scripts import app_access, match_json_LD, app_controller
 from app_scripts import app_calculations as calc
 
 # con, cur = app_access.get_sqlite_con_and_cur()
@@ -4741,19 +4741,20 @@ class DownloadParameters:
         ]
 
         reference_list = []
-        reference_dict = {}
+        reference_dict_list = []
 
         for sub_dict in dict_list:
             for key, value in sub_dict.items():
                 if "reference_url" in value:
+                    reference_dict = {}
                     reference = value["reference_url"]
                     if reference != None:
                         if reference not in reference_list:
                             reference_list.append(reference)
+                            reference_dict["@id"] = reference
+                            reference_dict_list.append(reference_dict)
 
-        reference_dict["@id"] = reference_list
-
-        return reference_dict
+        return reference_dict_list
 
     def move_dict_by_label(self, data_list, labels):
         # Create a new list to store the removed dictionaries
@@ -4793,7 +4794,25 @@ class DownloadParameters:
         if len(creator[0]):
             schema["@graph"]["schema:creator"] = creator
         # Cel properties
-        schema["@graph"]["hasProperty"] = parameters["@graph"]["hasProperty"]
+        cell_prop_labels = [
+            "number_parallel_electrode_pairs_within_cell",
+            "n_to_p_ratio",
+            "cell_mass",
+            "nominal_cell_capacity",
+        ]
+        case_prop_labels = ["packing_mass", "external_surface_area"]
+
+        cell_properties_list, _ = self.move_dict_by_label(
+            parameters["@graph"]["hasProperty"], cell_prop_labels
+        )
+        case_properties_list, _ = self.move_dict_by_label(
+            parameters["@graph"]["hasProperty"], case_prop_labels
+        )
+        schema["@graph"]["hasProperty"] = cell_properties_list
+        schema["@graph"]["hasCase"] = {}
+        schema["@graph"]["hasCase"]["rdfs:label"] = "battery_cell_case"
+        schema["@graph"]["hasCase"]["@type"] = "Case"
+        schema["@graph"]["hasCase"]["hasProperty"] = case_properties_list
 
         # Negative electrode
         ne = parameters["@graph"]["hasNegativeElectrode"]
@@ -4938,10 +4957,10 @@ class DownloadParameters:
         schema["@graph"]["hasPositiveElectrode"]["hasCurrentCollector"] = {}
         schema["@graph"]["hasPositiveElectrode"]["hasCurrentCollector"][
             "rdfs:label"
-        ] = "negative_electrode_current_collector"
+        ] = "positive_electrode_current_collector"
         schema["@graph"]["hasPositiveElectrode"]["hasCurrentCollector"]["@type"] = [
             "CurrentCollector",
-            "Copper",
+            "Aluminium",
             "Foil",
         ]
         schema["@graph"]["hasPositiveElectrode"]["hasCurrentCollector"][
@@ -4952,7 +4971,7 @@ class DownloadParameters:
         schema["@graph"]["hasPositiveElectrode"]["@reverse"]["hasParticipant"] = {}
         schema["@graph"]["hasPositiveElectrode"]["@reverse"]["hasParticipant"][
             "rdfs:label"
-        ] = "negative_electrode_reaction"
+        ] = "positive_electrode_reaction"
         schema["@graph"]["hasPositiveElectrode"]["@reverse"]["hasParticipant"][
             "@type"
         ] = "ElectrodeReaction"
@@ -4961,26 +4980,143 @@ class DownloadParameters:
         ] = reaction_prop_dict_list
 
         # Electrolyte
+        elyte = parameters["@graph"]["hasElectrolyte"]
+        elyte_prop = elyte["hasProperty"]
+
+        solute_prop_labels = ["concentration"]
+        solute_prop_list, _ = self.move_dict_by_label(elyte_prop, solute_prop_labels)
 
         schema["@graph"]["hasElectrolyte"] = {}
-        schema["@graph"]["hasElectrolyte"]["rdfs:label"] = {}
-        schema["@graph"]["hasElectrolyte"]["@type"] = {}
-        schema["@graph"]["hasElectrolyte"]["hasSolvent"] = {}
-        schema["@graph"]["hasElectrolyte"]["hasSolvent"]["@type"] = "Solvent"
-        schema["@graph"]["hasElectrolyte"]["hasSolvent"]["hasConstituent"] = {}
+        schema["@graph"]["hasElectrolyte"]["rdfs:label"] = elyte["rdfs:label"]
+        schema["@graph"]["hasElectrolyte"]["@type"] = elyte["@type"]
+        # schema["@graph"]["hasElectrolyte"]["hasSolvent"] = {}
+        # schema["@graph"]["hasElectrolyte"]["hasSolvent"]["@type"] = "Solvent"
+        # schema["@graph"]["hasElectrolyte"]["hasSolvent"]["hasConstituent"] = []
         schema["@graph"]["hasElectrolyte"]["hasSolute"] = {}
-        schema["@graph"]["hasElectrolyte"]["hasSolute"]["@type"] = "Solute"
-        schema["@graph"]["hasElectrolyte"]["hasSolute"]["hasProperty"] = {}
+        schema["@graph"]["hasElectrolyte"]["hasSolute"]["@type"] = "LithiumHexafluorophosphate"
+        schema["@graph"]["hasElectrolyte"]["hasSolute"]["hasProperty"] = solute_prop_list
+
+        charge_carrier_prop_labels = [
+            "charge_carrier_name",
+            "charge_carrier_charge_number",
+            "charge_carrier_transference_number",
+        ]
+
+        counter_ion_prop_labels = [
+            "counter_ion_name",
+            "counter_ion_charge_number",
+            "counter_ion_transference_number",
+        ]
+        elyte_prop_labels = [
+            "specific_heat_capacity",
+            "thermal_conductivity",
+            "density",
+            "conductivity",
+            "diffusion_coefficient",
+            "bruggeman_coefficient",
+        ]
+
+        charge_carrier_prop_dict_list, _ = self.move_dict_by_label(
+            elyte_prop, charge_carrier_prop_labels
+        )
+
+        counter_ion_prop_dict_list, _ = self.move_dict_by_label(elyte_prop, counter_ion_prop_labels)
+        elyte_prop_list, _ = self.move_dict_by_label(elyte_prop, elyte_prop_labels)
+
+        charge_carrier_dict = {
+            "@type": ["ChargeCarrier", "Lithium"],
+            "hasProperty": charge_carrier_prop_dict_list,
+        }
+
+        counter_ion_dict = {
+            "@type": ["HexaFluoroPhosphate"],
+            "hasProperty": counter_ion_prop_dict_list,
+        }
 
         schema["@graph"]["hasElectrolyte"]["hasConstituent"] = []
+        schema["@graph"]["hasElectrolyte"]["hasConstituent"].append(charge_carrier_dict)
+        schema["@graph"]["hasElectrolyte"]["hasConstituent"].append(counter_ion_dict)
 
-        schema["@graph"]["hasElectrolyte"]["hasProperty"] = {}
+        schema["@graph"]["hasElectrolyte"]["hasProperty"] = elyte_prop_list
 
-        schema["@graph"]["hasElectrolyte"] = parameters["@graph"]["hasElectrolyte"]
+        # Separator
         schema["@graph"]["hasSeparator"] = parameters["@graph"]["hasSeparator"]
-        schema["@graph"]["hasBoundaryConditions"] = parameters["@graph"]["hasBoundaryConditions"]
-        schema["@graph"]["hasCyclingProcess"] = parameters["@graph"]["hasCyclingProcess"]
-        schema["@graph"]["hasModel"] = parameters["@graph"]["hasModel"]
+
+        # Model
+        model = parameters["@graph"]["hasModel"]
+        model_list = model["hasProperty"]
+        bc_list = parameters["@graph"]["hasBoundaryConditions"]["hasProperty"]
+        init_soc, _ = self.move_dict_by_label(
+            parameters["@graph"]["hasCyclingProcess"]["hasProperty"], ["initial_state_of_charge"]
+        )
+
+        model_list.extend(bc_list)
+        model_list.extend(init_soc)
+
+        schema["@graph"]["hasModel"] = {}
+        schema["@graph"]["hasModel"]["@type"] = model["@type"]
+        schema["@graph"]["hasModel"]["hasProperty"] = model_list
+
+        # Control parameters
+
+        cycling_process = parameters["@graph"]["hasCyclingProcess"]["hasProperty"]
+
+        protocol_name_list, _ = self.move_dict_by_label(cycling_process, ["protocol_name"])
+        protocol_name = protocol_name_list[0]
+
+        if protocol_name["hasStringPart"]["hasStringValue"] == "CCCV":
+
+            cycle_prop_labels = [
+                "protocol_name",
+                "initial_step_type",
+                "number_of_cycles",
+                "time_step_duration",
+                "number_of_ramp_up_steps",
+            ]
+            cycle_prop_list, _ = self.move_dict_by_label(cycling_process, cycle_prop_labels)
+            cccharging_prop_list, _ = self.move_dict_by_label(
+                cycling_process, ["c_rate", "upper_cutoff_voltage"]
+            )
+            current_limit_list, _ = self.move_dict_by_label(cycling_process, ["di_dt_limit"])
+            ccdischarging_prop_list, _ = self.move_dict_by_label(
+                cycling_process, ["d_rate", "lower_cutoff_voltage"]
+            )
+            voltage_limit_prop_list, _ = self.move_dict_by_label(cycling_process, ["de_dt_limit"])
+
+            CVcharging_dict = {}
+            CVcharging_dict["@type"] = "FloatCharging"
+            CVcharging_dict["hasMeasurementParameter"] = current_limit_list
+
+            CCcharge_dict = {}
+            CCcharge_dict["@type"] = "ConstantCurrentCharging"
+            CCcharge_dict["hasMeasurementParameter"] = cccharging_prop_list
+
+            CVdischarging_dict = {}
+            CVdischarging_dict["@type"] = "Resting"
+            CVdischarging_dict["hasMeasurementParameter"] = voltage_limit_prop_list
+
+            CCdischarge_dict = {}
+            CCdischarge_dict["@type"] = "ConstantCurrentDischarging"
+            CCdischarge_dict["hasMeasurementParameter"] = ccdischarging_prop_list
+
+            schema["@graph"]["@reverse"] = {}
+            schema["@graph"]["@reverse"]["hasParticipant"] = {}
+            schema["@graph"]["@reverse"]["hasParticipant"]["@type"] = "Cycling"
+            schema["@graph"]["@reverse"]["hasParticipant"]["hasProperty"] = cycle_prop_list
+            schema["@graph"]["@reverse"]["hasTask"] = [
+                CCcharge_dict,
+                CVcharging_dict,
+                CCdischarge_dict,
+                CVdischarging_dict,
+            ]
+
+        else:
+            schema["@graph"]["@reverse"] = {}
+            schema["@graph"]["@reverse"]["hasParticipant"] = {}
+            schema["@graph"]["@reverse"]["hasParticipant"]["@type"] = "Cycling"
+            schema["@graph"]["@reverse"]["hasParticipant"]["@type"]["hasProperty"] = parameters[
+                "@graph"
+            ]["hasCyclingProcess"]["hasProperty"]
 
         # save formatted parameters in json file
         # with open(path_to_battmo_input, "w") as new_file:

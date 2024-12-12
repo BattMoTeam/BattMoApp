@@ -7,6 +7,7 @@
          "par_class": "non_material",
          "difficulty": "basis",
          "description": "",
+         "context_type": "Parameter",
          "is_shown_to_user": true,
          "type": "str",
          "display_name": "Initial step type"
@@ -107,25 +108,30 @@
          "unit_iri": "https://w3id.org/emmo#Volt",
          "display_name": "Upper cutoff coltage"
       },
-      "d_idt_limit": {
+      "di_dt_limit": {
          "model_name": ["P2D","P3D"],
          "par_class": "non_material",
          "difficulty": "advanced",
          "max_value": 0.1,
          "min_value": 0.00001,
          "description": "",
+         "context_type": "CurrentLimit",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_74de2c33_84fc_4c2f_afe1_56d169149114",
          "is_shown_to_user": true,
          "type": "float",
          "unit": "A\u00B7s\u207b\u00b9",
+         "unit_name": "emmo:AmperePerSecond",
          "display_name": "d idt limit"
       },
-      "d_edt_limit": {
+      "de_dt_limit": {
          "model_name": ["P2D","P3D"],
          "par_class": "non_material",
          "difficulty": "advanced",
          "max_value": 0.1,
          "min_value": 0.00001,
          "description": "",
+         "context_type": "VoltageLimit",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_5ebeea80_af22_456b_9087_78c2a8465c58",
          "is_shown_to_user": true,
          "type": "float",
          "unit": "V\u00B7s\u207b\u00b9",
