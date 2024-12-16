@@ -203,6 +203,15 @@ def get_basis_categories_display_names(tab_id):
 
 
 @st.cache_data
+def get_basis_categories_names(tab_id):
+    res = sql_category().select(
+        values="name",
+        where="tab_id=%d AND (difficulty = 'basis' OR difficulty = 'basis_advanced')" % tab_id,
+    )
+    return res
+
+
+@st.cache_data
 def get_categories_context_type_iri(tab_id):
     res = sql_category().select(
         values="context_type_iri",
@@ -364,7 +373,7 @@ def get_reference_url_from_parameter_set(parameter_set_name):
     res = sql_material().select_one(
         values='reference_url', where="display_name='%s'" % parameter_set_name
     )
-    return res
+    return res[0]
 
 
 #####################################
@@ -389,9 +398,12 @@ def get_parameter_id_from_template_parameters_and_parameter_set(
 
 
 @st.cache_data
-def get_parameter_from_template_parameter_id(template_parameter_id):
+def get_parameter_from_template_parameter_id(template_parameter_id, parameter_set_ids):
+    ids_str = ",".join(map(str, parameter_set_ids))
     res = sql_parameter().select(
-        values="*", where="template_parameter_id = '%d'" % int(template_parameter_id)
+        values="*",
+        where="template_parameter_id = '%d' AND parameter_set_id IN (%s)"
+        % (int(template_parameter_id), ids_str),
     )
     return res
 
@@ -685,6 +697,20 @@ def get_parameters_by_template_parameter_ids(template_parameter_ids, model_name)
     res = sql_template_parameter().select(
         values="*",
         where="id IN (%s) AND model_name = '%s'" % (ids_str, model_name),
+    )
+    return res
+
+
+@st.cache_data
+def get_parameters_by_template_parameter_ids_and_parameter_set_ids(
+    template_parameter_ids, parameter_set_ids, model_name
+):
+    ids_str = ",".join(map(str, template_parameter_ids))
+    ids_sets_str = ",".join(map(str, parameter_set_ids))
+    res = sql_template_parameter().select(
+        values="*",
+        where="id IN (%s) AND parameter_set_id IN (%s) AND model_name = '%s'"
+        % (ids_str, ids_sets_str, model_name),
     )
     return res
 

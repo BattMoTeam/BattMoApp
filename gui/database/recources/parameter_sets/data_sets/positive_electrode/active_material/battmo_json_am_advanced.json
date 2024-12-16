@@ -10,7 +10,7 @@
       "diffusion_pre_exponential_factor": 1e-14,
       "particle_radius": 1e-6,
       "number_of_discrete_cells_particle_radius": 10,
-      "specific_heat_capacity": 700,
+      "specific_heat_capacity": 632,
       "thermal_conductivity": 2.1,
       "maximum_concentration": 51765,
        "volumetric_surface_area": 382183.9 ,
