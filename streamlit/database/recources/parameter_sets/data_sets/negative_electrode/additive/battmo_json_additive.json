@@ -1,9 +1,0 @@
-{
-   "Name": "negative_electrode_additive",
-   "Header": {},
-   "component": "negative_electrode_additive",
-   "material": false,
-   "Parameters": {
-      "mass_fraction": 0.05
-   }
-}

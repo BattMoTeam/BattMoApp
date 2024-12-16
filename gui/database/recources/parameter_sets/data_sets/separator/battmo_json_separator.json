@@ -1,0 +1,11 @@
+{
+   "Name": "TBD_battmo_json_separator",
+   "component": "separator_properties",
+   "material": false,
+   "model_name": ["P2D", "P3D"],
+   "Header": {},
+   "Parameters": {
+      "thickness": 15,
+      "porosity": 0.4
+   }
+}

@@ -1,9 +1,0 @@
-{
-   "Name": "negative_electrode_binder",
-   "Header": {},
-   "component": "negative_electrode_binder",
-   "material": false,
-   "Parameters": {
-      "mass_fraction": 0.05
-   }
-}
