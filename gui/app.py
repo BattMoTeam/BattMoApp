@@ -5,7 +5,9 @@ import app_pages as pg
 from PIL import Image
 from app_scripts import app_access
 import streamlit.components.v1 as components
-import streamlit_analytics2 as streamlit_analytics
+import pathlib
+from bs4 import BeautifulSoup
+import shutil
 
 
 ##############################
@@ -51,6 +53,45 @@ st.markdown(
 #     """,
 #     height=0,
 # )
+
+
+def inject_ga():
+    UM_ID = "adcac53d-bc65-4ca3-9f98-be5c7c4ee75d"
+
+    UM_JS = """
+        <script defer src="https://cloud.umami.is/script.js" data-website-id="adcac53d-bc65-4ca3-9f98-be5c7c4ee75d"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js, new Date());
+            gtag('config', 'adcac53d-bc65-4ca3-9f98-be5c7c4ee75d');
+        <script>
+        """
+
+    # Insert script into the index.html file
+    index_path = pathlib.Path(st.__file__).parent / "static" / "index.html"
+    soup = BeautifulSoup(index_path.read_text(), features="html.parser")
+    if not soup.find(id=UM_ID):
+        bck_index = index_path.with_suffix('.bck')
+        if bck_index.exists():
+            shutil.copy(bck_index, index_path)
+        else:
+            shutil.copy(index_path, bck_index)
+        html = str(soup)
+        new_html = html.replace('<head>', '<head>\n' + UM_JS)
+        index_path.write_text(new_html)
+
+
+inject_ga()
+
+# def inject_umami():
+#     umami_js = """
+#         <script defer src="https://cloud.umami.is/script.js" data-website-id="adcac53d-bc65-4ca3-9f98-be5c7c4ee75d"></script>
+#     """
+#     st.markdown(umami_js, unsafe_allow_html=True)
+
+
+# inject_umami()
 
 
 ##############################

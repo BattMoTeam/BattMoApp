@@ -14,5 +14,5 @@ st-theme
 scipy
 streamlit-navigation-bar
 websocket-client
-websocat 
-streamlit-analytics2
+websocat
+bs4 
