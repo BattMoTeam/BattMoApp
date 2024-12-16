@@ -807,20 +807,36 @@ class SetTabs:
                 uploaded_file_dict = json.loads(uploaded_file)
                 # uploaded_file_str = str(uploaded_file_dict)
 
-                with open(app_access.get_path_to_uploaded_input(), "w") as outfile:
-                    json.dump(uploaded_file_dict, outfile, indent=3)
+                if "@id" in uploaded_file_dict["@graph"]:
+                    id = uploaded_file_dict["@graph"]["@id"]
 
-                uploaded_input_gui_dict = match_json_LD.get_gui_dict_from_linked_data(
-                    uploaded_file_dict
-                )
+                    if id != "BattMoApp-v0.2.0":
+                        st.error(
+                            "Your JSON LD input file doesn't contain a valid id. Setup your parameters they you want and download your JSON LD version in the sidebar."
+                        )
+                        self.set_sessions_state_clear_upload()
+                    else:
 
-                uploaded_input_gui_dict = match_json_LD.GuiDict(uploaded_input_gui_dict)
+                        with open(app_access.get_path_to_uploaded_input(), "w") as outfile:
+                            json.dump(uploaded_file_dict, outfile, indent=3)
 
-                st.session_state.json_uploaded_input = uploaded_input_gui_dict
+                        uploaded_input_gui_dict = match_json_LD.get_gui_dict_from_linked_data(
+                            uploaded_file_dict
+                        )
 
-                st.success(
-                    "Your file is succesfully uploaded. Click on the 'CLEAR' button if you want to reset the parameters to the default values again."
-                )
+                        uploaded_input_gui_dict = match_json_LD.GuiDict(uploaded_input_gui_dict)
+
+                        st.session_state.json_uploaded_input = uploaded_input_gui_dict
+
+                        st.success(
+                            "Your file is succesfully uploaded. Click on the 'CLEAR' button if you want to reset the parameters to the default values again."
+                        )
+                else:
+                    st.error(
+                        "Your JSON LD input file doesn't contain a valid id. Setup your parameters the you want and download your JSON LD file in the sidebar."
+                    )
+                    self.set_sessions_state_clear_upload()
+
             else:
                 uploaded_input_gui_dict = None
 
@@ -863,33 +879,64 @@ class SetTabs:
         Calculates increment from min and max values.
         Increment is used to define the number input widget.
         """
-
-        if type(value) == float:
+        if isinstance(value, float):
             if value == 0:
-                increment = 1e-17
+                # Dynamic minimum increment for zero
+                increment = 1e-14
                 return increment
 
-            # Calculate the order of magnitude
+            # Calculate order of magnitude
             order_of_magnitude = math.floor(math.log10(abs(value)))
 
-            # Determine a base increment which is a power of 10
+            # Base increment as power of 10
             base_increment = 10**order_of_magnitude
 
-            # Adjust the increment to be more user-friendly
+            # Adjust increment for user-friendliness
             if value < 1:
                 increment = base_increment / 10
             else:
                 increment = base_increment / 2
 
             # Further refinement for very small values
-            if abs(increment) < 1e-10:
-                increment = 1e-10
+            increment = max(increment, 1e-14)  # Set minimum threshold to 1e-14
 
             return float(increment)
-        else:
-            increment = 1
 
-            return int(increment)
+        # Default increment for integers or non-float values
+        return 1
+
+    # def set_increment(_self, value):
+    #     """
+    #     Calculates increment from min and max values.
+    #     Increment is used to define the number input widget.
+    #     """
+
+    #     if type(value) == float:
+    #         if value == 0:
+    #             increment = 1e-17
+    #             return increment
+
+    #         # Calculate the order of magnitude
+    #         order_of_magnitude = math.floor(math.log10(abs(value)))
+
+    #         # Determine a base increment which is a power of 10
+    #         base_increment = 10**order_of_magnitude
+
+    #         # Adjust the increment to be more user-friendly
+    #         if value < 1:
+    #             increment = base_increment / 10
+    #         else:
+    #             increment = base_increment / 2
+
+    #         # Further refinement for very small values
+    #         if abs(increment) < 1e-10:
+    #             increment = 1e-10
+
+    #         return float(increment)
+    #     else:
+    #         increment = 1
+
+    #         return int(increment)
 
     def set_tabs(self):
         cell_parameters = {}
@@ -1917,9 +1964,14 @@ class SetTabs:
         if key_arg:
             selected_parameter_set = st.session_state[key_select]
             parameter_set_id = material.options.get(selected_parameter_set).parameter_set_id
-            st.session_state[key_user_input] = str(
-                parameter.options.get(parameter_set_id).value["function"]
-            )
+            if "function" in parameter.options.get(parameter_set_id).value:
+                st.session_state[key_user_input] = str(
+                    parameter.options.get(parameter_set_id).value["function"]
+                )
+            else:
+                st.session_state[key_user_input] = str(
+                    parameter.options.get(parameter_set_id).value["functionname"]
+                )
             st.session_state[key_arg] = self.create_string_from_list(
                 parameter.options.get(parameter_set_id).value["argument_list"]
             )
@@ -1970,6 +2022,7 @@ class SetTabs:
                 parameter = material_formatted_parameters.get(parameter_id)
 
                 keys_to_include = list(parameter.options.keys())
+
                 sub_formatted_material = {
                     key: formatted_material.options[key]
                     for key in keys_to_include
@@ -3290,6 +3343,9 @@ class SetTabs:
 
             if excluded_template_parameter_ids:
 
+                parameter_set_ids = db_helper.get_all_material_parameter_sets_by_component_id(
+                    material_component_id
+                )
                 expander_missing_parameters = tab.expander(
                     label="Define {} missing material parameters".format(material)
                 )
@@ -3321,12 +3377,13 @@ class SetTabs:
                         ) = template_parameter
 
                         raw_parameters = db_helper.get_parameter_from_template_parameter_id(
-                            template_par_id
+                            template_par_id, parameter_set_ids
                         )
 
                         material_display_names = []
                         material_values = []
                         sub_formatted_material = {}
+
                         for raw_parameter in raw_parameters:
                             id, name, material_parameter_set_id, _, value = raw_parameter
 
@@ -3348,18 +3405,18 @@ class SetTabs:
                                 material_name[0], self.model_name
                             )
 
-                            if (
-                                material_display_name
-                                and material_display_name[0][0] != "User defined"
-                            ):
-                                material_display_names.append(material_display_name[0][0])
-                                material_values.append(value)
-                            elif (
-                                not material_display_name
-                                and "User defined" not in material_display_names
-                            ):
-                                material_display_names.append("User defined")
-                                material_values.append(value)
+                            # if (
+                            #     material_display_name
+                            #     and material_display_name[0][0] != "User defined"
+                            # ):
+                            material_display_names.append(material_display_name[0][0])
+                            material_values.append(value)
+                            # elif (
+                            #     not material_display_name
+                            #     and "User defined" not in material_display_names
+                            # ):
+                            #     material_display_names.append("User defined")
+                            #     material_values.append(value)
 
                         st.write(
                             "[{}]({})".format(par_display_name, context_type_iri)
@@ -3436,6 +3493,9 @@ class SetTabs:
                         if st.session_state[key_user_input] is None:
                             st.session_state[key_user_input] = material_value
 
+                        step_value = self.set_increment(st.session_state[key_user_input])
+                        format_value = self.set_format(st.session_state[key_user_input])
+
                         user_input = value_col.number_input(
                             label=par_display_name,
                             value=st.session_state[key_user_input],
@@ -3449,7 +3509,8 @@ class SetTabs:
                                 user_interaction,
                                 key_select,
                             ),
-                            step=self.set_increment(st.session_state[key_user_input]),
+                            step=step_value,
+                            format=format_value,
                             label_visibility="collapsed",
                         )
 
@@ -4592,7 +4653,7 @@ class DivergenceCheck:
         if (
             self.response == False
             and st.session_state.success == False
-            and st.session_state.battmo_api_response != None
+            # and st.session_state.battmo_api_response != None
         ):
             self.save_run.error(
                 "The data has not been retrieved succesfully, most probably due to an unsuccesful simulation"
@@ -4628,7 +4689,7 @@ class DivergenceCheck:
 
                 self.success = True
 
-                if len(log_messages) > 1:
+                if log_messages and len(log_messages) > 1:
                     c = self.save_run.container()
                     c.warning(
                         "Simulation results retrieved, but Some errors/warnings were produced. See the logging."
@@ -4680,8 +4741,8 @@ class DivergenceCheck:
                 # except:
                 #     pass
 
-        elif st.session_state.battmo_api_response == None:
-            pass
+        # elif st.session_state.battmo_api_response == None:
+        #     pass
 
         st.session_state.response == None
 
@@ -4781,7 +4842,7 @@ class DownloadParameters:
 
         schema["@context"] = parameters["@context"]
         schema["@graph"] = {}
-        schema["@graph"]["@id"] = parameters["@graph"]["@id"]
+        schema["@graph"]["@id"] = "BattMoApp-v0.2.0"
         schema["@graph"]["@type"] = parameters["@graph"]["@type"]
 
         if isBasedOn:
@@ -5159,11 +5220,11 @@ class DownloadParameters:
             # st.markdown("###### " + "Schema headline")
             # headline = st.text_input(label="headline", label_visibility="collapsed")
             headline = None
-            st.markdown("###### " + "Schema description")
+            st.markdown("###### " + "Description")
             description = st.text_input(label="description", label_visibility="collapsed")
 
             cola, colb = st.columns(2)
-            st.markdown("###### " + "Schema creators")
+            st.markdown("###### " + "Creators")
             col1, col2 = st.columns(2)
             col1.markdown("Number of creators")
             number = col2.number_input(

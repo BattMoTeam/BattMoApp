@@ -85,7 +85,7 @@
       "thermal_conductivity": {
          "model_name": ["P2D","P3D"],
          "par_class": "material",
-         "difficulty": "advanced",
+         "difficulty": "basis",
          "context_type": "ThermalConductivity",
          "context_type_iri": "https://w3id.org/emmo#EMMO_8dd40ec6_2c5a_43f3_bf64_cadcd447a1c1",
          "max_value": 1000.0,

@@ -6,9 +6,9 @@
    "Header": {},
    "Parameters": {
       
-      "specific_heat_capacity": 10,
-      "thermal_conductivity": 0.01,
-      "density": 100
+      "specific_heat_capacity": 1692,
+      "thermal_conductivity": 0.334,
+      "density": 946
       
    }
 }
