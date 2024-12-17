@@ -41,10 +41,6 @@ services:
 
   api:
     image: ghcr.io/battmoteam/battmoapp_api:latest
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-      target: prod
     container_name: api
     restart: always
     ports:
@@ -54,18 +50,11 @@ services:
 
   gui:
     image: ghcr.io/battmoteam/battmoapp_gui:latest
-    build: ./gui
     container_name: gui
     restart: always
     ports:
       - "8501:8501"
     command: streamlit run app.py --global.disableWidgetStateDuplicationWarning true --server.port=8501
-```
-
-Now run the following command to build the containers:
-
-```<bash>
-docker-compose build
 ```
 
 Now run the following command to start the containers:
