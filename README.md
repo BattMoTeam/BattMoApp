@@ -18,7 +18,10 @@ The application consists of a Web socket API build with **HTTP.jl** and configer
 
 ## Using the application
 
-The BattMo application can very easily be used on [app.batterymodel.com](http://app.batterymodel.com/). If you'd rather use the application offline, it can be installed using Docker. If you'd like to install for development, see the next section called 'Developer installation'. The BattMo GUI is available as a set of Docker images in the Github container registry and can be found among BattMoTeam's packages. In order to use it you have to install Docker and Docker Compose. See the [Docker website](https://www.docker.com/) for more information about Docker and how to install it. Assuming you have both Docker and Docker Compose installed on your machine:
+The BattMo application can very easily be used on [app.batterymodel.com](http://app.batterymodel.com/). If you'd rather use the application offline, it can be installed using Docker. If you'd like to install for development, see the next section called 'Developer installation'. 
+
+### Install with Docker
+The BattMo GUI is available as a set of Docker images in the Github container registry and can be found among BattMoTeam's packages. In order to use it you have to install Docker and Docker Compose. See the [Docker website](https://www.docker.com/) for more information about Docker and how to install it. Assuming you have both Docker and Docker Compose installed on your machine:
 
 Open a bash terminal and pull the latest Docker images from the registry. For the Docker image that represents the GUI:
 
