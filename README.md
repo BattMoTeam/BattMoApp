@@ -142,3 +142,6 @@ innovation program under grant agreement numbers:
 
 - 875527 HYDRA
 - 957189 BIG-MAP
+- 101104013 BATMAX
+- 101103997 DigiBatt
+- 101069765 IntelLiGent
