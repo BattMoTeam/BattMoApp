@@ -18,7 +18,10 @@ The application consists of a Web socket API build with **HTTP.jl** and configer
 
 ## Using the application
 
-The BattMo application can very easily be used on [app.batterymodel.com](http://app.batterymodel.com/). If you'd rather use the application offline, it can be installed using Docker. If you'd like to install for development, see the next section called 'Developer installation'. The BattMo GUI is available as a set of Docker images in the Github container registry and can be found among BattMoTeam's packages. In order to use it you have to install Docker and Docker Compose. See the [Docker website](https://www.docker.com/) for more information about Docker and how to install it. Assuming you have both Docker and Docker Compose installed on your machine:
+The BattMo application can very easily be used on [app.batterymodel.com](http://app.batterymodel.com/). If you'd rather use the application offline, it can be installed using Docker. If you'd like to install for development, see the next section called 'Developer installation'. 
+
+### Install with Docker
+The BattMo GUI is available as a set of Docker images in the Github container registry and can be found among BattMoTeam's packages. In order to use it you have to install Docker and Docker Compose. See the [Docker website](https://www.docker.com/) for more information about Docker and how to install it. Assuming you have both Docker and Docker Compose installed on your machine:
 
 Open a bash terminal and pull the latest Docker images from the registry. For the Docker image that represents the GUI:
 
@@ -41,10 +44,6 @@ services:
 
   api:
     image: ghcr.io/battmoteam/battmoapp_api:latest
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-      target: prod
     container_name: api
     restart: always
     ports:
@@ -54,18 +53,11 @@ services:
 
   gui:
     image: ghcr.io/battmoteam/battmoapp_gui:latest
-    build: ./gui
     container_name: gui
     restart: always
     ports:
       - "8501:8501"
     command: streamlit run app.py --global.disableWidgetStateDuplicationWarning true --server.port=8501
-```
-
-Now run the following command to build the containers:
-
-```<bash>
-docker-compose build
 ```
 
 Now run the following command to start the containers:
@@ -153,3 +145,6 @@ innovation program under grant agreement numbers:
 
 - 875527 HYDRA
 - 957189 BIG-MAP
+- 101104013 BATMAX
+- 101103997 DigiBatt
+- 101069765 IntelLiGent

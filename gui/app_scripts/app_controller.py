@@ -114,6 +114,7 @@ def setup_linked_data_structure():
 #####################################
 
 
+@st.cache_data
 def get_images():
     return view.LoadImages(app_access.get_path_to_images_dir())
 
