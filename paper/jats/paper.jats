@@ -31,6 +31,14 @@ battery simulations</article-title>
 <xref ref-type="aff" rid="aff-1"/>
 </contrib>
 <contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-8758-6109</contrib-id>
+<name>
+<surname>Clark*</surname>
+<given-names>Simon</given-names>
+</name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
 <name>
 <surname>Bolzinger</surname>
 <given-names>Oscar</given-names>
@@ -45,23 +53,15 @@ battery simulations</article-title>
 </name>
 <xref ref-type="aff" rid="aff-1"/>
 </contrib>
-<contrib contrib-type="author">
-<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-8758-6109</contrib-id>
-<name>
-<surname>Clark*</surname>
-<given-names>Simon</given-names>
-</name>
-<xref ref-type="aff" rid="aff-1"/>
-</contrib>
 <aff id="aff-1">
 <institution-wrap>
 <institution>SINTEF Industry, Norway</institution>
 </institution-wrap>
 </aff>
 </contrib-group>
-<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-08-14">
-<day>14</day>
-<month>8</month>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2024-12-19">
+<day>19</day>
+<month>12</month>
 <year>2024</year>
 </pub-date>
 <volume>¿VOL?</volume>
@@ -71,7 +71,7 @@ battery simulations</article-title>
 <copyright-statement>Authors of papers retain copyright and release the
 work under a Creative Commons Attribution 4.0 International License (CC
 BY 4.0)</copyright-statement>
-<copyright-year>2022</copyright-year>
+<copyright-year>1970</copyright-year>
 <copyright-holder>The article authors</copyright-holder>
 <license license-type="open-access" xlink:href="https://creativecommons.org/licenses/by/4.0/">
 <license-p>Authors of papers retain copyright and release the work under
@@ -82,13 +82,14 @@ a Creative Commons Attribution 4.0 International License (CC BY
 <kwd-group kwd-group-type="author">
 <kwd>BattMo</kwd>
 <kwd>Python</kwd>
-<kwd>Julia</kwd>
+<kwd>julia</kwd>
 <kwd>graphical user interface</kwd>
-<kwd>battery simulations</kwd>
-<kwd>Battery cell</kwd>
+<kwd>battery simulation</kwd>
+<kwd>battery cell</kwd>
 <kwd>PXD model</kwd>
-<kwd>Streamlit</kwd>
-<kwd>Genie</kwd>
+<kwd>streamlit</kwd>
+<kwd>battery</kwd>
+<kwd>web application</kwd>
 </kwd-group>
 </article-meta>
 </front>
@@ -97,9 +98,9 @@ a Creative Commons Attribution 4.0 International License (CC BY
   <title>Summary</title>
   <p>BattMoApp is a web-based application built upon the command-line
   based battery modelling software, BattMo
-  (<xref alt="al., n.d." rid="ref-BattMoDoc" ref-type="bibr">al.,
-  n.d.</xref>). It features a user-friendly graphical interface that
-  simplifies the simulation of battery cells. The development of
+  (<xref alt="Raynaud et al., 2024" rid="ref-BattMo" ref-type="bibr">Raynaud
+  et al., 2024</xref>). It features a user-friendly graphical interface
+  that simplifies the simulation of battery cells. The development of
   BattMoApp has been centered on accessibility, intuitiveness, and
   usability, with the aim of making it a practical and valuable tool for
   both educational and research purposes in the battery field. Its
@@ -113,15 +114,18 @@ a Creative Commons Attribution 4.0 International License (CC BY
 <sec id="statement-of-need">
   <title>Statement of need</title>
   <p>The Battery Modelling Toolbox (BattMo) is a framework for continuum
-  modeling of electrochemical devices. Built primarily in Matlab, it
-  offers a pseudo X-dimensional (PXD) framework for the
+  modeling of electrochemical devices. Built primarily in MATLAB
+  (<xref alt="MATLAB, 2023" rid="ref-MATLAB" ref-type="bibr">MATLAB,
+  2023</xref>), it offers a pseudo X-dimensional (PXD) framework for the
   Doyle-Fuller-Newman model of lithium-ion battery cells. Additionally,
   extensions for other battery chemistries and hydrogen systems are in
   development. BattMo provides a flexible framework for creating fully
   coupled electrochemical-thermal simulations of electrochemical devices
-  using 1D, 2D, or 3D geometries. Besides the Matlab toolbox, the
-  framework is also being developed in Julia to leverage increased
-  simulation speed and the non-proprietary nature of Julia.</p>
+  using 1D, 2D, or 3D geometries. Besides the MATLAB toolbox, the
+  framework is also being developed in Julia
+  (<xref alt="Bezanson et al., 2017" rid="ref-julia" ref-type="bibr">Bezanson
+  et al., 2017</xref>) to leverage increased simulation speed and the
+  non-proprietary nature of Julia.</p>
   <p>The primary objective of BattMoApp is to unlock access to battery
   simulations for users without coding experience. Most researchers who
   can benefit from battery simulations are not familier with any
@@ -130,67 +134,84 @@ a Creative Commons Attribution 4.0 International License (CC BY
   can use the results to inform their cell design and development
   activities.</p>
   <p>BattMoApp builds upon the P2D model implemented in the Julia
-  version of BattMo. The development of BattMoApp has focused on
-  accessibility, intuitiveness, and usability. Users can quickly and
-  easily obtain results using the default input parameter sets available
-  in the application or input their own values in a straightforward
-  manner. The results can be easily analyzed and compared using the
-  predefined plots that can handle multiple sets of simulation results.
-  Users can also download their results and later upload them back into
-  the application to review. Furthermore, significant effort has been
-  made to ensure the parameters are realistic for both computational
-  research and lab use, making it easier for experimentalists to fulfill
-  the necessary inputs.</p>
-  <p>Another important aspect, besides accessibility, intuitiveness, and
-  usability, is interoperability. To ensure that the input data of the
-  simulation is inter-operable, the selected data format adheres to the
-  FAIR principles and the 5-star open data guidelines. The data entered
-  by the user is automatically formatted into a JSON Linked Data (LD)
-  format which includes all the semantic metadata along with the actual
-  data. This semantic data connects the actual data to the ontology
-  documentations, EMMO and BattINFO, which contain descriptions of the
-  linked data definitions. With this, the JSON LD format eliminates any
-  confusion about definitions. If the user wishes to publish their
-  results, they can include the JSON LD file in their publication,
-  allowing anyone seeking to replicate the results to simply upload the
-  JSON LD file into BattMoApp and obtain the anticipated results.</p>
+  version of BattMo, see Raynaud et al.
+  (<xref alt="2024" rid="ref-BattMo" ref-type="bibr">2024</xref>). The
+  development of BattMoApp has focused on accessibility, intuitiveness,
+  and usability. Users can quickly and easily obtain results using the
+  default input parameter sets available in the application or input
+  their own values in a straightforward manner. The results can be
+  easily analyzed and compared using the predefined plots that can
+  handle multiple sets of simulation results. Users can also download
+  their results and later upload them back into the application to
+  review. Furthermore, significant effort has been made to ensure the
+  parameters are realistic for both computational research and lab use,
+  making it easier for experimentalists to fulfill the necessary
+  inputs.</p>
+  <p>Another important aspect that was kept in mind during the
+  development of BattMoApp is interoperability. To ensure that the input
+  data of the simulation is inter-operable, the selected data format
+  adheres to the FAIR principles
+  (<xref alt="Wilkinson et al., 2016" rid="ref-FAIR" ref-type="bibr">Wilkinson
+  et al., 2016</xref>) and the 5-star open data guidelines
+  (<xref alt="Berners-Lee, 2006" rid="ref-STAR_LD" ref-type="bibr">Berners-Lee,
+  2006</xref>). The data entered by the user is automatically formatted
+  into a JSON
+  (<xref alt="JSON, 2017" rid="ref-json" ref-type="bibr"><italic>JSON</italic>,
+  2017</xref>) Linked Data (LD) format which includes all the semantic
+  metadata along with the actual data. This semantic data connects the
+  actual data to the ontology documentations, EMMO
+  (<xref alt="EMMO, 2024" rid="ref-EMMO" ref-type="bibr">EMMO,
+  2024</xref>) and BattINFO
+  (<xref alt="Clark et al., 2022" rid="ref-BattINFO" ref-type="bibr">Clark
+  et al., 2022</xref>), which contain descriptions of the linked data
+  definitions. If the user wishes to publish their results, they can
+  include the JSON LD file in their publication, allowing anyone seeking
+  to replicate the results to simply upload the JSON LD file into
+  BattMoApp and obtain the anticipated results.</p>
   <p>The documentation of BattMoApp includes an overview on what the
   application has to offer and a troubleshooting section that provides
   insights into the relationship between input parameters and results.
-  As BattMoApp is designed to be informative and explanatory, it can
-  also be a powerful tool for educational purposes, helping students
-  understand batteries, battery modelling, and the impact of material
-  and cell design parameters on battery cell performance.</p>
+  As BattMoApp has a graphical and explanatory nature, it can also be a
+  powerful tool for educational purposes, helping students understand
+  batteries, battery modelling, and the impact of material and cell
+  design parameters on battery cell performance.</p>
 </sec>
 <sec id="technical-setup">
   <title>Technical setup</title>
   <p>The application consists of two main components: the graphical user
   interface (GUI), which includes the frontend, a database, and the
   backend that provides the frontend’s functionality, and the
-  application programming interface (API) that runs the BattMo software
-  in the background. These two components are isolated from each other,
-  each running in its own Docker container.</p>
+  application programming interface (API) which runs the BattMo software
+  on a web socket server. These two components are isolated from each
+  other, each running in its own Docker
+  (<xref alt="Docker, 2024" rid="ref-docker" ref-type="bibr">Docker,
+  2024</xref>) container.</p>
   <sec id="battmo-gui">
     <title>BattMo GUI</title>
-    <p>The frontend is Python-based and developed using the Streamlit
-    framework. Streamlit was chosen due to its user-friendly framework,
-    which greatly accelerates the development process. The backend, also
-    written in Python, supports the frontend’s functionality. The
-    database that supports both the frontend and backend is created
-    using the sqlite3 Python package.</p>
+    <p>The frontend is Python-based
+    (<xref alt="Rossum &amp; Python Development Team, 2024" rid="ref-python" ref-type="bibr">Rossum
+    &amp; Python Development Team, 2024</xref>) and developed using the
+    Streamlit framework
+    (<xref alt="Allaire et al., 2024" rid="ref-streamlit" ref-type="bibr">Allaire
+    et al., 2024</xref>). Streamlit was chosen due to its user-friendly
+    framework that greatly accelerates the development process. The
+    database that supports the frontend is created using the sqlite3
+    Python package
+    (<xref alt="Hipp, 2024" rid="ref-sqlite" ref-type="bibr">Hipp,
+    2024</xref>).</p>
   </sec>
   <sec id="battmo-api">
     <title>BattMo API</title>
-    <p>The API runs the Julia package BattMo. Integrating Julia, a
+    <p>The web socket API runs BattMo.jl. Integrating Julia, a
     pre-compiled language, with Python, a runtime language, to form a
     smoothly running and stable application turned out to be complex.
-    Therefore, a Julia-based API was created and containerized within a
-    separate Docker container, isolating it from the BattMo GUI. This
-    separation ensures that the Julia and Python components do not
-    interfere with each other. The framework used for creating the API
-    is Genie. Within the BattMo API’s docker image a system image of
-    BattMo’s pre-compilation is created to ensure an instantanious API
-    response.</p>
+    Therefore, a Julia-based web socket API was created and
+    containerized within a separate Docker container, isolating the
+    Julia environment from the python environment. The web socket API
+    has been created using the Julia package HTTP
+    (<xref alt="JuliaWeb, 2024" rid="ref-http" ref-type="bibr">JuliaWeb,
+    2024</xref>) and includes a system image of BattMo’s pre-compilation
+    to ensure an instantanious API response.</p>
   </sec>
 </sec>
 <sec id="examples">
@@ -198,12 +219,16 @@ a Creative Commons Attribution 4.0 International License (CC BY
   <p>The application provides a list of features:</p>
   <list list-type="bullet">
     <list-item>
-      <p>Access to parameter sets from literature, and costomization of
+      <p>Access to parameter sets from literature, and customization of
       these sets.</p>
     </list-item>
     <list-item>
       <p>Download input parameter values as a BattMo formatted JSON file
       or as a linked data formatted JSON file.</p>
+    </list-item>
+    <list-item>
+      <p>Upload previously downloaded input parameters to quickly review
+      and alter previous simulations.</p>
     </list-item>
     <list-item>
       <p>Visualization of 3D grids.</p>
@@ -226,21 +251,27 @@ a Creative Commons Attribution 4.0 International License (CC BY
       <p>Comparison of multiple simulation results.</p>
     </list-item>
     <list-item>
-      <p>Download full results as HDF5.</p>
+      <p>Download full results in HDF5 format.</p>
+    </list-item>
+    <list-item>
+      <p>Upload previously downloaded results to quickly review
+      them.</p>
     </list-item>
   </list>
   <p>The following figures display screenshots of the application’s
-  ‘Simulation’ and ‘Results’ pages. On the ‘Simulation’ page, users can
-  define input parameters, visualize their cell geometry, and initiate a
-  simulation. The ‘Results’ page then allows for the visualization of
-  simulation outcomes using predefined plots. In
+  ‘Simulation’ and ‘Results’ pages. On the ‘Simulation’ page,
+  <xref alt="[fig:simulation]" rid="figU003Asimulation">[fig:simulation]</xref>,
+  users can define input parameters, visualize their cell geometry, and
+  initiate a simulation. The ‘Results’ page then allows for the
+  visualization of simulation outcomes using predefined plots. In
   <xref alt="[fig:results]" rid="figU003Aresults">[fig:results]</xref>,
   the results of two simulations are visualized to show an example. The
-  two simulations were conducted using the default parameter sets from
-  Chen et al., with the electrode coating thicknesses varied to
-  illustrate a comparison of results. Both pages also present key
-  indicators of the battery cell, such as capacities, cell energy, and
-  round-trip efficiency.</p>
+  two simulations were conducted using the default parameter sets
+  retrieved from Chen et al.
+  (<xref alt="2020" rid="ref-chen2020" ref-type="bibr">2020</xref>) with
+  the electrode coating thicknesses varied to illustrate a comparison of
+  results. Both pages also present key indicators of the battery cell,
+  such as capacities, cell energy, and round-trip efficiency.</p>
   <fig>
     <caption><p>A screenshot of the Simulation page of BattMoApp.
     <styled-content id="figU003Asimulation"></styled-content></p></caption>
@@ -261,44 +292,278 @@ a Creative Commons Attribution 4.0 International License (CC BY
   simulation models and features like parameterization. BattMoApp will
   continue seeking feedback from its target audience to enhance
   usability and practicality. Additionally, more effort will be
-  dedicated to improving the performance of BattMo GUI to improve user
-  interactivity. As the Streamlit framework comes with some limitations
-  in terms of flexibility and performance, changing to a different front
-  end framework that is better suited for reactive applications will be
-  a serious consideration in the future.</p>
+  dedicated to improving the performance of the BattMo GUI to improve
+  user interactivity.</p>
 </sec>
 <sec id="installation">
   <title>Installation</title>
   <p><monospace>BattMoApp</monospace> can easily be used online at the
-  following address: app.batterymodel.com. Furthermore, it can be
-  locally installed using Docker. The Docker images and a detailed
-  instruction on how to install <monospace>BattMoApp</monospace> locally
-  can be found in the Github repository.</p>
+  following address:
+  <ext-link ext-link-type="uri" xlink:href="https://app.batterymodel.com/">app.batterymodel.com</ext-link>.
+  Furthermore, it can be installed locally using Docker. The Docker
+  images and a detailed instruction on how to install
+  <monospace>BattMoApp</monospace> locally can be found in the
+  <ext-link ext-link-type="uri" xlink:href="https://github.com/BattMoTeam/BattMoApp">Github
+  repository</ext-link>.</p>
 </sec>
 <sec id="acknowledgements">
   <title>Acknowledgements</title>
-  <p>BattMo has received funding from the European Union’s Horizon 2020
-  innovation program under grant agreement numbers:</p>
-  <list list-type="bullet">
-    <list-item>
-      <p>875527 HYDRA</p>
-    </list-item>
-    <list-item>
-      <p>957189 BIG-MAP</p>
-    </list-item>
-  </list>
+  <p>The authors acknowledge Francesca Watson and Olav Møyner for their
+  guidance and support. BattMoApp has received funding from the European
+  Union’s Horizon 2020 innovation program under grant agreement no.
+  875527 (HYDRA), no. 957189 (BIG-MAP), no. 101069765 (IntelLiGent), no.
+  101104013 (BATMAX), and no. 101103997 (DigiBatt).</p>
 </sec>
 </body>
 <back>
 <ref-list>
   <title></title>
-  <ref id="ref-BattMoDoc">
-    <element-citation>
+  <ref id="ref-BattMo">
+    <element-citation publication-type="software">
       <person-group person-group-type="author">
-        <name><surname>al.</surname><given-names>Simon Clark et</given-names></name>
+        <name><surname>Raynaud</surname><given-names>Xavier</given-names></name>
+        <name><surname>Johansson</surname><given-names>August</given-names></name>
+        <name><surname>Nilsen</surname><given-names>Halvor Møll</given-names></name>
+        <name><surname>Watson</surname><given-names>Francesca</given-names></name>
+        <name><surname>Clark</surname><given-names>Simon</given-names></name>
+        <name><surname>Erasdna</surname></name>
       </person-group>
-      <article-title>BattMo documentation</article-title>
-      <source>https://battmoteam.github.io/BattMo-doc</source>
+      <article-title>BattMoTeam/BattMo: v0.3.0</article-title>
+      <publisher-name>Zenodo</publisher-name>
+      <year iso-8601-date="2024-02">2024</year><month>02</month>
+      <uri>https://doi.org/10.5281/zenodo.10633682</uri>
+      <pub-id pub-id-type="doi">10.5281/zenodo.10633682</pub-id>
+    </element-citation>
+  </ref>
+  <ref id="ref-MATLAB">
+    <element-citation publication-type="software">
+      <person-group person-group-type="author">
+        <name><surname>MATLAB</surname></name>
+      </person-group>
+      <article-title>MATLAB</article-title>
+      <publisher-name>The MathWorks Inc.</publisher-name>
+      <year iso-8601-date="2023">2023</year>
+      <uri>https://se.mathworks.com/</uri>
+    </element-citation>
+  </ref>
+  <ref id="ref-julia">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Bezanson</surname><given-names>Jeff</given-names></name>
+        <name><surname>Edelman</surname><given-names>Alan</given-names></name>
+        <name><surname>Karpinski</surname><given-names>Stefan</given-names></name>
+        <name><surname>Shah</surname><given-names>Viral B.</given-names></name>
+      </person-group>
+      <article-title>Julia: A fresh approach to numerical computing</article-title>
+      <source>SIAM Review</source>
+      <year iso-8601-date="2017">2017</year>
+      <volume>59</volume>
+      <issue>1</issue>
+      <uri> 
+            
+                https://doi.org/10.1137/141000671
+            
+            
+
+        </uri>
+      <pub-id pub-id-type="doi">10.1137/141000671</pub-id>
+      <fpage>65</fpage>
+      <lpage>98</lpage>
+    </element-citation>
+  </ref>
+  <ref id="ref-sqlite">
+    <element-citation publication-type="software">
+      <person-group person-group-type="author">
+        <name><surname>Hipp</surname><given-names>D. Richard</given-names></name>
+      </person-group>
+      <article-title>SQLite</article-title>
+      <year iso-8601-date="2024">2024</year>
+      <uri>https://sqlite.org/</uri>
+    </element-citation>
+  </ref>
+  <ref id="ref-chen2020">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Chen</surname><given-names>Chang-Hui</given-names></name>
+        <name><surname>Planella</surname><given-names>Ferran Brosa</given-names></name>
+        <name><surname>O’regan</surname><given-names>Kieran</given-names></name>
+        <name><surname>Gastol</surname><given-names>Dominika</given-names></name>
+        <name><surname>Widanage</surname><given-names>W Dhammika</given-names></name>
+        <name><surname>Kendrick</surname><given-names>Emma</given-names></name>
+      </person-group>
+      <article-title>Development of experimental techniques for parameterization of multi-scale lithium-ion battery models</article-title>
+      <source>Journal of The Electrochemical Society</source>
+      <publisher-name>IOP Publishing</publisher-name>
+      <year iso-8601-date="2020">2020</year>
+      <volume>167</volume>
+      <issue>8</issue>
+      <fpage>080534</fpage>
+      <lpage></lpage>
+    </element-citation>
+  </ref>
+  <ref id="ref-http">
+    <element-citation publication-type="software">
+      <person-group person-group-type="author">
+        <name><surname>JuliaWeb</surname></name>
+      </person-group>
+      <article-title>HTTP.jl</article-title>
+      <year iso-8601-date="2024">2024</year>
+      <uri>https://juliaweb.github.io/HTTP.jl/stable/</uri>
+      <pub-id pub-id-type="doi">10.5281/zenodo.11032263</pub-id>
+    </element-citation>
+  </ref>
+  <ref id="ref-docker">
+    <element-citation publication-type="software">
+      <person-group person-group-type="author">
+        <name><surname>Docker</surname><given-names>Inc.</given-names></name>
+      </person-group>
+      <article-title>Docker</article-title>
+      <year iso-8601-date="2024">2024</year>
+      <uri>https://www.docker.com</uri>
+    </element-citation>
+  </ref>
+  <ref id="ref-FAIR">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Wilkinson</surname><given-names>Mark D.</given-names></name>
+        <name><surname>Dumontier</surname><given-names>Michel</given-names></name>
+        <name><surname>Aalbersberg</surname><given-names>IJsbrand Jan</given-names></name>
+        <name><surname>Appleton</surname><given-names>Gabrielle</given-names></name>
+        <name><surname>Axton</surname><given-names>Myles</given-names></name>
+        <name><surname>Baak</surname><given-names>Arie</given-names></name>
+        <name><surname>Blomberg</surname><given-names>Niklas</given-names></name>
+        <name><surname>Boiten</surname><given-names>Jan-Willem</given-names></name>
+        <name><surname>Silva Santos</surname><given-names>Luiz Bonino da</given-names></name>
+        <name><surname>Bourne</surname><given-names>Philip E.</given-names></name>
+        <name><surname>Bouwman</surname><given-names>Jildau</given-names></name>
+        <name><surname>Brookes</surname><given-names>Anthony J.</given-names></name>
+        <name><surname>Clark</surname><given-names>Tim</given-names></name>
+        <name><surname>Crosas</surname><given-names>Mercè</given-names></name>
+        <name><surname>Dillo</surname><given-names>Ingrid</given-names></name>
+        <name><surname>Dumon</surname><given-names>Olivier</given-names></name>
+        <name><surname>Edmunds</surname><given-names>Scott</given-names></name>
+        <name><surname>Evelo</surname><given-names>Chris T.</given-names></name>
+        <name><surname>Finkers</surname><given-names>Richard</given-names></name>
+        <name><surname>Gonzalez-Beltran</surname><given-names>Alejandra</given-names></name>
+        <name><surname>Gray</surname><given-names>Alasdair J. G.</given-names></name>
+        <name><surname>Groth</surname><given-names>Paul</given-names></name>
+        <name><surname>Goble</surname><given-names>Carole</given-names></name>
+        <name><surname>Grethe</surname><given-names>Jeffrey S.</given-names></name>
+        <name><surname>Heringa</surname><given-names>Jaap</given-names></name>
+        <name><surname>Hoen</surname><given-names>Peter A. C ’t</given-names></name>
+        <name><surname>Hooft</surname><given-names>Rob</given-names></name>
+        <name><surname>Kuhn</surname><given-names>Tobias</given-names></name>
+        <name><surname>Kok</surname><given-names>Ruben</given-names></name>
+        <name><surname>Kok</surname><given-names>Joost</given-names></name>
+        <name><surname>Lusher</surname><given-names>Scott J.</given-names></name>
+        <name><surname>Martone</surname><given-names>Maryann E.</given-names></name>
+        <name><surname>Mons</surname><given-names>Albert</given-names></name>
+        <name><surname>Packer</surname><given-names>Abel L.</given-names></name>
+        <name><surname>Persson</surname><given-names>Bengt</given-names></name>
+        <name><surname>Rocca-Serra</surname><given-names>Philippe</given-names></name>
+        <name><surname>Roos</surname><given-names>Marco</given-names></name>
+        <name><surname>Schaik</surname><given-names>Rene van</given-names></name>
+        <name><surname>Sansone</surname><given-names>Susanna-Assunta</given-names></name>
+        <name><surname>Schultes</surname><given-names>Erik</given-names></name>
+        <name><surname>Sengstag</surname><given-names>Thierry</given-names></name>
+        <name><surname>Slater</surname><given-names>Ted</given-names></name>
+        <name><surname>Strawn</surname><given-names>George</given-names></name>
+        <name><surname>Swertz</surname><given-names>Morris A.</given-names></name>
+        <name><surname>Thompson</surname><given-names>Mark</given-names></name>
+        <name><surname>Lei</surname><given-names>Johan van der</given-names></name>
+        <name><surname>Mulligen</surname><given-names>Erik van</given-names></name>
+        <name><surname>Velterop</surname><given-names>Jan</given-names></name>
+        <name><surname>Waagmeester</surname><given-names>Andra</given-names></name>
+        <name><surname>Wittenburg</surname><given-names>Peter</given-names></name>
+        <name><surname>Wolstencroft</surname><given-names>Katherine</given-names></name>
+        <name><surname>Zhao</surname><given-names>Jun</given-names></name>
+        <name><surname>Mons</surname><given-names>Barend</given-names></name>
+      </person-group>
+      <article-title>The FAIR guiding principles for scientific data management and stewardship</article-title>
+      <source>Scientific Data</source>
+      <year iso-8601-date="2016-03">2016</year><month>03</month>
+      <volume>3</volume>
+      <issn>2052-4463</issn>
+      <pub-id pub-id-type="doi">10.1038/sdata.2016.18</pub-id>
+      <fpage>160018</fpage>
+      <lpage></lpage>
+    </element-citation>
+  </ref>
+  <ref id="ref-STAR_LD">
+    <element-citation publication-type="webpage">
+      <person-group person-group-type="author">
+        <name><surname>Berners-Lee</surname><given-names>Tim</given-names></name>
+      </person-group>
+      <article-title>Star open data</article-title>
+      <source>https://5stardata.info/en/</source>
+      <year iso-8601-date="2006">2006</year>
+      <uri>https://www.w3.org/DesignIssues/LinkedData.html</uri>
+    </element-citation>
+  </ref>
+  <ref id="ref-BattINFO">
+    <element-citation publication-type="webpage">
+      <person-group person-group-type="author">
+        <name><surname>Clark</surname><given-names>Simon</given-names></name>
+        <name><surname>Bleken</surname><given-names>Francesca L.</given-names></name>
+        <name><surname>Stier</surname><given-names>Simon</given-names></name>
+        <name><surname>Flores</surname><given-names>Eibar</given-names></name>
+        <name><surname>Andersen</surname><given-names>Casper Welzel</given-names></name>
+        <name><surname>Marcinek</surname><given-names>Marek</given-names></name>
+        <name><surname>Szczesna‐Chrzan</surname><given-names>Anna</given-names></name>
+        <name><surname>Gaberscek</surname><given-names>Miran</given-names></name>
+        <name><surname>Palacin</surname><given-names>M. Rosa</given-names></name>
+        <name><surname>Uhrin</surname><given-names>Martin</given-names></name>
+        <name><surname>Friis</surname><given-names>Jesper</given-names></name>
+      </person-group>
+      <article-title>Toward a unified description of battery data</article-title>
+      <source>Advanced Energy Materials</source>
+      <year iso-8601-date="2022-05">2022</year><month>05</month>
+      <volume>12</volume>
+      <issn>1614-6832</issn>
+      <uri>https://github.com/BIG-MAP/BattINFO</uri>
+      <pub-id pub-id-type="doi">10.1002/aenm.202102702</pub-id>
+    </element-citation>
+  </ref>
+  <ref id="ref-EMMO">
+    <element-citation publication-type="webpage">
+      <person-group person-group-type="author">
+        <name><surname>EMMO</surname></name>
+      </person-group>
+      <article-title>Elementary multiperspective material ontology (EMMO)</article-title>
+      <year iso-8601-date="2024">2024</year>
+      <uri>https://github.com/emmo-repo/</uri>
+    </element-citation>
+  </ref>
+  <ref id="ref-python">
+    <element-citation publication-type="software">
+      <person-group person-group-type="author">
+        <name><surname>Rossum</surname><given-names>Guido van</given-names></name>
+        <name><surname>Python Development Team</surname></name>
+      </person-group>
+      <article-title>Python</article-title>
+      <year iso-8601-date="2024">2024</year>
+      <uri>https://www.python.org/</uri>
+    </element-citation>
+  </ref>
+  <ref id="ref-json">
+    <element-citation publication-type="webpage">
+      <article-title>JSON</article-title>
+      <year iso-8601-date="2017">2017</year>
+      <uri>https://www.json.org/</uri>
+    </element-citation>
+  </ref>
+  <ref id="ref-streamlit">
+    <element-citation publication-type="software">
+      <person-group person-group-type="author">
+        <name><surname>Allaire</surname><given-names>Adrien</given-names></name>
+        <name><surname>Brondex</surname><given-names>Alexis</given-names></name>
+        <name><surname>Plotkin</surname><given-names>Randy</given-names></name>
+        <name><surname>others</surname></name>
+      </person-group>
+      <article-title>Streamlit</article-title>
+      <publisher-name>Streamlit Inc.</publisher-name>
+      <year iso-8601-date="2024">2024</year>
+      <uri>https://www.streamlit.io/</uri>
     </element-citation>
   </ref>
 </ref-list>

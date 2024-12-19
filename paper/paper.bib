@@ -1,23 +1,91 @@
-@misc{BattMoDoc,
-   author = {Simon Clark et al.},
-   journal = {https://battmoteam.github.io/BattMo-doc},
-   title = {BattMo Documentation},
+@software{BattMo,
+  author       = {Xavier Raynaud and
+                  August Johansson and
+                  Halvor Møll Nilsen and
+                  Francesca Watson and
+                  Simon Clark and
+                  Erasdna},
+  title        = {BattMoTeam/BattMo: v0.3.0},
+  month        = feb,
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {v0.3.0},
+  doi          = {10.5281/zenodo.10633682},
+  url          = {https://doi.org/10.5281/zenodo.10633682},
 }
 
 @software{MATLAB,
-  title = {{MATLAB}},
-  version = {R2022b},
-  organization = {MathWorks},
-  year = {2022},
-  url = {https://www.mathworks.com/products/matlab.html},
+year = {2023},
+author = {MATLAB},
+title = {MATLAB},
+version = {Version R2023b},
+url = {https://se.mathworks.com/},
+publisher = {The MathWorks Inc.}
 }
 
-@software{julia,
-  title = {{Julia}},
-  version = {1.9.0},
-  organization = {The Julia Language},
-  year = {2023},
-  url = {https://julialang.org/},
+@article{julia,
+  author = {Bezanson, Jeff and Edelman, Alan and Karpinski, Stefan and Shah, Viral B.},
+  title = {Julia: A Fresh Approach to Numerical Computing},
+  journal = {SIAM Review},
+  volume = {59},
+  number = {1},
+  pages = {65-98},
+  year = {2017},
+  version = {v1.11.2},
+  doi = {10.1137/141000671},
+
+  URL = { 
+      
+          https://doi.org/10.1137/141000671
+      
+      
+
+  },
+  eprint = { 
+      
+          https://doi.org/10.1137/141000671
+      
+      
+
+  }
+  ,
+      abstract = { Bridging cultures that have often been distant, Julia combines expertise from the diverse fields of computer science and computational science to create a new approach to numerical computing. Julia is designed to be easy and fast and questions notions generally held to be “laws of nature" by practitioners of numerical computing: \beginlist \item High-level dynamic programs have to be slow. \item One must prototype in one language and then rewrite in another language for speed or deployment. \item There are parts of a system appropriate for the programmer, and other parts that are best left untouched as they have been built by the experts. \endlist We introduce the Julia programming language and its design---a dance between specialization and abstraction. Specialization allows for custom treatment. Multiple dispatch, a technique from computer science, picks the right algorithm for the right circumstance. Abstraction, which is what good computation is really about, recognizes what remains the same after differences are stripped away. Abstractions in mathematics are captured as code through another technique from computer science, generic programming. Julia shows that one can achieve machine performance without sacrificing human convenience. }
+}
+
+@software{sqlite,
+  title = {{SQLite}},
+  author    = {D. Richard Hipp},
+  year = {2024},
+  version = {v3.45.3},
+  url = {https://sqlite.org/},
+}
+
+@article{chen2020,
+  title={Development of experimental techniques for parameterization of multi-scale lithium-ion battery models},
+  author={Chen, Chang-Hui and Planella, Ferran Brosa and O’regan, Kieran and Gastol, Dominika and Widanage, W Dhammika and Kendrick, Emma},
+  journal={Journal of The Electrochemical Society},
+  volume={167},
+  number={8},
+  pages={080534},
+  year={2020},
+  publisher={IOP Publishing}
+}
+
+@software{http,
+  title = {{HTTP.jl}},
+  author    = {JuliaWeb},
+  year = {2024},
+  version = {v1.10.14},
+  url = {https://juliaweb.github.io/HTTP.jl/stable/},
+  doi = {10.5281/zenodo.11032263}
+}
+
+@software{docker,
+  title = {Docker},
+  author = {Docker, Inc.},
+  url = {https://www.docker.com},
+  version = {v4.36.0},
+  year = {2024}  % Update the year based on when you accessed Docker.
 }
 
 @article{FAIR,
@@ -34,11 +102,13 @@
    year = {2016},
 }
 
-@article{STAR_LD,
-   author = {Star Open Data},
-   journal = {URl: https://5stardata. info/en/},
+@online{STAR_LD,
+   organisation = {Star Open Data},
+   author = {Tim Berners-Lee},
+   year = {2006},
    title = {Star Open Data},
-   url = {https://www.go-fair.org/fair-principles/},
+   journal = {https://5stardata.info/en/},
+   url = {https://www.w3.org/DesignIssues/LinkedData.html},
 }
 
 @online{BattINFO,
@@ -53,34 +123,41 @@
    title = {Toward a Unified Description of Battery Data},
    volume = {12},
    year = {2022},
+   note = {Accessed December 2024},
 }
 
 @online{EMMO,
    url = {https://github.com/emmo-repo/},
-   title = {EMMO},
+   organisation = {Europeean Materials Modelling Council (EMMC)},
+   note = {Accessed December 2024},
+   year = {2024},
+   title = {Elementary Multiperspective Material Ontology (EMMO)},
+   author = {EMMO}
 }
 
-@misc{python,
+@software{python,
   title = {{Python}},
-  author = {Python Software Foundation},
-  year = {2023},
+  organisation = {Python Software Foundation},
+  author    = {Guido van Rossum and the Python Development Team},
+  year = {2024},
   url = {https://www.python.org/},
+  version = {v3.12.0}
 }
 
 
-@misc{json,
+@online{json,
   title = {{JSON}},
-  howpublished = {Internet},
-  year = {1999},
+  year = {2017},
   note = {JavaScript Object Notation},
   url = {https://www.json.org/},
+  note = {Accessed December 2024},
 }
 
 @software{streamlit,
   title = {{Streamlit}},
-  version = {1.26.0},
+  version = {1.39.0},
   author = {Allaire, Adrien and Brondex, Alexis and Plotkin, Randy and others},
   organization = {Streamlit Inc.},
-  year = {2023},
+  year = {2024},
   url = {https://www.streamlit.io/},
 }
