@@ -227,7 +227,7 @@ class SetExternalLinks:
         self.batterymodel = "[BatteryModel.com](https://batterymodel.com/)"
         self.zenodo = "[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6362783.svg)](https://doi.org/10.5281/zenodo.6362783)"
         self.github = "[![Repo](https://badgen.net/badge/icon/GitHub?icon=github&label)](https://github.com/BattMoTeam/BattMo)"
-        self.documentation = "[![Repo](https://badgen.net/badge/Doc/BattMo-app)](https://battmoteam.github.io/BattMo/gui.html)"
+        self.documentation = "[![Repo](https://badgen.net/badge/Doc/BattMo-app)](https://battmoteam.github.io/BattMo/app.html#)"
 
         self.set_external_links()
 
