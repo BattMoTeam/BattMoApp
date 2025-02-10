@@ -11,7 +11,7 @@ services:
     restart: always
     ports:
       - "8081:8081"
-      - "8080:8080"
+      - "8080:8082"
     networks:
       - app-network
     volumes:
@@ -37,6 +37,7 @@ services:
       - ./gui:/app
 
     command: streamlit run app.py --global.disableWidgetStateDuplicationWarning true --server.port=8501
+
 
 networks:
   app-network:

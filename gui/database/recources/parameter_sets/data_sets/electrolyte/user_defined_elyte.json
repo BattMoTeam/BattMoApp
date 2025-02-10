@@ -5,23 +5,25 @@
    "material": true,
    "model_name": ["P2D", "P3D"],
    "Parameters": {
-      "specific_heat_capacity": 1,
-      "thermal_conductivity": 1,
-      "density": 1,
+      "specific_heat_capacity": 1518.0,
+      "thermal_conductivity": 0.099,
+      "density": 1200,
       "charge_carrier_name": "Li",
       "charge_carrier_charge_number": 1,
-      "charge_carrier_transference_number": 1,
+      "charge_carrier_transference_number": 0.2594,
       "counter_ion_name": "PF6",
-      "counter_ion_charge_number": 1,
-      "counter_ion_transference_number": 1,
+      "counter_ion_charge_number": -1,
+      "counter_ion_transference_number": 0.7406,
       "conductivity": {
          "functionname": "",
+         "function": "",
          "argument_list": [
            ""
          ]
       },
       "diffusion_coefficient": {
          "functionname": "",
+         "function": "",
          "argument_list": [
            ""
          ]
