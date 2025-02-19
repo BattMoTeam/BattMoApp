@@ -53,7 +53,11 @@
          "@type": "NegativeElectrode",
          "hasActiveMaterial": {
             "rdfs:label": "negative_electrode_active_material",
-            "@type": "ActiveMaterial",
+            "@type": [
+               "ActiveMaterial",
+               "SiliconOxideGraphiteElectrode",
+               "Graphite"
+            ],
             "hasProperty": [
                {
                   "rdfs:label": "maximum_concentration",
@@ -113,30 +117,6 @@
                   },
                   "schema:citation": {
                      "@id": "https://doi.org/10.1149/1945-7111/ab9050"
-                  }
-               },
-               {
-                  "rdfs:label": "thermal_conductivity",
-                  "@type": "ThermalConductivity",
-                  "hasNumericalPart": {
-                     "@type": "Real",
-                     "hasNumericalValue": 1.04
-                  },
-                  "hasMeasurementUnit": {
-                     "hasSymbolValue": "W\u00b7m\u207b\u00b9\u00b7K\u207b\u00b9",
-                     "@type": "emmo:WattPerMetreKelvin"
-                  }
-               },
-               {
-                  "rdfs:label": "electronic_conductivity",
-                  "@type": "ElectricConductivity",
-                  "hasNumericalPart": {
-                     "@type": "Real",
-                     "hasNumericalValue": 100.0
-                  },
-                  "hasMeasurementUnit": {
-                     "hasSymbolValue": "S\u00b7m\u207b\u00b9",
-                     "@type": "emmo:SiemensPerMetre"
                   }
                },
                {
@@ -215,6 +195,48 @@
                   }
                },
                {
+                  "rdfs:label": "open_circuit_potential",
+                  "@type": "['OpenCircuitVoltage', 'Expression']",
+                  "hasStringPart": {
+                     "@type": "String",
+                     "hasStringValue": {
+                        "functionname": "computeOCP_Graphite_SiOx_Chen2020",
+                        "function": "1.9793 * exp(-39.3631*(c/cmax)) + 0.2482 - 0.0909 * tanh(29.8538*((c/cmax) - 0.1234)) - 0.04478 * tanh(14.9159*((c/cmax) - 0.2769)) - 0.0205 * tanh(30.4444*((c/cmax) - 0.6103))"
+                     }
+                  },
+                  "hasVariable": [
+                     "c",
+                     "cmax"
+                  ],
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                  }
+               },
+               {
+                  "rdfs:label": "thermal_conductivity",
+                  "@type": "ThermalConductivity",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 1.04
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "W\u00b7m\u207b\u00b9\u00b7K\u207b\u00b9",
+                     "@type": "emmo:WattPerMetreKelvin"
+                  }
+               },
+               {
+                  "rdfs:label": "electronic_conductivity",
+                  "@type": "ElectricConductivity",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 100.0
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "S\u00b7m\u207b\u00b9",
+                     "@type": "emmo:SiemensPerMetre"
+                  }
+               },
+               {
                   "rdfs:label": "activation_energy_of_diffusion",
                   "@type": "ActivationEnergy",
                   "hasNumericalPart": {
@@ -248,24 +270,6 @@
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "m",
                      "@type": "emmo:Metre"
-                  }
-               },
-               {
-                  "rdfs:label": "open_circuit_potential",
-                  "@type": "['OpenCircuitVoltage', 'Expression']",
-                  "hasStringPart": {
-                     "@type": "String",
-                     "hasStringValue": {
-                        "functionname": null,
-                        "function": "1.9793 * exp(-39.3631*(c/cmax)) + 0.2482 - 0.0909 * tanh(29.8538*((c/cmax) - 0.1234)) - 0.04478 * tanh(14.9159*((c/cmax) - 0.2769)) - 0.0205 * tanh(30.4444*((c/cmax) - 0.6103))"
-                     }
-                  },
-                  "hasVariable": [
-                     "c",
-                     "cmax"
-                  ],
-                  "schema:citation": {
-                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
@@ -308,7 +312,10 @@
          },
          "hasBinder": {
             "rdfs:label": "negative_electrode_binder",
-            "@type": "Binder",
+            "@type": [
+               "Binder",
+               "PolyvinylideneFluoride"
+            ],
             "hasProperty": [
                {
                   "rdfs:label": "density",
@@ -374,7 +381,10 @@
          },
          "hasConductiveAdditive": {
             "rdfs:label": "negative_electrode_additive",
-            "@type": "ConductiveAdditive",
+            "@type": [
+               "ConductiveAdditive",
+               "CarbonBlack"
+            ],
             "hasProperty": [
                {
                   "rdfs:label": "density",
@@ -554,21 +564,24 @@
          "@type": "PositiveElectrode",
          "hasActiveMaterial": {
             "rdfs:label": "positive_electrode_active_material",
-            "@type": "ActiveMaterial",
+            "@type": [
+               "ActiveMaterial",
+               "LithiumNickelManganeseCobaltOxideElectrode"
+            ],
             "hasProperty": [
                {
                   "rdfs:label": "maximum_concentration",
                   "@type": "MaximumConcentration",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 26390.0
+                     "hasNumericalValue": 51765.0
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "mol\u00b7m\u207b\u00b3",
                      "@type": "emmo:MolePerCubicMetre"
                   },
                   "schema:citation": {
-                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
@@ -576,14 +589,14 @@
                   "@type": "VolumetricSurfaceArea",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 1878260.0
+                     "hasNumericalValue": 382183.9
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "m\u00b2m\u207b\u00b3",
                      "@type": "emmo:Metre"
                   },
                   "schema:citation": {
-                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
@@ -591,14 +604,107 @@
                   "@type": "Density",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 3450.0
+                     "hasNumericalValue": 4950.0
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "kg\u00b7m\u207b\u00b3",
                      "@type": "emmo:GramPerCubicMetre"
                   },
                   "schema:citation": {
-                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                  }
+               },
+               {
+                  "rdfs:label": "number_of_electrons_transferred",
+                  "@type": "NumberOfElectronsTransferred",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 1
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "1",
+                     "@type": "emmo:UnitOne"
+                  },
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                  }
+               },
+               {
+                  "rdfs:label": "activation_energy_of_reaction",
+                  "@type": "ActivationEnergy",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 17800.0
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "J\u00b7mol\u207b\u00b9\u00b7",
+                     "@type": "emmo:JoulePerMole"
+                  },
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                  }
+               },
+               {
+                  "rdfs:label": "reaction_rate_constant",
+                  "@type": "ReactionRateConstant",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 3.545e-11
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "mol\u00b7m\u207b\u00b2\u00b7s\u207b\u00b9",
+                     "@type": "emmo:MolePerSquareMetrePerSecond"
+                  },
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                  }
+               },
+               {
+                  "rdfs:label": "maximum_lithium_stoichiometry",
+                  "@type": "StoichiometricNumberOfSubstance",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 0.2661
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "1",
+                     "@type": "emmo:UnitOne"
+                  },
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                  }
+               },
+               {
+                  "rdfs:label": "minimum_lithium_stoichiometry",
+                  "@type": "StoichiometricNumberOfSubstance",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 0.9084
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "1",
+                     "@type": "emmo:UnitOne"
+                  },
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                  }
+               },
+               {
+                  "rdfs:label": "open_circuit_potential",
+                  "@type": "['OpenCircuitVoltage', 'Expression']",
+                  "hasStringPart": {
+                     "@type": "String",
+                     "hasStringValue": {
+                        "functionname": "computeOCP_NMC811_Chen2020",
+                        "function": "-0.8090 * (c/cmax) + 4.4875 - 0.0428 * tanh(18.5138*((c/cmax) - 0.5542)) - 17.7326 * tanh(15.7890*((c/cmax) - 0.3117)) + 17.5842 * tanh(15.9308*((c/cmax) - 0.3120))"
+                     }
+                  },
+                  "hasVariable": [
+                     "c",
+                     "cmax"
+                  ],
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
@@ -638,81 +744,6 @@
                   }
                },
                {
-                  "rdfs:label": "number_of_electrons_transferred",
-                  "@type": "NumberOfElectronsTransferred",
-                  "hasNumericalPart": {
-                     "@type": "Real",
-                     "hasNumericalValue": 1
-                  },
-                  "hasMeasurementUnit": {
-                     "hasSymbolValue": "1",
-                     "@type": "emmo:UnitOne"
-                  },
-                  "schema:citation": {
-                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
-                  }
-               },
-               {
-                  "rdfs:label": "activation_energy_of_reaction",
-                  "@type": "ActivationEnergy",
-                  "hasNumericalPart": {
-                     "@type": "Real",
-                     "hasNumericalValue": 4000.0
-                  },
-                  "hasMeasurementUnit": {
-                     "hasSymbolValue": "J\u00b7mol\u207b\u00b9\u00b7",
-                     "@type": "emmo:JoulePerMole"
-                  },
-                  "schema:citation": {
-                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
-                  }
-               },
-               {
-                  "rdfs:label": "reaction_rate_constant",
-                  "@type": "ReactionRateConstant",
-                  "hasNumericalPart": {
-                     "@type": "Real",
-                     "hasNumericalValue": 3.626e-11
-                  },
-                  "hasMeasurementUnit": {
-                     "hasSymbolValue": "mol\u00b7m\u207b\u00b2\u00b7s\u207b\u00b9",
-                     "@type": "emmo:MolePerSquareMetrePerSecond"
-                  },
-                  "schema:citation": {
-                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
-                  }
-               },
-               {
-                  "rdfs:label": "maximum_lithium_stoichiometry",
-                  "@type": "StoichiometricNumberOfSubstance",
-                  "hasNumericalPart": {
-                     "@type": "Real",
-                     "hasNumericalValue": 0.14778
-                  },
-                  "hasMeasurementUnit": {
-                     "hasSymbolValue": "1",
-                     "@type": "emmo:UnitOne"
-                  },
-                  "schema:citation": {
-                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
-                  }
-               },
-               {
-                  "rdfs:label": "minimum_lithium_stoichiometry",
-                  "@type": "StoichiometricNumberOfSubstance",
-                  "hasNumericalPart": {
-                     "@type": "Real",
-                     "hasNumericalValue": 0.999
-                  },
-                  "hasMeasurementUnit": {
-                     "hasSymbolValue": "1",
-                     "@type": "emmo:UnitOne"
-                  },
-                  "schema:citation": {
-                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
-                  }
-               },
-               {
                   "rdfs:label": "activation_energy_of_diffusion",
                   "@type": "ActivationEnergy",
                   "hasNumericalPart": {
@@ -749,25 +780,6 @@
                   }
                },
                {
-                  "rdfs:label": "open_circuit_potential",
-                  "@type": "['OpenCircuitVoltage', 'Expression']",
-                  "hasStringPart": {
-                     "@type": "String",
-                     "hasStringValue": {
-                        "functionname": "computeOCP_LFP_Xu2015",
-                        "function": null
-                     }
-                  },
-                  "hasVariable": [
-                     "c",
-                     "T",
-                     "cmax"
-                  ],
-                  "schema:citation": {
-                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
-                  }
-               },
-               {
                   "rdfs:label": "mass_fraction",
                   "@type": "MassFraction",
                   "hasNumericalPart": {
@@ -796,7 +808,7 @@
                   "@type": "SpecificCapacity",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 174.50710467704346
+                     "hasNumericalValue": 180.01966126454545
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "mAh\u00b7g\u207b\u00b9",
@@ -807,7 +819,10 @@
          },
          "hasBinder": {
             "rdfs:label": "positive_electrode_binder",
-            "@type": "Binder",
+            "@type": [
+               "Binder",
+               "PolyvinylideneFluoride"
+            ],
             "hasProperty": [
                {
                   "rdfs:label": "density",
@@ -873,7 +888,10 @@
          },
          "hasConductiveAdditive": {
             "rdfs:label": "positive_electrode_additive",
-            "@type": "ConductiveAdditive",
+            "@type": [
+               "ConductiveAdditive",
+               "CarbonBlack"
+            ],
             "hasProperty": [
                {
                   "rdfs:label": "density",
@@ -967,7 +985,7 @@
                "@type": "MassLoading",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 16.971711999999997
+                  "hasNumericalValue": 23.948511999999994
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "mg\u00b7cm\u207b\u00b2",
@@ -1039,7 +1057,7 @@
                "@type": "Capacity",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 1386.068262945273
+                  "hasNumericalValue": 2017.6430124379945
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "mAh",
@@ -1050,7 +1068,10 @@
       },
       "hasElectrolyte": {
          "rdfs:label": "electrolyte_materials",
-         "@type": "Electrolyte",
+         "@type": [
+            "Electrolyte",
+            "LithiumHexaFluoroPhosphateElectrolyte"
+         ],
          "hasProperty": [
             {
                "rdfs:label": "specific_heat_capacity",
@@ -1170,7 +1191,7 @@
                "hasStringPart": {
                   "@type": "String",
                   "hasStringValue": {
-                     "functionname": null,
+                     "functionname": "computeElectrolyteConductivity_Chen2020",
                      "function": "0.1297*(c/1000)^3 - 2.51*(c/1000)^(1.5) + 3.329*(c/1000)"
                   }
                },
@@ -1187,7 +1208,7 @@
                "hasStringPart": {
                   "@type": "String",
                   "hasStringValue": {
-                     "functionname": null,
+                     "functionname": "computeDiffusionCoefficient_Chen2020",
                      "function": "8.794*10^(-11)*(c/1000)^2 - 3.972*10^(-10)*(c/1000) + 4.862*10^(-10)"
                   }
                },
@@ -1226,7 +1247,10 @@
       },
       "hasSeparator": {
          "rdfs:label": "separator_materials",
-         "@type": "Separator",
+         "@type": [
+            "Separator",
+            "Separator"
+         ],
          "hasProperty": [
             {
                "rdfs:label": "specific_heat_capacity",
@@ -1365,7 +1389,7 @@
             "@type": "NPRatio",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 1.56
+               "hasNumericalValue": 1.07
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "1",
@@ -1377,7 +1401,7 @@
             "@type": "Mass",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 34.8707477632
+               "hasNumericalValue": 37.33774424320001
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "g",
@@ -1389,7 +1413,7 @@
             "@type": "NominalCapacity",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 1386.068262945273
+               "hasNumericalValue": 2017.6430124379945
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "mAh",
@@ -1552,7 +1576,7 @@
                "@type": "UpperVoltageLimit",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 3.6
+                  "hasNumericalValue": 4.1
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "V",

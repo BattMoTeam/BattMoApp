@@ -116,7 +116,5 @@ streamlit_nav = st.navigation(
     pages=[home_page, simulation_page, results_page, materials_models_page]
 )
 
-with streamlit_analytics.track():
-    streamlit_nav.run()
 
-    streamlit_analytics.track(save_to_json="user_data.json")
+streamlit_nav.run()
