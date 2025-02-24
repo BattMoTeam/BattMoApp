@@ -16,3 +16,5 @@ streamlit-navigation-bar
 websocket-client
 websocat 
 streamlit-option-menu
+websocat
+bs4 

@@ -71,7 +71,7 @@
                      "@type": "emmo:MolePerCubicMetre"
                   },
                   "schema:citation": {
-                     "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
@@ -86,7 +86,7 @@
                      "@type": "emmo:Metre"
                   },
                   "schema:citation": {
-                     "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
@@ -101,7 +101,11 @@
                      "@type": "emmo:GramPerCubicMetre"
                   },
                   "schema:citation": {
+<<<<<<< HEAD
                      "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+=======
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+>>>>>>> main
                   }
                },
                {
@@ -116,12 +120,39 @@
                      "@type": "emmo:JoulePerKiloGramKelvin"
                   },
                   "schema:citation": {
-                     "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
+<<<<<<< HEAD
+=======
+                  "rdfs:label": "thermal_conductivity",
+                  "@type": "ThermalConductivity",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 1.04
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "W\u00b7m\u207b\u00b9\u00b7K\u207b\u00b9",
+                     "@type": "emmo:WattPerMetreKelvin"
+                  }
+               },
+               {
+                  "rdfs:label": "electronic_conductivity",
+                  "@type": "ElectricConductivity",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 100.0
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "S\u00b7m\u207b\u00b9",
+                     "@type": "emmo:SiemensPerMetre"
+                  }
+               },
+               {
+>>>>>>> main
                   "rdfs:label": "number_of_electrons_transferred",
-                  "@type": "NumberOfEntities",
+                  "@type": "NumberOfElectronsTransferred",
                   "hasNumericalPart": {
                      "@type": "Real",
                      "hasNumericalValue": 1
@@ -131,12 +162,12 @@
                      "@type": "emmo:UnitOne"
                   },
                   "schema:citation": {
-                     "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
                   "rdfs:label": "activation_energy_of_reaction",
-                  "@type": "Energy",
+                  "@type": "ActivationEnergy",
                   "hasNumericalPart": {
                      "@type": "Real",
                      "hasNumericalValue": 35000.0
@@ -146,7 +177,7 @@
                      "@type": "emmo:JoulePerMole"
                   },
                   "schema:citation": {
-                     "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
@@ -161,7 +192,7 @@
                      "@type": "emmo:MolePerSquareMetrePerSecond"
                   },
                   "schema:citation": {
-                     "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
@@ -176,7 +207,7 @@
                      "@type": "emmo:UnitOne"
                   },
                   "schema:citation": {
-                     "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
@@ -191,7 +222,7 @@
                      "@type": "emmo:UnitOne"
                   },
                   "schema:citation": {
-                     "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                   }
                },
                {
@@ -238,7 +269,7 @@
                },
                {
                   "rdfs:label": "diffusion_pre_exponential_factor",
-                  "@type": null,
+                  "@type": "DiffusionCoefficient",
                   "hasNumericalPart": {
                      "@type": "Real",
                      "hasNumericalValue": 3.9e-14
@@ -261,6 +292,27 @@
                   }
                },
                {
+<<<<<<< HEAD
+=======
+                  "rdfs:label": "open_circuit_potential",
+                  "@type": "['OpenCircuitVoltage', 'Expression']",
+                  "hasStringPart": {
+                     "@type": "String",
+                     "hasStringValue": {
+                        "functionname": null,
+                        "function": "1.9793 * exp(-39.3631*(c/cmax)) + 0.2482 - 0.0909 * tanh(29.8538*((c/cmax) - 0.1234)) - 0.04478 * tanh(14.9159*((c/cmax) - 0.2769)) - 0.0205 * tanh(30.4444*((c/cmax) - 0.6103))"
+                     }
+                  },
+                  "hasVariable": [
+                     "c",
+                     "cmax"
+                  ],
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1149/1945-7111/ab9050"
+                  }
+               },
+               {
+>>>>>>> main
                   "rdfs:label": "mass_fraction",
                   "@type": "MassFraction",
                   "hasNumericalPart": {
@@ -270,18 +322,6 @@
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "1",
                      "@type": "emmo:UnitOne"
-                  }
-               },
-               {
-                  "rdfs:label": "thermal_conductivity",
-                  "@type": "ThermalConductivity",
-                  "hasNumericalPart": {
-                     "@type": "Real",
-                     "hasNumericalValue": 1.04
-                  },
-                  "hasMeasurementUnit": {
-                     "hasSymbolValue": "W\u00b7m\u207b\u00b9\u00b7K\u207b\u00b9",
-                     "@type": "emmo:WattPerMetreKelvin"
                   }
                },
                {
@@ -581,7 +621,11 @@
                      "@type": "emmo:MolePerCubicMetre"
                   },
                   "schema:citation": {
+<<<<<<< HEAD
                      "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+=======
+                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+>>>>>>> main
                   }
                },
                {
@@ -596,7 +640,11 @@
                      "@type": "emmo:Metre"
                   },
                   "schema:citation": {
+<<<<<<< HEAD
                      "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+=======
+                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+>>>>>>> main
                   }
                },
                {
@@ -611,6 +659,7 @@
                      "@type": "emmo:GramPerCubicMetre"
                   },
                   "schema:citation": {
+<<<<<<< HEAD
                      "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
                   }
                },
@@ -705,6 +754,9 @@
                   ],
                   "schema:citation": {
                      "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+=======
+                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+>>>>>>> main
                   }
                },
                {
@@ -732,6 +784,84 @@
                   }
                },
                {
+<<<<<<< HEAD
+=======
+                  "rdfs:label": "number_of_electrons_transferred",
+                  "@type": "NumberOfElectronsTransferred",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 1
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "1",
+                     "@type": "emmo:UnitOne"
+                  },
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                  }
+               },
+               {
+                  "rdfs:label": "activation_energy_of_reaction",
+                  "@type": "ActivationEnergy",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 4000.0
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "J\u00b7mol\u207b\u00b9\u00b7",
+                     "@type": "emmo:JoulePerMole"
+                  },
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                  }
+               },
+               {
+                  "rdfs:label": "reaction_rate_constant",
+                  "@type": "ReactionRateConstant",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 3.626e-11
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "mol\u00b7m\u207b\u00b2\u00b7s\u207b\u00b9",
+                     "@type": "emmo:MolePerSquareMetrePerSecond"
+                  },
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                  }
+               },
+               {
+                  "rdfs:label": "maximum_lithium_stoichiometry",
+                  "@type": "StoichiometricNumberOfSubstance",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 0.14778
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "1",
+                     "@type": "emmo:UnitOne"
+                  },
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                  }
+               },
+               {
+                  "rdfs:label": "minimum_lithium_stoichiometry",
+                  "@type": "StoichiometricNumberOfSubstance",
+                  "hasNumericalPart": {
+                     "@type": "Real",
+                     "hasNumericalValue": 0.999
+                  },
+                  "hasMeasurementUnit": {
+                     "hasSymbolValue": "1",
+                     "@type": "emmo:UnitOne"
+                  },
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                  }
+               },
+               {
+>>>>>>> main
                   "rdfs:label": "activation_energy_of_diffusion",
                   "@type": "ActivationEnergy",
                   "hasNumericalPart": {
@@ -745,10 +875,10 @@
                },
                {
                   "rdfs:label": "diffusion_pre_exponential_factor",
-                  "@type": null,
+                  "@type": "DiffusionCoefficient",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 3.9e-14
+                     "hasNumericalValue": 1e-14
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "s\u207b\u00b9",
@@ -768,6 +898,28 @@
                   }
                },
                {
+<<<<<<< HEAD
+=======
+                  "rdfs:label": "open_circuit_potential",
+                  "@type": "['OpenCircuitVoltage', 'Expression']",
+                  "hasStringPart": {
+                     "@type": "String",
+                     "hasStringValue": {
+                        "functionname": "computeOCP_LFP_Xu2015",
+                        "function": null
+                     }
+                  },
+                  "hasVariable": [
+                     "c",
+                     "T",
+                     "cmax"
+                  ],
+                  "schema:citation": {
+                     "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                  }
+               },
+               {
+>>>>>>> main
                   "rdfs:label": "mass_fraction",
                   "@type": "MassFraction",
                   "hasNumericalPart": {
@@ -777,18 +929,6 @@
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "1",
                      "@type": "emmo:UnitOne"
-                  }
-               },
-               {
-                  "rdfs:label": "thermal_conductivity",
-                  "@type": "ThermalConductivity",
-                  "hasNumericalPart": {
-                     "@type": "Real",
-                     "hasNumericalValue": 2.1
-                  },
-                  "hasMeasurementUnit": {
-                     "hasSymbolValue": "W\u00b7m\u207b\u00b9\u00b7K\u207b\u00b9",
-                     "@type": "emmo:WattPerMetreKelvin"
                   }
                },
                {
@@ -1085,7 +1225,7 @@
                   "@type": "emmo:JoulePerKiloGramKelvin"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1100,7 +1240,7 @@
                   "@type": "emmo:WattPerMetreKelvin"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1115,7 +1255,7 @@
                   "@type": "emmo:GramPerCubicMetre"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1126,7 +1266,7 @@
                   "hasStringValue": "Li"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1141,7 +1281,7 @@
                   "@type": "emmo:UnitOne"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1156,7 +1296,7 @@
                   "@type": "emmo:UnitOne"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1167,7 +1307,7 @@
                   "hasStringValue": "PF6"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1182,7 +1322,7 @@
                   "@type": "UnitOne"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1199,7 +1339,7 @@
                   "c"
                ],
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1216,7 +1356,7 @@
                   "c"
                ],
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1233,7 +1373,7 @@
             },
             {
                "rdfs:label": "bruggeman_coefficient",
-               "@type": null,
+               "@type": "BruggemanCoefficient",
                "hasNumericalPart": {
                   "@type": "Real",
                   "hasNumericalValue": 1.5
@@ -1264,7 +1404,7 @@
                   "@type": "emmo:JoulePerKiloGramKelvin"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1279,7 +1419,7 @@
                   "@type": "emmo:WattPerMetreKelvin"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1294,7 +1434,7 @@
                   "@type": "emmo:GramPerCubicMetre"
                },
                "schema:citation": {
-                  "@id": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta"
+                  "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                }
             },
             {
@@ -1362,7 +1502,7 @@
          },
          {
             "rdfs:label": "number_parallel_electrode_pairs_within_cell",
-            "@type": "XXX",
+            "@type": "NumberOfEntities",
             "hasNumericalPart": {
                "@type": "Real",
                "hasNumericalValue": 1
@@ -1374,7 +1514,7 @@
          },
          {
             "rdfs:label": "external_surface_area",
-            "@type": null,
+            "@type": "SurfaceArea",
             "hasNumericalPart": {
                "@type": "Real",
                "hasNumericalValue": 0.0379
@@ -1389,7 +1529,11 @@
             "@type": "NPRatio",
             "hasNumericalPart": {
                "@type": "Real",
+<<<<<<< HEAD
                "hasNumericalValue": 1.07
+=======
+               "hasNumericalValue": 1.56
+>>>>>>> main
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "1",
@@ -1401,7 +1545,11 @@
             "@type": "Mass",
             "hasNumericalPart": {
                "@type": "Real",
+<<<<<<< HEAD
                "hasNumericalValue": 37.33774424320001
+=======
+               "hasNumericalValue": 34.8707477632
+>>>>>>> main
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "g",
@@ -1505,7 +1653,7 @@
          "hasProperty": [
             {
                "rdfs:label": "initial_step_type",
-               "@type": null,
+               "@type": "Parameter",
                "hasStringPart": {
                   "@type": "String",
                   "hasStringValue": "charging"
@@ -1592,20 +1740,20 @@
                }
             },
             {
-               "rdfs:label": "d_idt_limit",
-               "@type": null,
+               "rdfs:label": "di_dt_limit",
+               "@type": "CurrentLimit",
                "hasNumericalPart": {
                   "@type": "Real",
                   "hasNumericalValue": 0.001
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "A\u00b7s\u207b\u00b9",
-                  "@type": null
+                  "@type": "emmo:AmperePerSecond"
                }
             },
             {
-               "rdfs:label": "d_edt_limit",
-               "@type": null,
+               "rdfs:label": "de_dt_limit",
+               "@type": "VoltageLimit",
                "hasNumericalPart": {
                   "@type": "Real",
                   "hasNumericalValue": 0.01

@@ -21,20 +21,7 @@ services:
     # command: julia --project=. -e 'include("api.jl")' --color=yes --depwarn=no --project=@. --sysimage="pre-compilation/sysimage.so" -q -i -- $$(dirname $$0)/../bootstrap.jl -s=true "$$@"
 
     command: julia --project=. -e 'include("api.jl")'
-  
-  nginx:
-    build: ./nginx
-    container_name: nginx
-    restart: always
-    ports:
-      - "8001:8001"
-      - "8002:8002"
-    volumes:
-      - ./nginx:/app
 
-    depends_on:
-      - api
-      - gui
 
   gui:
     build: ./gui
@@ -42,7 +29,14 @@ services:
     restart: always
     ports:
       - "8501:8501"
+    networks:
+      - app-network
     volumes:
       - ./gui:/app
 
     command: streamlit run app.py --global.disableWidgetStateDuplicationWarning true --server.port=8501
+
+
+networks:
+  app-network:
+    driver: bridge

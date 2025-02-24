@@ -48,8 +48,9 @@ class BaseHandler:
 
                 cur.execute(query, tuple(string_values))
             finally:
-                con.commit()
 
+                con.commit()
+                # con.close()
             return cur.lastrowid
 
     def thread_safe_db_access(_self, query, params=None, fetch=None):

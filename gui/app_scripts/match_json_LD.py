@@ -489,8 +489,8 @@ def get_batt_mo_dict_from_gui_dict(gui_dict):
             "lowerCutoffVoltage": json_ld.protocol.get("lower_cutoff_voltage").get("value"),
             "upperCutoffVoltage": json_ld.protocol.get("upper_cutoff_voltage").get("value"),
             "rampupTime": 10.0,
-            "dIdtLimit": json_ld.protocol.get("d_idt_limit").get("value"),
-            "dEdtLimit": json_ld.protocol.get("d_edt_limit").get("value"),
+            "dIdtLimit": json_ld.protocol.get("di_dt_limit").get("value"),
+            "dEdtLimit": json_ld.protocol.get("de_dt_limit").get("value"),
         },
         "ThermalModel": {
             "externalHeatTransferCoefficient": json_ld.bc.get(
@@ -607,61 +607,158 @@ def get_geometry_data_from_gui_dict(gui_dict):
     return geometry_data
 
 
+def move_dict_by_label(data_list, labels):
+    # Create a new list to store the removed dictionaries
+    removed_dicts = []
+
+    for label in labels:
+        # Iterate over the original list in reverse to avoid issues while modifying the list
+        for item in data_list[:]:  # Using a copy of the list for safe iteration
+            if item.get("rdfs:label") == label:
+                removed_dicts.append(item)
+                data_list.remove(item)
+
+    return removed_dicts, data_list
+
+
 def get_gui_dict_from_linked_data(linked_data):
+
+    gui_dict = {}
+    gui_dict["@context"] = linked_data["@context"]
+    gui_dict["@graph"] = {}
+    gui_dict["@graph"]["@id"] = linked_data["@graph"]["@id"]
+    gui_dict["@graph"]["@type"] = linked_data["@graph"]["@type"]
+
+    # Cell parameters
+
+    cell_prop = linked_data["@graph"]["hasProperty"]
+    cell_prop.extend(linked_data["@graph"]["hasCase"]["hasProperty"])
+
+    gui_dict["@graph"]["hasProperty"] = cell_prop
 
     # Negative electrode
     ne_prop = linked_data["@graph"]["hasNegativeElectrode"]["hasCoating"]["hasProperty"]
-    ne_am_prop = linked_data["@graph"]["hasNegativeElectrode"]["@reverse"]["hasParticipant"][
-        "hasProperty"
-    ]
-
-    gui_dict = copy.deepcopy(linked_data)
-
-    gui_dict["@graph"]["hasNegativeElectrode"]["hasProperty"].extend(ne_prop)
-    gui_dict["@graph"]["hasNegativeElectrode"]["hasProperty"].extend(
+    ne_prop.extend(linked_data["@graph"]["hasNegativeElectrode"]["hasProperty"])
+    ne_prop.extend(
         linked_data["@graph"]["hasNegativeElectrode"]["hasCurrentCollector"]["hasProperty"]
     )
 
-    del gui_dict["@graph"]["hasNegativeElectrode"]["hasCoating"]
+    gui_dict["@graph"]["hasNegativeElectrode"] = {}
+    gui_dict["@graph"]["hasNegativeElectrode"]["hasProperty"] = ne_prop
 
-    gui_dict["@graph"]["hasNegativeElectrode"]["hasActiveMaterial"] = linked_data["@graph"][
-        "hasNegativeElectrode"
-    ]["hasCoating"]["hasActiveMaterial"]
-    gui_dict["@graph"]["hasNegativeElectrode"]["hasActiveMaterial"]["hasProperty"].extend(
-        ne_am_prop
+    ## AM
+
+    ne_am_prop = linked_data["@graph"]["hasNegativeElectrode"]["@reverse"]["hasParticipant"][
+        "hasProperty"
+    ]
+    ne_am_prop.extend(
+        linked_data["@graph"]["hasNegativeElectrode"]["hasCoating"]["hasActiveMaterial"][
+            "hasProperty"
+        ]
     )
-    gui_dict["@graph"]["hasNegativeElectrode"]["hasBinder"] = linked_data["@graph"][
-        "hasNegativeElectrode"
-    ]["hasCoating"]["hasBinder"]
-    gui_dict["@graph"]["hasNegativeElectrode"]["hasConductiveAdditive"] = linked_data["@graph"][
-        "hasNegativeElectrode"
-    ]["hasCoating"]["hasConductiveAdditive"]
+
+    gui_dict["@graph"]["hasNegativeElectrode"]["hasActiveMaterial"] = {}
+    gui_dict["@graph"]["hasNegativeElectrode"]["hasActiveMaterial"]["hasProperty"] = ne_am_prop
+
+    ## binder
+    ne_b_prop = linked_data["@graph"]["hasNegativeElectrode"]["hasCoating"]["hasBinder"][
+        "hasProperty"
+    ]
+
+    gui_dict["@graph"]["hasNegativeElectrode"]["hasBinder"] = {}
+    gui_dict["@graph"]["hasNegativeElectrode"]["hasBinder"]["hasProperty"] = ne_b_prop
+
+    ## Additive
+    ne_ad_prop = linked_data["@graph"]["hasNegativeElectrode"]["hasCoating"][
+        "hasConductiveAdditive"
+    ]["hasProperty"]
+
+    gui_dict["@graph"]["hasNegativeElectrode"]["hasConductiveAdditive"] = {}
+    gui_dict["@graph"]["hasNegativeElectrode"]["hasConductiveAdditive"]["hasProperty"] = ne_ad_prop
 
     # Positive electrode
 
     pe_prop = linked_data["@graph"]["hasPositiveElectrode"]["hasCoating"]["hasProperty"]
-    pe_am_prop = linked_data["@graph"]["hasPositiveElectrode"]["@reverse"]["hasParticipant"][
-        "hasProperty"
-    ]
-
-    gui_dict["@graph"]["hasPositiveElectrode"]["hasProperty"].extend(pe_prop)
-    gui_dict["@graph"]["hasPositiveElectrode"]["hasProperty"].extend(
+    pe_prop.extend(linked_data["@graph"]["hasPositiveElectrode"]["hasProperty"])
+    pe_prop.extend(
         linked_data["@graph"]["hasPositiveElectrode"]["hasCurrentCollector"]["hasProperty"]
     )
 
-    del gui_dict["@graph"]["hasPositiveElectrode"]["hasCoating"]
+    gui_dict["@graph"]["hasPositiveElectrode"] = {}
+    gui_dict["@graph"]["hasPositiveElectrode"]["hasProperty"] = pe_prop
 
-    gui_dict["@graph"]["hasPositiveElectrode"]["hasActiveMaterial"] = linked_data["@graph"][
-        "hasPositiveElectrode"
-    ]["hasCoating"]["hasActiveMaterial"]
-    gui_dict["@graph"]["hasPositiveElectrode"]["hasActiveMaterial"]["hasProperty"].extend(
-        pe_am_prop
+    ## AM
+    pe_am_prop = linked_data["@graph"]["hasPositiveElectrode"]["@reverse"]["hasParticipant"][
+        "hasProperty"
+    ]
+    pe_am_prop.extend(
+        linked_data["@graph"]["hasPositiveElectrode"]["hasCoating"]["hasActiveMaterial"][
+            "hasProperty"
+        ]
     )
-    gui_dict["@graph"]["hasPositiveElectrode"]["hasBinder"] = linked_data["@graph"][
-        "hasPositiveElectrode"
-    ]["hasCoating"]["hasBinder"]
-    gui_dict["@graph"]["hasPositiveElectrode"]["hasConductiveAdditive"] = linked_data["@graph"][
-        "hasPositiveElectrode"
-    ]["hasCoating"]["hasConductiveAdditive"]
+    gui_dict["@graph"]["hasPositiveElectrode"]["hasActiveMaterial"] = {}
+    gui_dict["@graph"]["hasPositiveElectrode"]["hasActiveMaterial"]["hasProperty"] = pe_am_prop
+
+    ## binder
+    pe_b_prop = linked_data["@graph"]["hasPositiveElectrode"]["hasCoating"]["hasBinder"][
+        "hasProperty"
+    ]
+
+    gui_dict["@graph"]["hasPositiveElectrode"]["hasBinder"] = {}
+    gui_dict["@graph"]["hasPositiveElectrode"]["hasBinder"]["hasProperty"] = pe_b_prop
+
+    ## Additive
+    pe_ad_prop = linked_data["@graph"]["hasPositiveElectrode"]["hasCoating"][
+        "hasConductiveAdditive"
+    ]["hasProperty"]
+
+    gui_dict["@graph"]["hasPositiveElectrode"]["hasConductiveAdditive"] = {}
+    gui_dict["@graph"]["hasPositiveElectrode"]["hasConductiveAdditive"]["hasProperty"] = pe_ad_prop
+
+    # Electrolyte
+    elyte_prop = linked_data["@graph"]["hasElectrolyte"]["hasSolute"]["hasProperty"]
+
+    for const_dict in linked_data["@graph"]["hasElectrolyte"]["hasConstituent"]:
+        elyte_prop.extend(const_dict["hasProperty"])
+
+    elyte_prop.extend(linked_data["@graph"]["hasElectrolyte"]["hasProperty"])
+
+    gui_dict["@graph"]["hasElectrolyte"] = {}
+    gui_dict["@graph"]["hasElectrolyte"]["hasProperty"] = elyte_prop
+
+    # Separator
+    sep_prop = linked_data["@graph"]["hasSeparator"]["hasProperty"]
+
+    gui_dict["@graph"]["hasSeparator"] = {}
+    gui_dict["@graph"]["hasSeparator"]["hasProperty"] = sep_prop
+
+    # model parameters
+    model_labels = [
+        "use_thermal",
+        "include_current_collector",
+        "use_solid_diffusion_model",
+        "solid_diffusion_model_type",
+        "use_ramp_up",
+    ]
+    model_bc_prop = linked_data["@graph"]["hasModel"]["hasProperty"]
+    model_prop, bc_prop_init_soc = move_dict_by_label(model_bc_prop, model_labels)
+
+    gui_dict["@graph"]["hasModel"] = {}
+    gui_dict["@graph"]["hasModel"]["hasProperty"] = model_prop
+
+    # Boundary conditions
+    init_soc, bc_prop = move_dict_by_label(bc_prop_init_soc, ["initial_state_of_charge"])
+    gui_dict["@graph"]["hasBoundaryConditions"] = {}
+    gui_dict["@graph"]["hasBoundaryConditions"]["hasProperty"] = bc_prop
+
+    # Protocol parameters
+    protocol_prop = linked_data["@graph"]["@reverse"]["hasParticipant"]["hasProperty"]
+    for task_dict in linked_data["@graph"]["@reverse"]["hasTask"]:
+
+        protocol_prop.extend(task_dict["hasMeasurementParameter"])
+
+    protocol_prop.extend(init_soc)
+    gui_dict["@graph"]["hasCyclingProcess"] = {}
+    gui_dict["@graph"]["hasCyclingProcess"]["hasProperty"] = protocol_prop
 
     return gui_dict

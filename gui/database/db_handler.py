@@ -134,6 +134,10 @@ class ParameterSetHandler(db.BaseHandler):
         res = self.select_one(values="id", where="name='%s'" % name)
         return res[0] if res else None
 
+    def get_all_material_by_component_id(self, component_id):
+        res = self.select(values="id", where="component_id=%d" % component_id)
+        return [res_[0] for res_ in res]
+
 
 #####################################
 # TEMPLATE
