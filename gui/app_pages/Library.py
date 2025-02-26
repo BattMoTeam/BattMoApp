@@ -28,17 +28,17 @@ from app_scripts.app_controller import (
 )
 
 
-# def show_library():
+def show_library():
 
-app = get_app_controller()
+    app = get_app_controller()
 
-# Set header color
-app.set_page_design().color_headers()
+    # Set header color
+    app.set_page_design().color_headers()
 
-app.set_footer(page="Library")
+    app.set_footer(page="Library")
 
-st.text("")
-st.text("")
-set_model_description()
+    st.text("")
+    st.text("")
+    set_model_description()
 
-set_material_description()
+    set_material_description()

@@ -5,7 +5,22 @@
             "bootstrap_icon": "house",
             "execute": "show_home"
         },
-        
+        "Parameter_sets":{
+            "display_name": "Parameter Sets",
+            "bootstrap_icon": "card-list",
+            "sub_pages":{
+                "Create_sets": {
+                    "display_name": "Create your own sets",
+                    "bootstrap_icon": "upload",
+                    "execute": "show_create_sets"
+                },
+                "Library": {
+                    "display_name": "Library",
+                    "bootstrap_icon": "book",
+                    "execute": "show_library"
+                }
+            }
+        },
 
         "Simulation": {
             "display_name": "Simulation",
@@ -16,12 +31,8 @@
             "display_name": "Analyze",
             "bootstrap_icon": "graph-up",
             "execute": "show_analyze"
-        },
-        "Library": {
-                    "display_name": "Library",
-                    "bootstrap_icon": "book",
-                    "execute": "show_library"
-                }
+        }
+        
         
     }
 }

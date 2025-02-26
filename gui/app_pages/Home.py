@@ -26,28 +26,25 @@ st.session_state.update(st.session_state)
 # ##############################
 
 
-# def show_home():
+def show_home():
 
-st.text("")
-st.text("")
+    st.text("")
+    st.text("")
 
-app = get_app_controller()
+    app = get_app_controller()
 
-# Initiate session states
-init_session_states()
+    # Initiate session states
+    init_session_states()
 
-# Set header color
-app.set_page_design().color_headers()
+    # Set header color
+    app.set_page_design().color_headers()
 
-# Set Introduction page heading wil title, BattMo logo, and BattMo info.
-app.set_heading()
+    # Set Introduction page heading wil title, BattMo logo, and BattMo info.
+    app.set_heading()
 
-# Set footer
-app.set_footer("Home")
+    # Set footer
+    app.set_footer("Home")
 
-# Set funding acknowledgement
-set_acknowlegent_info()
-
-# Set external links to websites and documentation
-app.set_page_design().st_space(space_width=1)
-set_external_links()
+    # Set external links to websites and documentation
+    # app.set_page_design().st_space(space_width=1)
+    set_external_links()

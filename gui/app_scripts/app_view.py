@@ -270,7 +270,7 @@ class SetHeading:
                     Welcome to BattMoApp, a user-friendly and accessible platform for cell-level battery modelling.
                     Our web application leverages the powerful BattMo.jl software to model battery cells with precision and speed.
                     It offers a suite of features designed to make battery simulations easy and intuitive. 
-                    Hover over the following buttons and explore what BattMoApp has to offer. Have fun simulating!
+                    See the following blocks find out what BattMoApp has to offer. Have fun simulating!
             
         """
         self.info = "Hover over the following buttons to see what you can find on each page."
@@ -283,18 +283,43 @@ class SetHeading:
         self.set_description()
         self.set_explore()
         st.text("")
-        self.set_feedback()
+        st.subheader("", divider="orange")
+        self.set_feedback_and_funding()
         # self.set_info()
 
-    def set_feedback(self):
-        st.subheader("Feedback", divider="orange")
-        st.markdown(
-            """If you have some constructive feedback, find a bug, or have an idea for a cool feature for this 
-                    aplication we welcome you to let us know by creating an issue on our [Github repository](https://github.com/BattMoTeam/BattMoApp)."""
-        )
+    def set_feedback_and_funding(self):
+
+        # Function to convert an image to base64
+        def image_to_base64(image_path):
+            with open(image_path, "rb") as image_file:
+                return base64.b64encode(image_file.read()).decode()
+
+        # Create columns for the information boxes
+        col1, col2 = st.columns(2)
+
+        # Render each info box inside its respective column
+        with col1:
+
+            st.subheader("Funding")
+            image_path = os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg")
+            image_base64 = image_to_base64(image_path)
+            st.markdown(
+                "This project has received [funding](https://github.com/BattMoTeam/BattMo#) from the European Union"
+            )
+            # Embed the image in HTML
+            st.html(
+                f'<img src="data:image/jpeg;base64,{image_base64}" id="flag_of_europe" style="width: 200px;">'
+            )
+
+        with col2:
+            st.subheader("Contribute")
+            st.markdown(
+                """If you have some constructive feedback, find a bug, or have an idea for a cool feature for this 
+                        application, we welcome you to let us know by creating an issue on our [Github repository](https://github.com/BattMoTeam/BattMoApp)."""
+            )
 
     def set_explore(self):
-        st.subheader("Explore each page", divider="orange")
+        # st.subheader("Explore each page")
         # st.markdown("**Simulation** Define your input parameters and run a simulation.")
         # st.markdown("**Results** Download and visualize your results.")
         # st.markdown(
@@ -463,7 +488,7 @@ class SetAcknowledgementInfo:
 
     def set_acknowledgement(self):
 
-        st.subheader(self.header, divider="orange")
+        st.subheader(self.header)
 
         self.set_funding_info()
         self.set_europe_flag()
