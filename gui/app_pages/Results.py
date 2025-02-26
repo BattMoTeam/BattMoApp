@@ -89,6 +89,8 @@ if "selected_data" not in st.session_state:
 
 app = get_app_controller()
 
+app.set_footer(page=None)
+
 app.set_hdf5_upload().set_results_uploader()
 selected_data_sets = app.set_data_set_selector().set_selector()
 
@@ -147,7 +149,3 @@ elif (
     and not selected_data_sets
 ):
     st.error("Your simulation was not succesful unfortunately, give it another try.")
-
-with st.sidebar:
-    st.divider()
-    set_acknowlegent_info()

@@ -12,6 +12,11 @@ import sys
 import requests
 import pdb
 from streamlit_extras.switch_page_button import switch_page
+from streamlit_extras.metric_cards import style_metric_cards
+from streamlit_extras.stylable_container import stylable_container
+from streamlit_extras.bottom_container import bottom
+from streamlit_extras.badges import badge
+from streamlit_extras.colored_header import colored_header
 import sympy as sp
 import matplotlib.pyplot as plt
 import os
@@ -63,7 +68,172 @@ def st_space(tab=None, space_width=1, space_number=1):
 
 
 #########################################
-# Classes used on the Introduction page
+# Classes used on multiple pages
+#########################################
+
+
+class PageDesign:
+    """
+    Used to do design changes.
+    """
+
+    def __init__(self):
+        pass
+
+    def st_space(self, tab=None, space_width=1, space_number=1):
+        """
+        function meant to be a shortcut for adding space in streamlit. Not important.
+        """
+        space = ""
+        for _ in range(space_width):
+            space += "#"
+
+        if tab:
+            for _ in range(space_number):
+                tab.markdown(space)
+        else:
+            for _ in range(space_number):
+                st.markdown(space)
+
+    def color_headers(self):
+        header_html = """
+            <style>
+
+            /* Specific styling for headers within the container */
+                h1, h2, h3, h4, h5, h6 {
+                    color: #770737; /* Make header text white */
+                }
+
+            </style>
+            """
+        st.html(header_html)
+
+
+class SetFooter:
+    """
+    Used to render the footer on each page.
+    """
+
+    def __init__(self, page=None):
+
+        self.page = page
+
+        # Path to the EU logo
+        self.image_path = os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg")
+
+        self.render_footer()
+
+    def image_to_base64(self, image_path):
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode()
+
+    def render_eu_logo(self):
+        # Convert image to base64
+        image_base64 = self.image_to_base64(self.image_path)
+
+        # Embed the image in HTML
+        st.html(
+            f'<img src="data:image/jpeg;base64,{image_base64}" id="flag_of_europe" style="width: 80px;">'
+        )
+
+    def render_theme_toggle(self):
+
+        def theming():
+            if st.session_state['themebutton'] == 'light':
+                # Switch to dark theme
+                st._config.set_option(f'theme.base', "dark")
+                st._config.set_option(f'theme.backgroundColor', "black")
+                st._config.set_option(f'theme.primaryColor', "#770737")
+                st._config.set_option(f'theme.secondaryBackgroundColor', "#262730")
+                st._config.set_option(f'theme.textColor', "white")
+                st.session_state['themebutton'] = 'dark'
+            else:
+                # Switch to light theme
+                st._config.set_option(f'theme.base', "light")
+                st._config.set_option(f'theme.backgroundColor', "white")
+                st._config.set_option(f'theme.primaryColor', "#770737")
+                st._config.set_option(f'theme.secondaryBackgroundColor', "#F0F0F0")
+                st._config.set_option(f'theme.textColor', "#000000")
+                st.session_state['themebutton'] = 'light'
+
+        if st.button(
+            ":sun_with_face:/:first_quarter_moon_with_face:", help="Switch theme", type="primary"
+        ):
+            theming()
+            st.rerun()
+
+    def set_sessions_state_clear_upload(self):
+        st.session_state.upload = False
+        st.session_state.clear_upload = True
+
+    def render_footer(self):
+
+        if self.page == "Home":
+
+            with bottom():
+
+                col1, col2 = st.columns((8, 0.7))
+
+                with col2:
+                    self.render_theme_toggle()
+
+                # with col1:
+                SetExternalLinks()
+        elif self.page == "Input_upload" or self.page == "Parameter_sets":
+            with bottom():
+
+                col1, col2, col3 = st.columns((7, 0.7, 0.5))
+
+                with col1:
+                    upload = st.session_state.upload
+                    if upload == True:
+                        st.write(":heavy_check_mark: JSON LD file is uploaded and used")
+
+                    else:
+                        st.write(":red_circle: No JSON LD file uploaded")
+
+                with col3:
+
+                    self.render_eu_logo()
+
+                with col2:
+                    st.text("")
+                    self.render_theme_toggle()
+
+        else:
+            with bottom():
+
+                col1, col2, _, col3, col4 = st.columns((1, 1, 5, 0.7, 0.5))
+
+                with col1:
+                    upload = st.session_state.upload
+                    if upload == True:
+                        st.write(":heavy_check_mark: JSON LD file is uploaded and used")
+
+                        clear = st.button(
+                            "Clear Upload",
+                            on_click=self.set_sessions_state_clear_upload,
+                            use_container_width=False,
+                            type="secondary",
+                        )
+                    else:
+                        st.write(":red_circle: No JSON LD file uploaded")
+
+                with col2:
+                    # DownloadParameters(st.session_state.json_linked_data_input)
+                    st.text("")
+
+                with col4:
+
+                    self.render_eu_logo()
+
+                with col3:
+                    st.text("")
+                    self.render_theme_toggle()
+
+
+#########################################
+# Classes used on the Home page
 #########################################
 
 
@@ -225,9 +395,14 @@ class SetExternalLinks:
     def __init__(self):
 
         self.batterymodel = "[BatteryModel.com](https://batterymodel.com/)"
-        self.zenodo = "[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6362783.svg)](https://doi.org/10.5281/zenodo.6362783)"
-        self.github = "[![Repo](https://badgen.net/badge/icon/GitHub?icon=github&label)](https://github.com/BattMoTeam/BattMo)"
-        self.documentation = "[![Repo](https://badgen.net/badge/Doc/BattMo-app)](https://battmoteam.github.io/BattMo/app.html#)"
+        self.zenodo = "[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.6362783-770737)](https://doi.org/10.5281/zenodo.6362783)"
+        self.github = "[![GitHub](https://img.shields.io/badge/GitHub-770737?logo=github&logoColor=white)](https://github.com/BattMoTeam/BattMoApp)"
+        self.documentation = "[![Docs](https://img.shields.io/badge/Docs-BattMo--app-770737)](https://battmoteam.github.io/BattMo/app.html#)"
+
+        self.batterymodel_url = "https://batterymodel.com/"
+        self.zenodo_url = "https://doi.org/10.5281/zenodo.6362783"
+        self.github_url = "https://github.com/BattMoTeam/BattMoApp"
+        self.documentation_url = "https://battmoteam.github.io/BattMo/app.html#"
 
         self.set_external_links()
 
@@ -239,6 +414,14 @@ class SetExternalLinks:
         doi_col.markdown(self.zenodo)
         github_col.markdown(self.github)
         doc_col.markdown(self.documentation)
+        # with website_col:
+        #     badge(type="buymeacoffee", name="batterymodel.com", url=self.batterymodel_url)
+        # with doi_col:
+        #     badge(type="buymeacoffee", name="DOI", url=self.zenodo_url)
+        # with github_col:
+        #     badge(type="github", name="github", url=self.github_url)
+        # with doc_col:
+        #     badge(type="buymeacoffee", name="Doc", url=self.documentation_url)
         st.divider()
 
 

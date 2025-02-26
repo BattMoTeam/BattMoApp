@@ -21,6 +21,15 @@ class AppController:
         self.images = images
         self.context = context
 
+    def set_footer(self, page):
+        return view.SetFooter(page)
+
+    def set_heading(self):
+        return view.SetHeading(get_logo())
+
+    def set_page_design(self):
+        return view.PageDesign()
+
     def set_model_choice(self):
         return view.SetModelChoice()
 
@@ -70,10 +79,6 @@ class AppController:
 
 def get_app_controller():
     return AppController(get_image_dict(), get_context())
-
-
-def set_heading():
-    return view.SetHeading(get_logo())
 
 
 def set_page_navigation():

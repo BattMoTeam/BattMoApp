@@ -21,6 +21,11 @@ st.set_page_config(
     layout="wide",
 )
 
+##############################
+# Remember user changed values
+for k, v in st.session_state.items():
+    st.session_state[k] = v
+##############################
 
 st.logo(
     image=os.path.join(
@@ -46,13 +51,6 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
-# components.html(
-#     """
-#     <script async src="https://app.batterymodel.com/umami/script.js" data-website-id="adcac53d-bc65-4ca3-9f98-be5c7c4ee75d"></script>
-#     """,
-#     height=0,
-# )
 
 
 def inject_ga():
@@ -83,22 +81,6 @@ def inject_ga():
 
 
 inject_ga()
-
-# def inject_umami():
-#     umami_js = """
-#         <script defer src="https://cloud.umami.is/script.js" data-website-id="adcac53d-bc65-4ca3-9f98-be5c7c4ee75d"></script>
-#     """
-#     st.markdown(umami_js, unsafe_allow_html=True)
-
-
-# inject_umami()
-
-
-##############################
-# Remember user changed values
-for k, v in st.session_state.items():
-    st.session_state[k] = v
-##############################
 
 
 home_page = st.Page("app_pages/Home.py", title="Home", default=True)  # , icon="🏠")

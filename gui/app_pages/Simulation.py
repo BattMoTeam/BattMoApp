@@ -129,6 +129,8 @@ log_memory_usage()
 
 app = get_app_controller()
 
+app.set_footer(page=None)
+
 model_id = app.set_model_choice().selected_model
 
 # if st.session_state.success and st.session_state.transfer_results:
@@ -161,12 +163,6 @@ if st.session_state.success and st.session_state.transfer_results:
     st.session_state.sim_finished = None
 
 st.session_state.response = None
-
-with st.sidebar:
-    # app_view.st_space(space_width=3)
-
-    st.divider()
-    set_acknowlegent_info()
 
 
 ############################################

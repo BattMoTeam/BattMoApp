@@ -8,12 +8,14 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # set config is done before import to avoid streamlit error
 from app_scripts.app_controller import (
-    set_heading,
+    get_app_controller,
     set_page_navigation,
     set_external_links,
     set_acknowlegent_info,
 )
 from app_scripts import app_view
+
+# from app_scripts.app_session_states import init_session_states
 
 # ##############################
 # # Remember user changed values
@@ -29,19 +31,29 @@ st.session_state.update(st.session_state)
 st.text("")
 st.text("")
 
-# Set Introduction page heading wil title, BattMo logo, and BattMo info.
-set_heading()
+# Description: The theme of the browser (light or dark)
+if "themebutton" not in st.session_state:
+    st.session_state['themebutton'] = "light"
 
-app_view.st_space(space_width=3)
+app = get_app_controller()
+
+# Set header color
+app.set_page_design().color_headers()
+
+# Set Introduction page heading wil title, BattMo logo, and BattMo info.
+app.set_heading()
+
+app.set_page_design().st_space(space_width=3)
 
 # Set page navigation
 col = set_page_navigation()
 
 # Set external links to websites and documentation
-set_external_links()
+app.set_footer(page="Home")
+# set_external_links()
 
 with st.sidebar:
-    app_view.st_space(space_width=3)
+    app.set_page_design().st_space(space_width=3)
 
     # Set funding acknowledgement
     set_acknowlegent_info()
