@@ -425,13 +425,13 @@ class ModelSetup:
     def __init__(self):
 
         # Basis model selection
-        self.header_1 = "Basis model"
+        self.header_1 = "Battery model"
         self.selected_model_name = None
         self.selected_model_id = None
         self.set_model_choice()
 
         self.header_2 = "Include sub-models"
-        self.set_sub_model_options()
+        # self.set_sub_model_options()
 
     def set_model_choice(self):
 
@@ -442,11 +442,11 @@ class ModelSetup:
 
         st.subheader(self.header_2)
 
-        json_model = SetupLinkedDataStruct().setup_json_linked_data_model(
-            model_name=self.selected_model_name
-        )
+        # json_model = SetupLinkedDataStruct().setup_json_linked_data_model(
+        #     model_name=self.selected_model_name
+        # )
 
-        index_dict = create_label_index_mapping(json_model["ModelSetup"])
+        # index_dict = create_label_index_mapping(json_model["ModelSetup"])
 
         col1, col2 = st.columns((1, 10))
 

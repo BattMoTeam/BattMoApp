@@ -141,7 +141,7 @@ for key, page in pages_data.items():
     if selected_page == page["display_name"]:
         if "execute" in page:
             execute_function(page["execute"])
-        elif "sub_pages" in page:
+        if "sub_pages" in page:
             # Submenu navigation
             sub_page_data = sub_menus[page["display_name"]]
             sub_page_names = [sp["display_name"] for sp in sub_page_data.values()]

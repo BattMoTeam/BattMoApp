@@ -243,5 +243,49 @@ if __name__ == "__main__":
     """
     )
 
+    ########################################################
+    #       cell_type
+    #       name, model_name, difficulty, display_name, context_type, context_type_iri, description
+    ########################################################
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS cell_type(
+            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            name VARCHAR(40) NOT NULL,
+            model_name VARCHAR(255) DEFAULT NULL,
+            is_shown_to_user BOOLEAN NOT NULL DEFAULT 1,
+            display_name VARCHAR(40) NOT NULL,
+            default_template_id INT NOT NULL,
+            context_type VARCHAR(40) DEFAULT NULL,
+            context_type_iri VARCHAR(40) DEFAULT NULL,
+            description VARCHAR(255) NULL DEFAULT ""
+        )
+    """
+    )
+
+    ########################################################
+    #       cell_design
+    #       name, model_name, difficulty, display_name, context_type, context_type_iri, description
+    ########################################################
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS cell_design(
+            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            name VARCHAR(40) NOT NULL,
+            model_name VARCHAR(255) DEFAULT NULL,
+            is_shown_to_user BOOLEAN NOT NULL DEFAULT 1,
+            default_template_id INT NOT NULL,
+            cell_type VARCHAR(40) DEFAULT NULL,
+            reference_name VARCHAR(40) DEFAULT NULL,
+            reference VARCHAR(40) DEFAULT NULL,
+            reference_url VARCHAR(40) DEFAULT NULL,
+            display_name VARCHAR(40) NOT NULL,
+            context_type VARCHAR(40) DEFAULT NULL,
+            context_type_iri VARCHAR(40) DEFAULT NULL,
+            description VARCHAR(255) NULL DEFAULT ""
+        )
+    """
+    )
+
     data = cur.execute("""SELECT * FROM component""")
     print(data.description)

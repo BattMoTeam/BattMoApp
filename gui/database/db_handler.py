@@ -611,3 +611,58 @@ class MaterialHandler(db.BaseHandler):
     #         where="id={}".format(id)
     #     )
     #     return res[0] if res else None
+
+
+#####################################
+# CELLTYPE
+#####################################
+class CellTypeHandler(db.BaseHandler):
+    def __init__(self):
+        self._table_name = "cell_type"
+        self._columns = "name, model_name, context_type, context_type_iri, display_name, default_template_id,is_shown_to_user, description"
+
+    def insert_value(
+        self,
+        name,
+        default_template_id,
+        context_type=None,
+        model_name=None,
+        context_type_iri=None,
+        display_name=None,
+        is_shown_to_user=None,
+        description="",
+    ):
+        assert name is not None, "Cell_type's name can't be None"
+        assert default_template_id is not None, "Cell_type's default_template_id can't be None"
+        print("model = ", model_name)
+        return self._insert_value_query(
+            columns_and_values={
+                "name": name,
+                "model_name": model_name,
+                "context_type": context_type,
+                "context_type_iri": context_type_iri,
+                "display_name": display_name,
+                "is_shown_to_user": is_shown_to_user,
+                "default_template_id": default_template_id,
+                "description": description,
+            }
+        )
+
+    @st.cache_data
+    def get_all_by_tab_id(_self, tab_id):
+        return _self.select(values="*", where="tab_id=%d" % tab_id)
+
+    def create_index(self, index_name, columns):
+        return self._create_index(index_name, self._table_name, columns)
+
+    def get_model_id_from_model_name(self, model_name):
+        return self.select(values="id", where="model_name=%s" % model_name)
+
+    def get_id_from_name_and_model(self, name, model_name):
+        return self.select(
+            values="id", where="name = '%s' AND model_name='%s'" % (name, model_name)
+        )
+
+    def get_default_template_id_by_id(self, id):
+        res = self.select_one(values="default_template_id", where="id={}".format(id))
+        return res[0] if res else None

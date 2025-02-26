@@ -24,8 +24,9 @@ def show_model_setup():
 
     app = get_app_controller()
 
-    app.set_model_setup()
+    with st.sidebar:
+        app.set_model_setup()
 
-    app.set_model_description()
+        # app.set_model_description()
 
-    app.set_footer(page=None)
+    # app.set_footer(page=None)

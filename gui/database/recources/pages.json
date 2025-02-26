@@ -21,59 +21,34 @@
                 }
             }
         },
-        "build_cell":{
-            "display_name": "Build Cell",
+        "adapt_model":{
+            "display_name": "Adapt model",
             "bootstrap_icon": "battery",
+            "execute": "show_model_setup",
             "sub_pages": {
-                "negative_electrode": {
-                    "display_name": "Negative Electrode",
-                    "bootstrap_icon": "dash",
-                    "execute": "show_negative_electrode"
+                "cell_geometry": {
+                    "display_name": "Cell Geometry",
+                    "bootstrap_icon": "battery",
+                    "execute": "show_cell_geometry"
                 },
-                "positive_electrode": {
-                    "display_name": "Positive Electrode",
-                    "bootstrap_icon": "plus",
-                    "execute": "show_positive_electrode"
+                "material_parameters": {
+                    "display_name": "Material Parameters",
+                    "bootstrap_icon": "battery-full",
+                    "execute": "show_material_parameters"
                 },
-                "electrolyte": {
-                    "display_name": "Electrolyte",
-                    "bootstrap_icon": "",
-                    "execute": "show_electrolyte"
-                },
-                "Separator": {
-                    "display_name": "Separator",
+                "thermal_parameters": {
+                    "display_name": "Thermal Parameters",
                     "bootstrap_icon": "distribute-horizontal",
-                    "execute": "show_separator"
+                    "execute": "show_thermal_parameters"
                 },
-                "cell_design": {
-                    "display_name": "Cell Design",
-                    "bootstrap_icon": "battery",
-                    "execute": "show_cell_design"
-                }
-            }
-        },
-        "simulation_setup":{
-            "display_name": "Simulation Setup",
-            "bootstrap_icon": "battery-half",
-            "sub_pages": {
-                "model_setup": {
-                    "display_name": "Model Setup",
-                    "bootstrap_icon": "toggles",
-                    "execute": "show_model_setup"
-                },
-                "boundary_conditions": {
-                    "display_name": "Boundary Conditions",
-                    "bootstrap_icon": "battery",
-                    "execute": "show_boundary_conditions"
-                },
-                "protocol": {
-                    "display_name": "Protocol",
+                "cycling_protocol": {
+                    "display_name": "Cycling Protocol",
                     "bootstrap_icon": "recycle",
-                    "execute": "show_protocol"
+                    "execute": "show_cycling_protocol"
                 }
-                
             }
         },
+
         "run": {
             "display_name": "Run",
             "bootstrap_icon": "battery-charging",
