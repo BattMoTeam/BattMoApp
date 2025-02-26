@@ -4232,7 +4232,7 @@ class RunSimulation:
         # self.gui_file_name = "gui_output_parameters.json"
         # self.file_mime_type = "application/json"
         # self.progress_bar = st.progress(st.session_state.simulation_progress)
-        self.success = st.session_state.success
+        self.simulation_successful = st.session_state.simulation_successful
         self.api_url = "ws://api:8081"
         self.json_input_folder = "BattMoJulia"
         self.json_input_file = "battmo_formatted_input.json"
@@ -4334,7 +4334,7 @@ class RunSimulation:
         try:
             if message == "Simulation failed or timed out.":
                 st.error("Simulation failed or timed out.")
-                st.session_state.sim_finished = True
+                st.session_state.simulation_completed = True
             else:
                 try:
                     parsed_message = json.loads(message)
@@ -4368,17 +4368,17 @@ class RunSimulation:
 
                     else:
                         st.session_state.response = True
-                        st.session_state.sim_finished = True
+                        st.session_state.simulation_completed = True
                         # message_h5 = h5py.File(message, "r")
                         st.session_state.simulation_results = message
 
                         # st.write("class:", DivergenceCheck)
-                        # self.success = DivergenceCheck(save_run=None, response=message).success
-                        # st.write("succes:", self.success)
+                        # self.simulation_successful = DivergenceCheck(save_run=None, response=message).simulation_successful
+                        # st.write("succes:", self.simulation_successful)
 
         except EOFError as e:
             st.error(f"WebSocket message handling error: {e}")
-            st.session_state.sim_finished = True
+            st.session_state.simulation_completed = True
 
     def on_error(self, ws, error):
         print(f"Error object: {error}")
@@ -4386,18 +4386,18 @@ class RunSimulation:
         print(f"WebSocket error: {error}")
 
         st.session_state.response = False
-        st.session_state.sim_finished = True
+        st.session_state.simulation_completed = True
         st.session_state.simulation_results = False
 
     def on_close(self, ws, close_status_code, close_msg):
 
-        if st.session_state.sim_finished == True:
+        if st.session_state.simulation_completed == True:
             # if "progress_bar" in vars(RunSimulation).values():
             st.progress(100)
 
-            self.success = DivergenceCheck(
+            self.simulation_successful = DivergenceCheck(
                 self.sim_start, st.session_state.simulation_results
-            ).success
+            ).simulation_successful
             # self.sim_start.error("WebSocket was closed: {}_{}".format(close_status_code, close_msg))
         else:
             self.sim_start.error(
@@ -4411,7 +4411,7 @@ class RunSimulation:
         # with open(app_access.get_path_to_battmo_formatted_input(), "r") as j:
         #     json_data = json.load(j)
         json_data = st.session_state.json_battmo_formatted_input
-        # st.info("data send with ID: {}".format(st.session_state.unique_id_temp_folder))
+        # st.info("data send with ID: {}".format(st.session_state.uuid_user_session))
         st.session_state.simulation_uuid = str(uuid.uuid4())
         start_dict = {
             "operation": "run_simulation",
@@ -4461,15 +4461,18 @@ class RunSimulation:
         self.sim_start.info("Pre-processing steps are being executed")
         self.bar = st.empty()
 
-        with self.bar:
+        # with self.bar:
 
-            with st.spinner():
-                self.run_simulation()
-                time.sleep(1)
+        with st.spinner():
+            self.run_simulation()
+            time.sleep(1)
 
-        if st.session_state.success == True:
+        if st.session_state.simulation_successful == True:
             self.set_results_button()
-        elif st.session_state.success == False or st.session_state.sim_finished == False:
+        elif (
+            st.session_state.simulation_successful == False
+            or st.session_state.simulation_completed == False
+        ):
             self.set_close_button()
 
     @st.fragment()
@@ -4506,7 +4509,7 @@ class RunSimulation:
 #     # Set the Content-Type header to application/json
 #     headers = {"Content-Type": "application/json"}
 
-#     while st.session_state.stop_simulation != True and st.session_state.sim_finished != True:
+#     while st.session_state.stop_simulation != True and st.session_state.simulation_completed != True:
 
 #         response_start = requests.post(self.api_url, json=json_data)
 
@@ -4520,10 +4523,10 @@ class RunSimulation:
 #             random_file_name = str(random_number)
 #             st.session_state["simulation_results_file_name"] = "data_" + random_file_name
 
-#         self.success = DivergenceCheck(save_run, response_start.content).success
+#         self.simulation_successful = DivergenceCheck(save_run, response_start.content).simulation_successful
 
 #     else:
-#         self.success = DivergenceCheck(save_run, False).success
+#         self.simulation_successful = DivergenceCheck(save_run, False).simulation_successful
 
 #         st.session_state.response = False
 
@@ -4531,7 +4534,7 @@ class RunSimulation:
 
 
 #         st.session_state.update_par = False
-#         st.session_state.sim_finished = True
+#         st.session_state.simulation_completed = True
 class DivergenceCheck:
     """
     Checks if the simulation is fully executed. If not it provides a warning to the user.
@@ -4542,7 +4545,7 @@ class DivergenceCheck:
 
         self.response = response
         self.save_run = save_run
-        self.success = st.session_state.success
+        self.simulation_successful = st.session_state.simulation_successful
         self.check_for_divergence()
 
     def check_for_divergence(self):
@@ -4836,24 +4839,24 @@ class DivergenceCheck:
 
         if (
             self.response == False
-            and st.session_state.success == False
+            and st.session_state.simulation_successful == False
             # and st.session_state.battmo_api_response != None
         ):
             self.save_run.error(
                 "The data has not been retrieved succesfully, most probably due to an unsuccesful simulation"
             )
-            st.session_state.success = False
-            self.success = st.session_state.success
+            st.session_state.simulation_successful = False
+            self.simulation_successful = st.session_state.simulation_successful
 
         elif self.response:
             if number_of_states == 0:
-                st.session_state.success = False
-                self.success = st.session_state.success
+                st.session_state.simulation_successful = False
+                self.simulation_successful = st.session_state.simulation_successful
 
                 if len(log_messages) > 1:
                     c = self.save_run.container(height=400)
                     c.error(
-                        "Simulation wasn't successful unfortunately. Some errors were produced, see the logging."
+                        "Simulation wasn't simulation_successfulful unfortunately. Some errors were produced, see the logging."
                     )
                     c.markdown("***Logging:***")
 
@@ -4869,9 +4872,11 @@ class DivergenceCheck:
             else:
 
                 temp_file_name = st.session_state["simulation_results_file_name"]
-                file_path = os.path.join(st.session_state["temp_dir"], temp_file_name + ".hdf5")
+                file_path = os.path.join(
+                    st.session_state["temporary_directory"], temp_file_name + ".hdf5"
+                )
 
-                self.success = True
+                self.simulation_successful = True
 
                 if log_messages and len(log_messages) > 1:
                     c = self.save_run.container()
@@ -4888,10 +4893,12 @@ class DivergenceCheck:
 
                 else:
 
-                    self.save_run.success(f"""Simulation finished successfully!""")  # \n\n
+                    self.save_run.success(
+                        f"""Simulation finished simulation_successfulfully!"""
+                    )  # \n\n
 
-                st.session_state.success = True
-                self.success = st.session_state.success
+                st.session_state.simulation_successful = True
+                self.simulation_successful = st.session_state.simulation_successful
 
                 # if self.response:
                 if not isinstance(self.response, bool):
@@ -5597,7 +5604,7 @@ class GetResultsData:
         )
 
         self.results = formatted_results
-        # file_path = os.path.join(st.session_state['temp_dir'], uploaded_file[0].name)
+        # file_path = os.path.join(st.session_state['temporary_directory'], uploaded_file[0].name)
         # with open(file_path, "wb") as f:
         #     f.write(uploaded_file[0].getbuffer())
         return self.results, indicators, input_files
@@ -5618,7 +5625,7 @@ class GetResultsData:
                 results = []
                 indicators = []
                 for file_name in file_names:
-                    file_path = os.path.join(st.session_state.temp_dir, file_name)
+                    file_path = os.path.join(st.session_state.temporary_directory, file_name)
                     result = h5py.File(file_path, "r")
                     result, indicator, input_files = self.translate_results(result)
                     results.append(result)
@@ -5626,7 +5633,7 @@ class GetResultsData:
 
             elif isinstance(file_names, str):
 
-                file_path = os.path.join(st.session_state.temp_dir, file_names)
+                file_path = os.path.join(st.session_state.temporary_directory, file_names)
                 result = h5py.File(file_path, "r")
                 results, indicators, input_files = self.translate_results(result)
 
@@ -7241,7 +7248,7 @@ class SetHDF5Download:
 
     def prepare_h5_file(_self):
 
-        file_path = os.path.join(st.session_state.temp_dir, _self.selected_data_sets[0])
+        file_path = os.path.join(st.session_state.temporary_directory, _self.selected_data_sets[0])
 
         results, indicators, input_files = app_controller.get_results_data(
             file_path
@@ -7461,7 +7468,7 @@ class SetHDF5Upload:
             if isinstance(uploaded_file, list) and len(uploaded_file) > 1:
                 names = []
                 for i, data in enumerate(uploaded_file):
-                    file_path = os.path.join(st.session_state["temp_dir"], data.name)
+                    file_path = os.path.join(st.session_state["temporary_directory"], data.name)
                     with open(file_path, "wb") as f:
                         f.write(data.getbuffer())
                     names.append(data.name)
@@ -7474,7 +7481,9 @@ class SetHDF5Upload:
                 )
 
             else:
-                file_path = os.path.join(st.session_state["temp_dir"], uploaded_file[0].name)
+                file_path = os.path.join(
+                    st.session_state["temporary_directory"], uploaded_file[0].name
+                )
                 with open(file_path, "wb") as f:
                     f.write(uploaded_file[0].getbuffer())
 
@@ -7655,7 +7664,7 @@ class SetHDF5Upload:
 class SetDataSetSelector:
     def __init__(self):
         self.header = "Select data to visualize/compare"
-        self.session_temp_folder = st.session_state["temp_dir"]
+        self.session_temp_folder = st.session_state["temporary_directory"]
 
     def set_selector(self):
 

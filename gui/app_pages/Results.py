@@ -66,27 +66,6 @@ st.text("")
 st.text("")
 page_name = "Results"
 
-if "success" not in st.session_state:
-    st.session_state.success = None
-
-if "hdf5_upload" not in st.session_state:
-    st.session_state.hdf5_upload = None
-
-# Generate a unique identifier for the session
-if "unique_id_temp_folder" not in st.session_state:
-    st.session_state["unique_id_temp_folder"] = str(uuid.uuid4())
-
-if "temp_dir" not in st.session_state:
-    unique_id = st.session_state["unique_id_temp_folder"]
-    # Create a temporary directory for the session
-    temp_dir = tempfile.mkdtemp(prefix=f"session_{unique_id}_")
-
-    # Store the temp_dir in session state
-    st.session_state["temp_dir"] = temp_dir
-
-if "selected_data" not in st.session_state:
-    st.session_state["selected_data"] = None
-
 app = get_app_controller()
 
 app.set_footer(page=None)
@@ -94,8 +73,12 @@ app.set_footer(page=None)
 app.set_hdf5_upload().set_results_uploader()
 selected_data_sets = app.set_data_set_selector().set_selector()
 
-if st.session_state.success == True or st.session_state.hdf5_upload == True or selected_data_sets:
-    session_temp_folder = st.session_state["temp_dir"]
+if (
+    st.session_state.simulation_successful == True
+    or st.session_state.hdf5_upload == True
+    or selected_data_sets
+):
+    session_temp_folder = st.session_state["temporary_directory"]
     file_names = [
         f
         for f in os.listdir(session_temp_folder)
@@ -138,13 +121,13 @@ if st.session_state.success == True or st.session_state.hdf5_upload == True or s
 
         app.set_download_hdf5_button(results, selected_data_sets)
 
-elif st.session_state.success == None:
+elif st.session_state.simulation_successful == None:
     st.error(
         "You have not executed a simulation yet. Go to the 'Simulation' page to run a simulation or upload your previous results to visualize them."
     )
 
 elif (
-    st.session_state.success == False
+    st.session_state.simulation_successful == False
     and st.session_state.transfer_results == False
     and not selected_data_sets
 ):

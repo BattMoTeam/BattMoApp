@@ -14,8 +14,7 @@ from app_scripts.app_controller import (
     set_acknowlegent_info,
 )
 from app_scripts import app_view
-
-# from app_scripts.app_session_states import init_session_states
+from app_scripts.app_session_states import init_session_states
 
 # ##############################
 # # Remember user changed values
@@ -31,11 +30,10 @@ st.session_state.update(st.session_state)
 st.text("")
 st.text("")
 
-# Description: The theme of the browser (light or dark)
-if "themebutton" not in st.session_state:
-    st.session_state['themebutton'] = "light"
-
 app = get_app_controller()
+
+# Initiate session states
+init_session_states()
 
 # Set header color
 app.set_page_design().color_headers()
