@@ -178,7 +178,7 @@ class SetFooter:
                     self.render_theme_toggle()
 
                 # with col1:
-                SetExternalLinks()
+                # SetExternalLinks()
         elif self.page == "Input_upload" or self.page == "Parameter_sets":
             with bottom():
 
@@ -203,19 +203,22 @@ class SetFooter:
         else:
             with bottom():
 
-                col1, col2, _, col3, col4 = st.columns((1, 1, 5, 0.7, 0.5))
+                col1, col2, _, col3, col4 = st.columns((3, 0.5, 3, 0.7, 0.5))
 
                 with col1:
                     upload = st.session_state.upload
                     if upload == True:
-                        st.write(":heavy_check_mark: JSON LD file is uploaded and used")
+                        cola, colb = st.columns((2, 1))
+                        with cola:
+                            st.write(":heavy_check_mark: JSON LD file is uploaded and used")
 
-                        clear = st.button(
-                            "Clear Upload",
-                            on_click=self.set_sessions_state_clear_upload,
-                            use_container_width=False,
-                            type="secondary",
-                        )
+                        with colb:
+                            clear = st.button(
+                                "Clear Upload",
+                                on_click=self.set_sessions_state_clear_upload,
+                                use_container_width=False,
+                                type="secondary",
+                            )
                     else:
                         st.write(":red_circle: No JSON LD file uploaded")
 
@@ -262,14 +265,100 @@ class SetHeading:
     def set_heading(self):
         self.set_title_and_logo()
         self.set_description()
+        self.set_explore()
+        st.text("")
+        self.set_feedback()
         # self.set_info()
 
+    def set_feedback(self):
+        st.subheader("Feedback", divider="orange")
+        st.markdown(
+            """If you have some constructive feedback, find a bug, or an idea for a cool feature for this 
+                    aplication we welcome you to let us know by creating an issue on our [Github repository](https://github.com/BattMoTeam/BattMoApp)."""
+        )
+
+    def set_explore(self):
+        st.subheader("Explore each page", divider="orange")
+        # st.markdown("**Simulation** Define your input parameters and run a simulation.")
+        # st.markdown("**Results** Download and visualize your results.")
+        # st.markdown(
+        #     "**Materials and Models** See which pre-defined materials and which simulation models are available."
+        # )
+        # Custom CSS for styling the info boxes
+        # Include Bootstrap Icons CDN correctly
+        st.markdown(
+            """
+            <head>
+                <link rel="stylesheet" 
+                    href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+            </head>
+            <style>
+                .info-box {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    padding: 15px;
+                    border-radius: 10px;
+                    border: 3px solid #770737; /* Change border color as needed */
+                    position: relative;
+                    width: 100%;
+                    background-color: white;
+                    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+                    min-height: 200px;
+                }
+                .info-box-icon {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    font-size: 30px;
+                    color: #770737; /* Icon color */
+                }
+            </style>
+        """,
+            unsafe_allow_html=True,
+        )
+
+        # Create three columns for the information boxes
+        col1, col2, col3 = st.columns(3)
+
+        # Define the content of each box with Bootstrap icons
+        info_boxes = [
+            {
+                "icon": "bi-battery-charging",
+                "title": "Simulation",
+                "content": "Define your input parameters and run a simulation.",
+            },
+            {
+                "icon": "bi-graph-up",
+                "title": "Results",
+                "content": "Visualize and compare your results. Download them in HDF5 format to revisit them on a later time.",
+            },
+            {
+                "icon": "bi-book",
+                "title": "Library",
+                "content": "A library of the pre-defined materials and simulation models.",
+            },
+        ]
+
+        # Render each info box inside its respective column
+        for col, info in zip([col1, col2, col3], info_boxes):
+            with col:
+                st.markdown(
+                    f"""
+                    <div class="info-box">
+                        <i class="bi {info['icon']} info-box-icon"></i> <!-- Correct Bootstrap Icon Rendering -->
+                        <h4>{info['title']}</h4>
+                        <p>{info['content']}</p>
+                    </div>
+                """,
+                    unsafe_allow_html=True,
+                )
+
     def set_title_and_logo(self):
-        # Title and subtitle
-        # logo_col, title_col = st.columns([1, 5])
-        # logo_col.image(self.logo)
+
         st.title(self.title)
-        # st.text(self.subtitle)
 
     def set_description(self):
         # Description
@@ -348,6 +437,7 @@ class SetAcknowledgementInfo:
 
     def __init__(self):
 
+        self.header = "Funding"
         self.text = "This project has received [funding](https://github.com/BattMoTeam/BattMo#) from the European Union"
         self.flag_image = Image.open(
             os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg")
@@ -357,10 +447,10 @@ class SetAcknowledgementInfo:
 
     def set_acknowledgement(self):
 
-        # col1,col2,col3 = st.columns([1,2,3])
-        # _,col2 = st.columns([4,1.5])
-        self.set_europe_flag()
+        st.subheader(self.header, divider="orange")
+
         self.set_funding_info()
+        self.set_europe_flag()
 
     def set_funding_info(self):
 
@@ -397,7 +487,7 @@ class SetExternalLinks:
         self.batterymodel = "[BatteryModel.com](https://batterymodel.com/)"
         self.zenodo = "[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.6362783-770737)](https://doi.org/10.5281/zenodo.6362783)"
         self.github = "[![GitHub](https://img.shields.io/badge/GitHub-770737?logo=github&logoColor=white)](https://github.com/BattMoTeam/BattMoApp)"
-        self.documentation = "[![Docs](https://img.shields.io/badge/Docs-BattMo--app-770737)](https://battmoteam.github.io/BattMo/app.html#)"
+        self.documentation = "[![Docs](https://img.shields.io/badge/Docs-BattMoApp-770737)](https://battmoteam.github.io/BattMo/app.html#)"
 
         self.batterymodel_url = "https://batterymodel.com/"
         self.zenodo_url = "https://doi.org/10.5281/zenodo.6362783"
@@ -447,10 +537,9 @@ class SetModelChoice:
     def set_model_choice(self):
         self.set_title()
         self.set_dropdown()
-        st_space()
 
     def set_title(self):
-        st.markdown("### " + self.title)
+        st.subheader(self.title, divider="orange")
 
     def set_dropdown(self):
         models_as_dict = db_helper.get_models_as_dict()
@@ -957,7 +1046,7 @@ class SetTabs:
         self.set_tabs()
 
     def set_title(self):
-        st.markdown("### " + self.title)
+        st.subheader(self.title, divider="orange")
 
     def set_sessions_state_upload(self):
         st.session_state.upload = True

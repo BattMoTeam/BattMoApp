@@ -6,6 +6,7 @@ altair==4.2.2
 Flask==2.3.2
 pylance==0.6.2
 streamlit_extras == 0.5.5
+streamlit_option_menu
 sympy == 1.12
 psutil == 3.2.2
 plotly == 5.22.0

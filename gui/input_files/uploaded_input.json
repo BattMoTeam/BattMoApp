@@ -6,9 +6,6 @@
       "schema:isBasedOn": [
          {
             "@id": "https://doi.org/10.1149/1945-7111/ab9050"
-         },
-         {
-            "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
          }
       ],
       "hasProperty": [
@@ -29,7 +26,7 @@
             "@type": "NPRatio",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 1.56
+               "hasNumericalValue": 1.07
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "1",
@@ -41,7 +38,7 @@
             "@type": "Mass",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 34.8707477632
+               "hasNumericalValue": 37.33774424320001
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "g",
@@ -53,7 +50,7 @@
             "@type": "NominalCapacity",
             "hasNumericalPart": {
                "@type": "Real",
-               "hasNumericalValue": 1386.068262945273
+               "hasNumericalValue": 2017.6430124379945
             },
             "hasMeasurementUnit": {
                "hasSymbolValue": "mAh",
@@ -659,7 +656,7 @@
                "@type": "Capacity",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 1386.068262945273
+                  "hasNumericalValue": 2017.6430124379945
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "mAh",
@@ -700,7 +697,7 @@
                   "@type": "MassLoading",
                   "hasNumericalPart": {
                      "@type": "Real",
-                     "hasNumericalValue": 16.971711999999997
+                     "hasNumericalValue": 23.948511999999994
                   },
                   "hasMeasurementUnit": {
                      "hasSymbolValue": "mg\u00b7cm\u207b\u00b2",
@@ -745,14 +742,14 @@
                      "@type": "MaximumConcentration",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 26390.0
+                        "hasNumericalValue": 51765.0
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "mol\u00b7m\u207b\u00b3",
                         "@type": "emmo:MolePerCubicMetre"
                      },
                      "schema:citation": {
-                        "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -760,14 +757,14 @@
                      "@type": "VolumetricSurfaceArea",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 1878260.0
+                        "hasNumericalValue": 382183.9
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "m\u00b2m\u207b\u00b3",
                         "@type": "emmo:Metre"
                      },
                      "schema:citation": {
-                        "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -775,14 +772,14 @@
                      "@type": "Density",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 3450.0
+                        "hasNumericalValue": 4950.0
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "kg\u00b7m\u207b\u00b3",
                         "@type": "emmo:GramPerCubicMetre"
                      },
                      "schema:citation": {
-                        "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -790,14 +787,14 @@
                      "@type": "StoichiometricNumberOfSubstance",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 0.14778
+                        "hasNumericalValue": 0.2661
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "1",
                         "@type": "emmo:UnitOne"
                      },
                      "schema:citation": {
-                        "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -805,14 +802,14 @@
                      "@type": "StoichiometricNumberOfSubstance",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 0.999
+                        "hasNumericalValue": 0.9084
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "1",
                         "@type": "emmo:UnitOne"
                      },
                      "schema:citation": {
-                        "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -821,17 +818,16 @@
                      "hasStringPart": {
                         "@type": "String",
                         "hasStringValue": {
-                           "functionname": "computeOCP_LFP_Xu2015",
-                           "function": null
+                           "functionname": "computeOCP_NMC811_Chen2020",
+                           "function": "-0.8090 * (c/cmax) + 4.4875 - 0.0428 * tanh(18.5138*((c/cmax) - 0.5542)) - 17.7326 * tanh(15.7890*((c/cmax) - 0.3117)) + 17.5842 * tanh(15.9308*((c/cmax) - 0.3120))"
                         }
                      },
                      "hasVariable": [
                         "c",
-                        "T",
                         "cmax"
                      ],
                      "schema:citation": {
-                        "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -935,7 +931,7 @@
                      "@type": "SpecificCapacity",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 174.50710467704346
+                        "hasNumericalValue": 180.01966126454545
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "mAh\u00b7g\u207b\u00b9",
@@ -1122,7 +1118,7 @@
                         "@type": "emmo:UnitOne"
                      },
                      "schema:citation": {
-                        "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -1130,14 +1126,14 @@
                      "@type": "ActivationEnergy",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 4000.0
+                        "hasNumericalValue": 17800.0
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "J\u00b7mol\u207b\u00b9\u00b7",
                         "@type": "emmo:JoulePerMole"
                      },
                      "schema:citation": {
-                        "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   },
                   {
@@ -1145,14 +1141,14 @@
                      "@type": "ReactionRateConstant",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 3.626e-11
+                        "hasNumericalValue": 3.545e-11
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "mol\u00b7m\u207b\u00b2\u00b7s\u207b\u00b9",
                         "@type": "emmo:MolePerSquareMetrePerSecond"
                      },
                      "schema:citation": {
-                        "@id": "https://doi.org/10.1016/j.energy.2014.11.073"
+                        "@id": "https://doi.org/10.1149/1945-7111/ab9050"
                      }
                   }
                ]
@@ -1626,7 +1622,7 @@
                      "@type": "UpperVoltageLimit",
                      "hasNumericalPart": {
                         "@type": "Real",
-                        "hasNumericalValue": 3.6
+                        "hasNumericalValue": 4.1
                      },
                      "hasMeasurementUnit": {
                         "hasSymbolValue": "V",

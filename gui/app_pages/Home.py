@@ -25,33 +25,29 @@ for k, v in st.session_state.items():
 st.session_state.update(st.session_state)
 # ##############################
 
-# def show_home():
 
-st.text("")
-st.text("")
+def show_home():
 
-app = get_app_controller()
+    st.text("")
+    st.text("")
 
-# Initiate session states
-init_session_states()
+    app = get_app_controller()
 
-# Set header color
-app.set_page_design().color_headers()
+    # Initiate session states
+    init_session_states()
 
-# Set Introduction page heading wil title, BattMo logo, and BattMo info.
-app.set_heading()
+    # Set header color
+    app.set_page_design().color_headers()
 
-app.set_page_design().st_space(space_width=3)
+    # Set Introduction page heading wil title, BattMo logo, and BattMo info.
+    app.set_heading()
 
-# Set page navigation
-col = set_page_navigation()
-
-# Set external links to websites and documentation
-app.set_footer(page="Home")
-# set_external_links()
-
-with st.sidebar:
-    app.set_page_design().st_space(space_width=3)
+    # Set footer
+    app.set_footer("Home")
 
     # Set funding acknowledgement
     set_acknowlegent_info()
+
+    # Set external links to websites and documentation
+    app.set_page_design().st_space(space_width=1)
+    set_external_links()

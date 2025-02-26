@@ -37,12 +37,15 @@ from app_scripts.app_controller import (
     get_app_controller,
 )
 
-app = get_app_controller()
-app.set_footer(page=None)
 
-# def show_materials_and_models():
-st.text("")
-st.text("")
-set_model_description()
+def show_library():
 
-set_material_description()
+    app = get_app_controller()
+
+    app.set_footer(page=None)
+
+    st.text("")
+    st.text("")
+    set_model_description()
+
+    set_material_description()

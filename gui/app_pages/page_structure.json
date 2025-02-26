@@ -1,0 +1,25 @@
+{
+    "pages": {
+        "Home":{
+            "display_name": "Home",
+            "bootstrap_icon": "house",
+            "execute": "show_home"
+        },
+
+        "Simulation": {
+            "display_name": "Simulation",
+            "bootstrap_icon": "battery-charging",
+            "execute": "show_simulation"
+                },
+        "Results":{
+            "display_name": "Results",
+            "bootstrap_icon": "graph-up",
+            "execute": "show_results"
+        },
+        "Library": {
+                    "display_name": "Library",
+                    "bootstrap_icon": "book",
+                    "execute": "show_library"
+                }
+    }
+}

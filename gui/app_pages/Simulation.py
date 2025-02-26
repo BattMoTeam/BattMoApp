@@ -41,52 +41,54 @@ st.session_state.update(st.session_state)
 ##############################
 
 
-page_name = "Simulation"
+def show_simulation():
+    page_name = "Simulation"
 
+    log_memory_usage()
 
-log_memory_usage()
+    app = get_app_controller()
 
-app = get_app_controller()
+    # Set header color
+    app.set_page_design().color_headers()
 
-app.set_footer(page=None)
+    app.set_footer(page=None)
 
-model_id = app.set_model_choice().selected_model
+    model_id = app.set_model_choice().selected_model
 
-# if st.session_state.simulation_successful and st.session_state.transfer_results:
-#     st.session_state["toast"](":green-background[Gathering the results!]", icon="💤")
+    # if st.session_state.simulation_successful and st.session_state.transfer_results:
+    #     st.session_state["toast"](":green-background[Gathering the results!]", icon="💤")
 
-gui_parameters = app.set_tabs(model_id).user_input
+    gui_parameters = app.set_tabs(model_id).user_input
 
-app.set_indicators(page_name)
-# st.divider()
+    app.set_indicators(page_name)
+    # st.divider()
 
-app.set_geometry_visualization(gui_parameters)
+    app.set_geometry_visualization(gui_parameters)
 
-app.download_parameters(gui_parameters)
+    app.download_parameters(gui_parameters)
 
-simulation_successful = app.run_simulation(gui_parameters).simulation_successful
+    simulation_successful = app.run_simulation(gui_parameters).simulation_successful
 
-if st.session_state.simulation_completed == True:
+    if st.session_state.simulation_completed == True:
 
-    # with h5py.File(app_access.get_path_to_battmo_results(), "r") as f:
-    #     data = f
+        # with h5py.File(app_access.get_path_to_battmo_results(), "r") as f:
+        #     data = f
 
-    save_run = st.container()
-    app.divergence_check(save_run, True)
+        save_run = st.container()
+        app.divergence_check(save_run, True)
 
-if st.session_state.simulation_successful and st.session_state.transfer_results:
-    # st.session_state["toast"](
-    #     ":green-background[Find your results on the results page!]", icon="✅"
-    # )
-    st.session_state.simulation_successful = None
-    st.session_state.simulation_completed = None
+    if st.session_state.simulation_successful and st.session_state.transfer_results:
+        # st.session_state["toast"](
+        #     ":green-background[Find your results on the results page!]", icon="✅"
+        # )
+        st.session_state.simulation_successful = None
+        st.session_state.simulation_completed = None
 
-st.session_state.response = None
+    st.session_state.response = None
 
-
-############################################
-# Can be used to check the structure of gui_parameters in the terminal
-# pp = pprint.PrettyPrinter(indent=2)
-# pp.pprint(gui_parameters)
-# pdb.set_trace()
-############################################
+    ############################################
+    # Can be used to check the structure of gui_parameters in the terminal
+    # pp = pprint.PrettyPrinter(indent=2)
+    # pp.pprint(gui_parameters)
+    # pdb.set_trace()
+    ############################################
