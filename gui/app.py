@@ -90,78 +90,76 @@ inject_ga()
 # Page navigation
 ####################
 
-with open(os.path.join(get_path_to_pages_dir(), "page_structure.json"), 'r') as f:
-    json_data = json.load(f)
+# with open(os.path.join(get_path_to_pages_dir(), "page_structure.json"), 'r') as f:
+#     json_data = json.load(f)
 
-pages_data = json_data["pages"]
-
-
-# Helper function to execute a function by name
-def execute_function(function_name):
-    if hasattr(pg, function_name):
-        getattr(pg, function_name)()
+# pages_data = json_data["pages"]
 
 
-# Main navigation
-with st.sidebar:
-    main_pages = []
-    main_icons = []
-    sub_menus = {}
-
-    for key, page in pages_data.items():
-        main_pages.append(page["display_name"])
-        main_icons.append(page.get("bootstrap_icon", ""))
-        if "sub_pages" in page:
-            sub_menus[page["display_name"]] = page["sub_pages"]
-
-    selected_page = option_menu(
-        "Menu",
-        main_pages,
-        icons=main_icons,
-        menu_icon="cast",
-        default_index=0,
-    )
-
-# Show the corresponding page
-for key, page in pages_data.items():
-    if selected_page == page["display_name"]:
-        if "execute" in page:
-            execute_function(page["execute"])
-        if "sub_pages" in page:
-            # Submenu navigation
-            sub_page_data = sub_menus[page["display_name"]]
-            sub_page_names = [sp["display_name"] for sp in sub_page_data.values()]
-            sub_page_icons = [sp["bootstrap_icon"] for sp in sub_page_data.values()]
-            sub_page_functions = [sp["execute"] for sp in sub_page_data.values()]
-
-            sub_selected = option_menu(
-                None,
-                sub_page_names,
-                menu_icon="cast",
-                icons=sub_page_icons,
-                default_index=0,
-                orientation="horizontal",
-            )
-
-            for sp_key, sp in sub_page_data.items():
-                if sub_selected == sp["display_name"]:
-                    execute_function(sp["execute"])
+# # Helper function to execute a function by name
+# def execute_function(function_name):
+#     if hasattr(pg, function_name):
+#         getattr(pg, function_name)()
 
 
-# home_page = st.Page("app_pages/Home.py", title="Home", default=True)  # , icon="🏠")
+# # Main navigation
+# with st.sidebar:
+#     main_pages = []
+#     main_icons = []
+#     sub_menus = {}
 
-# simulation_page = st.Page("app_pages/Simulation.py", title="Simulation")  # , icon="🔋")
+#     for key, page in pages_data.items():
+#         main_pages.append(page["display_name"])
+#         main_icons.append(page.get("bootstrap_icon", ""))
+#         if "sub_pages" in page:
+#             sub_menus[page["display_name"]] = page["sub_pages"]
 
-# results_page = st.Page("app_pages/Results.py", title="Results")  # , icon="📈")
+#     selected_page = option_menu(
+#         None,
+#         main_pages,
+#         icons=main_icons,
+#         menu_icon="cast",
+#         default_index=0,
+#     )
 
-# materials_models_page = st.Page(
-#     "app_pages/Materials_and_models.py", title="Materials and models"
-# )  # , icon="🍪")
+# # Show the corresponding page
+# for key, page in pages_data.items():
+#     if selected_page == page["display_name"]:
+#         if "execute" in page:
+#             execute_function(page["execute"])
+#         if "sub_pages" in page:
+#             # Submenu navigation
+#             sub_page_data = sub_menus[page["display_name"]]
+#             sub_page_names = [sp["display_name"] for sp in sub_page_data.values()]
+#             sub_page_icons = [sp["bootstrap_icon"] for sp in sub_page_data.values()]
+#             sub_page_functions = [sp["execute"] for sp in sub_page_data.values()]
+
+#             sub_selected = option_menu(
+#                 None,
+#                 sub_page_names,
+#                 menu_icon="cast",
+#                 icons=sub_page_icons,
+#                 default_index=0,
+#                 orientation="horizontal",
+#             )
+
+#             for sp_key, sp in sub_page_data.items():
+#                 if sub_selected == sp["display_name"]:
+#                     execute_function(sp["execute"])
 
 
-# streamlit_nav = st.navigation(
-#     pages=[home_page, simulation_page, results_page, materials_models_page]
-# )
+home_page = st.Page("app_pages/Home.py", title="Home", default=True)  # , icon="🏠")
+
+simulation_page = st.Page("app_pages/Simulation.py", title="Simulation")  # , icon="🔋")
+
+results_page = st.Page("app_pages/Analyze.py", title="Analyze")  # , icon="📈")
+
+materials_models_page = st.Page("app_pages/Library.py", title="Library")  # , icon="🍪")
 
 
-# streamlit_nav.run()
+streamlit_nav = st.navigation(
+    pages=[home_page, simulation_page, results_page, materials_models_page]
+)
+
+
+streamlit_nav.run()

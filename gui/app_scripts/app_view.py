@@ -17,6 +17,7 @@ from streamlit_extras.stylable_container import stylable_container
 from streamlit_extras.bottom_container import bottom
 from streamlit_extras.badges import badge
 from streamlit_extras.colored_header import colored_header
+from streamlit_extras.metric_cards import style_metric_cards
 import sympy as sp
 import matplotlib.pyplot as plt
 import os
@@ -273,7 +274,7 @@ class SetHeading:
     def set_feedback(self):
         st.subheader("Feedback", divider="orange")
         st.markdown(
-            """If you have some constructive feedback, find a bug, or an idea for a cool feature for this 
+            """If you have some constructive feedback, find a bug, or have an idea for a cool feature for this 
                     aplication we welcome you to let us know by creating an issue on our [Github repository](https://github.com/BattMoTeam/BattMoApp)."""
         )
 
@@ -332,7 +333,7 @@ class SetHeading:
             },
             {
                 "icon": "bi-graph-up",
-                "title": "Results",
+                "title": "Analyze",
                 "content": "Visualize and compare your results. Download them in HDF5 format to revisit them on a later time.",
             },
             {
@@ -539,7 +540,7 @@ class SetModelChoice:
         self.set_dropdown()
 
     def set_title(self):
-        st.subheader(self.title, divider="orange")
+        st.header(self.title)
 
     def set_dropdown(self):
         models_as_dict = db_helper.get_models_as_dict()
@@ -1046,7 +1047,7 @@ class SetTabs:
         self.set_tabs()
 
     def set_title(self):
-        st.subheader(self.title, divider="orange")
+        st.header(self.title)
 
     def set_sessions_state_upload(self):
         st.session_state.upload = True
@@ -4344,7 +4345,7 @@ class RunSimulation:
 
     def set_header(self, save_run):
 
-        save_run.markdown("### " + self.header)
+        save_run.header(self.header)
         save_run.text(" ")
 
     def set_naming(self, save_run):
@@ -4388,7 +4389,7 @@ class RunSimulation:
             self.execute_api_on_click(save_run, file_name)
 
         if results_page:
-            st.switch_page(os.path.join(app_access.get_path_to_pages_dir(), "Results.py"))
+            st.switch_page(os.path.join(app_access.get_path_to_pages_dir(), "Analyze.py"))
 
     def update_on_click(self, file_name):
         self.update_json_LD()
@@ -4550,11 +4551,11 @@ class RunSimulation:
         self.sim_start.info("Pre-processing steps are being executed")
         self.bar = st.empty()
 
-        # with self.bar:
+        with self.bar:
 
-        with st.spinner():
-            self.run_simulation()
-            time.sleep(1)
+            with st.spinner():
+                self.run_simulation()
+                time.sleep(1)
 
         if st.session_state.simulation_successful == True:
             self.set_results_button()
@@ -4585,7 +4586,7 @@ class RunSimulation:
             help="Use this button to exit this dialog",
         )
         if results_page2:
-            st.switch_page(os.path.join(app_access.get_path_to_pages_dir(), "Results.py"))
+            st.switch_page(os.path.join(app_access.get_path_to_pages_dir(), "Analyze.py"))
         if close_dialog2:
             st.rerun()
 
@@ -4982,9 +4983,7 @@ class DivergenceCheck:
 
                 else:
 
-                    self.save_run.success(
-                        f"""Simulation finished simulation_successfulfully!"""
-                    )  # \n\n
+                    self.save_run.success(f"""Simulation finished successfully!""")  # \n\n
 
                 st.session_state.simulation_successful = True
                 self.simulation_successful = st.session_state.simulation_successful
@@ -5639,7 +5638,7 @@ class SetModelDescription:
         P2D_model = db_helper.get_model_parameters_as_dict("P2D")
         P2D_model_description = db_helper.get_model_description(self.model)[0][0]
 
-        st.title("The available models")
+        st.subheader("The available models")
 
         model = st.expander(self.model)
 
@@ -6261,6 +6260,14 @@ class SetIndicators:
                         label="N/P ratio / {}".format(n_to_p_ratio["unit"]),
                         value=np.round(n_to_p_ratio["value"], 1),
                         label_visibility="visible",
+                    )
+
+                    background_color = st._config.get_option(f'theme.backgroundColor')
+                    primary_color = st._config.get_option(f'theme.primaryColor')
+                    style_metric_cards(
+                        border_left_color=primary_color,
+                        background_color=background_color,
+                        border_color=primary_color,
                     )
 
                 elif self.page_name == "Results":
@@ -9124,7 +9131,7 @@ class SetMaterialDescription:
 
         materials = db_helper.get_all_default_material()
 
-        st.title("The available materials")
+        st.subheader("The available materials")
 
         display_names = []
         for material_values in materials:

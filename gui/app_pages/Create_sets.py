@@ -28,17 +28,5 @@ from app_scripts.app_controller import (
 )
 
 
-# def show_library():
-
-app = get_app_controller()
-
-# Set header color
-app.set_page_design().color_headers()
-
-app.set_footer(page=None)
-
-st.text("")
-st.text("")
-set_model_description()
-
-set_material_description()
+def show_create_sets():
+    st.text("Create you own sets")
