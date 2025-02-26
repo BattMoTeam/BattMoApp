@@ -3,26 +3,15 @@ version: "3.3"
 services:
 
   api:
-    build: 
-      context: ./api
-      dockerfile: Dockerfile
-      target: dev
+    image: ghcr.io/battmoteam/battmo_api:latest
     container_name: api
     restart: always
     ports:
       - "8081:8081"
-      - "8080:8082"
+      - "8080:8080"
     networks:
       - app-network
-    volumes:
-      - ./api/scripts:/api/scripts
-      - ./api/api.jl:/api/api.jl
-      - ./api/logs:/api/logs
-      - ./api/input_files:/api/input_files
-      - ./api/results:/api/results
-    # command: julia --project=. -e 'include("api.jl")' --color=yes --depwarn=no --project=@. --sysimage="pre-compilation/sysimage.so" -q -i -- $$(dirname $$0)/../bootstrap.jl -s=true "$$@"
-
-    command: julia --project=. -e 'include("api.jl")'
+    command: julia --project=. -e 'include("api.jl")' --color=yes --depwarn=no --project=@. --sysimage="pre-compilation/sysimage.so" -q -i -- $$(dirname $$0)/../bootstrap.jl -s=true "$$@"
 
 
   gui:
