@@ -35,7 +35,7 @@ app = get_app_controller()
 # Set header color
 app.set_page_design().color_headers()
 
-app.set_footer(page=None)
+app.set_footer(page="Library")
 
 st.text("")
 st.text("")

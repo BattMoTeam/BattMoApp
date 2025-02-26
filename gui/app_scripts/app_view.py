@@ -201,6 +201,21 @@ class SetFooter:
                     st.text("")
                     self.render_theme_toggle()
 
+        elif self.page == "Analyze" or self.page == "Library":
+            with bottom():
+                col1, col2, col3 = st.columns((7, 0.7, 0.5))
+
+                with col1:
+                    st.text("")
+
+                with col3:
+
+                    self.render_eu_logo()
+
+                with col2:
+                    st.text("")
+                    self.render_theme_toggle()
+
         else:
             with bottom():
 

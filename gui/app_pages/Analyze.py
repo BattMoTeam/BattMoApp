@@ -68,7 +68,7 @@ page_name = "Results"
 
 app = get_app_controller()
 
-app.set_footer(page=None)
+app.set_footer(page="Analyze")
 
 app.set_hdf5_upload().set_results_uploader()
 selected_data_sets = app.set_data_set_selector().set_selector()
