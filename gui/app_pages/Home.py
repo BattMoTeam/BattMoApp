@@ -45,8 +45,6 @@ app.set_heading()
 # Set footer
 app.set_footer("Home")
 
-# Set funding acknowledgement
-set_acknowlegent_info()
 
 # Set external links to websites and documentation
 app.set_page_design().st_space(space_width=1)
