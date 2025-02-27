@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 import shutil
 from app_scripts.app_access import get_path_to_pages_dir
 import json
-
+from app_scripts.app_session_states import init_session_states
 
 ##############################
 # Page Config
@@ -85,6 +85,8 @@ def inject_ga():
 
 inject_ga()
 
+# Initiate session states
+init_session_states()
 
 ####################
 # Page navigation
@@ -120,6 +122,7 @@ with st.sidebar:
         icons=main_icons,
         menu_icon="cast",
         default_index=0,
+        manual_select=st.session_state['menu_option'],
     )
 
 # Show the corresponding page

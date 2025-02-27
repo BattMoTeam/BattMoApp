@@ -34,7 +34,7 @@ def show_home():
     app = get_app_controller()
 
     # Initiate session states
-    init_session_states()
+    # init_session_states()
 
     # Set header color
     app.set_page_design().color_headers()

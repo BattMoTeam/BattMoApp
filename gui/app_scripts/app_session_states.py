@@ -26,6 +26,11 @@ def init_session_states():
         temporary_directory = tempfile.mkdtemp(prefix=f"session_{unique_id}_")
         st.session_state["temporary_directory"] = temporary_directory
 
+    # Type: Int
+    # Description: Stores the index of the page that should be selected in the option menu
+    if 'menu_option' not in st.session_state:
+        st.session_state['menu_option'] = 0
+
     #################################
     # Upload session states
     #################################

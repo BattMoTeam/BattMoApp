@@ -11,19 +11,20 @@ from app_scripts import app_access
 
 class BaseHandler:
     """
-    Base class for all handlers (every handler refers to a precise table, this one is common to all)
+    Base class for all database handlers. Each handler corresponds to a specific table.
+    This base class provides common database operations.
     """
 
     def __init__(self):
         self._table_name = ""
         self._columns = ""
-        assert False, "must be overridden"
+        raise NotImplementedError("This method must be overridden in subclasses.")
 
     def insert_value(self, **kwargs):
-        assert False, "must be overridden"
+        raise NotImplementedError("This method must be overridden in subclasses.")
 
     def _insert_value_query(self, columns_and_values):
-        assert columns_and_values, "must specify columns_and_values arg"
+        assert columns_and_values, "columns_and_values argument is required"
         columns = []
         values = []
         for column in columns_and_values:
@@ -50,10 +51,11 @@ class BaseHandler:
             finally:
 
                 con.commit()
-                # con.close()
+
             return cur.lastrowid
 
     def thread_safe_db_access(_self, query, params=None, fetch=None):
+        """Execute a database query safely with thread locking."""
         with db_lock:
             con, cur = None, None
             try:
@@ -77,11 +79,8 @@ class BaseHandler:
                 raise
 
             finally:
-                # if cur:
-                #     cur.close()
                 if con:
                     con.commit()
-                    # con.close()
 
     def _create_index(_self, index_name, table_name, columns):
         if isinstance(columns, (list, tuple)):
@@ -236,7 +235,7 @@ class BaseHandler:
             if confirm:
                 self.thread_safe_db_access("DROP TABLE %s" % other_table)
             else:
-                print("Please set confirm parameter as True to delete the table '%s'" % other_table)
+                print(f"Please set confirm=True to delete the table '{other_table}'")
         else:
             if confirm:
                 self.thread_safe_db_access("DROP TABLE %s" % self._table_name)

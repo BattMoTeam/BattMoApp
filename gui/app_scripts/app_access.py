@@ -3,7 +3,8 @@ import json
 import sqlite3
 import streamlit as st
 
-db_name = "BattMo_gui.db"
+db_name_old = "BattMo_gui.db"
+db_name = "database.db"
 
 """
 Get paths and connections to files

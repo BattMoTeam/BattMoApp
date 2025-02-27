@@ -33,6 +33,15 @@ class AppController:
     def set_model_choice(self):
         return view.SetModelChoice()
 
+    def set_cell_design_choice(self):
+        return view.SetCellDesignChoice()
+
+    def set_cell_design(self):
+        return view.SetCellDesign()
+
+    def set_upload_input_file(self):
+        return view.SetUploadInputFile()
+
     def set_tabs(self, model_id):
         return view.SetTabs(self.images, model_id, self.context)
 

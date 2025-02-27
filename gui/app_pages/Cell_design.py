@@ -28,5 +28,9 @@ from app_scripts.app_controller import (
 )
 
 
-def show_create_sets():
-    st.text("Create you own sets")
+def show_cell_design():
+    app = get_app_controller()
+
+    app.set_cell_design()
+
+    app.set_footer(page="Analyze")

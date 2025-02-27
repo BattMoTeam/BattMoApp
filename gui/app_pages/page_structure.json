@@ -5,32 +5,52 @@
             "bootstrap_icon": "house",
             "execute": "show_home"
         },
-        "Parameter_sets":{
-            "display_name": "Parameter Sets",
+        "Build_components":{
+            "display_name": "Build Components",
             "bootstrap_icon": "card-list",
             "sub_pages":{
-                "Create_sets": {
-                    "display_name": "Create your own sets",
-                    "bootstrap_icon": "upload",
-                    "execute": "show_create_sets"
+                "Cell_design": {
+                    "display_name": "Cell design",
+                    "bootstrap_icon": "battery",
+                    "execute": "show_cell_design"
                 },
-                "Library": {
-                    "display_name": "Library",
-                    "bootstrap_icon": "book",
-                    "execute": "show_library"
+                "Materials": {
+                    "display_name": "Materials",
+                    "bootstrap_icon": "battery-full",
+                    "execute": "show_materials"
+                },
+                "Cycling_protocol": {
+                    "display_name": "Cycling protocol",
+                    "bootstrap_icon": "recycle",
+                    "execute": "show_cycling_protocol"
                 }
             }
         },
-
-        "Simulation": {
-            "display_name": "Simulation",
+        "Simulators": {
+            "display_name": "Simulators",
             "bootstrap_icon": "battery-charging",
-            "execute": "show_simulation"
+            "sub_pages": {
+                "Simulator_components":{
+                    "display_name": "Use components",
+                    "bootstrap_icon": "battery-charging",
+                    "execute": "show_simulator_components"
+                },
+                "Simulator_file":{
+                    "display_name": "Use JSON LD file",
+                    "bootstrap_icon": "battery-charging",
+                    "execute": "show_simulator_file"
+                }
+            }
                 },
         "Analyze":{
             "display_name": "Analyze",
             "bootstrap_icon": "graph-up",
             "execute": "show_analyze"
+        },
+        "Library": {
+            "display_name": "Library",
+            "bootstrap_icon": "book",
+            "execute": "show_library"
         }
         
         

@@ -41,7 +41,7 @@ st.session_state.update(st.session_state)
 ##############################
 
 
-def show_simulation():
+def show_simulation_old():
     page_name = "Simulation"
 
     log_memory_usage()
@@ -63,7 +63,7 @@ def show_simulation():
     app.set_indicators(page_name)
     # st.divider()
 
-    app.set_geometry_visualization(gui_parameters)
+    # app.set_geometry_visualization(gui_parameters)
 
     app.download_parameters(gui_parameters)
 
