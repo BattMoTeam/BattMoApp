@@ -47,5 +47,5 @@ app.set_footer("Home")
 
 
 # Set external links to websites and documentation
-app.set_page_design().st_space(space_width=1)
+
 set_external_links()

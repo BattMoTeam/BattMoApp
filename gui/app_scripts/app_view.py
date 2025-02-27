@@ -282,7 +282,8 @@ class SetHeading:
         self.set_title_and_logo()
         self.set_description()
         self.set_explore()
-        st.text("")
+
+        st.subheader("", divider="orange")
         self.set_feedback_and_funding()
         # self.set_info()
 
@@ -4587,7 +4588,10 @@ class RunSimulation:
         st.session_state.stop_simulation = False
 
         self.sim_start = st.empty()
-        self.sim_start.info("Pre-processing steps are being executed")
+        self.sim_start.info(
+            """**Precompilation:** Julia Language is precompiling parts of the code that is used to run your simulation. 
+                            This might take a little while and it only happens when the backend has been updated and those parts of the code haven't been run yet."""
+        )
         self.bar = st.empty()
 
         with self.bar:

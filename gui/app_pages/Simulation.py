@@ -26,6 +26,7 @@ from streamlit_extras.stylable_container import stylable_container
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app_scripts.app_controller import get_app_controller, log_memory_usage, set_acknowlegent_info
 from app_scripts import app_view, app_access
+from app_scripts.app_session_states import init_session_states
 
 
 # with open(app_access.get_path_to_custom_style_css()) as f:
@@ -47,6 +48,9 @@ page_name = "Simulation"
 log_memory_usage()
 
 app = get_app_controller()
+
+# Initiate session states
+init_session_states()
 
 # Set header color
 app.set_page_design().color_headers()
