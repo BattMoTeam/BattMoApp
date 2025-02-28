@@ -81,7 +81,18 @@ class PageDesign:
     """
 
     def __init__(self):
-        pass
+
+        # Dark theme colors
+        self.backgroundColor_dark = "black"
+        self.primaryColor_dark = "#770737"
+        self.secondaryBackgroundColor_dark = "#262730"
+        self.textColor_dark = "white"
+
+        # Light theme colors
+        self.backgroundColor_light = "white"
+        self.primaryColor_light = "#770737"
+        self.secondaryBackgroundColor_light = "#F0F0F0"
+        self.textColor_light = "#000000"
 
     def st_space(self, tab=None, space_width=1, space_number=1):
         """
@@ -110,6 +121,15 @@ class PageDesign:
             </style>
             """
         st.html(header_html)
+
+    def dynamic_secondary_background_color(self):
+
+        if st.session_state["themebutton"] == "light":
+            secondaryBackgroundColor = self.secondaryBackgroundColor_light
+        else:
+            secondaryBackgroundColor = self.secondaryBackgroundColor_dark
+
+        return secondaryBackgroundColor
 
 
 class SetFooter:
@@ -142,21 +162,26 @@ class SetFooter:
     def render_theme_toggle(self):
 
         def theming():
+            pgd = PageDesign()
             if st.session_state['themebutton'] == 'light':
                 # Switch to dark theme
                 st._config.set_option(f'theme.base', "dark")
-                st._config.set_option(f'theme.backgroundColor', "black")
-                st._config.set_option(f'theme.primaryColor', "#770737")
-                st._config.set_option(f'theme.secondaryBackgroundColor', "#262730")
-                st._config.set_option(f'theme.textColor', "white")
+                st._config.set_option(f'theme.backgroundColor', pgd.backgroundColor_dark)
+                st._config.set_option(f'theme.primaryColor', pgd.primaryColor_dark)
+                st._config.set_option(
+                    f'theme.secondaryBackgroundColor', pgd.secondaryBackgroundColor_dark
+                )
+                st._config.set_option(f'theme.textColor', pgd.textColor_dark)
                 st.session_state['themebutton'] = 'dark'
             else:
                 # Switch to light theme
                 st._config.set_option(f'theme.base', "light")
-                st._config.set_option(f'theme.backgroundColor', "white")
-                st._config.set_option(f'theme.primaryColor', "#770737")
-                st._config.set_option(f'theme.secondaryBackgroundColor', "#F0F0F0")
-                st._config.set_option(f'theme.textColor', "#000000")
+                st._config.set_option(f'theme.backgroundColor', pgd.backgroundColor_light)
+                st._config.set_option(f'theme.primaryColor', pgd.primaryColor_light)
+                st._config.set_option(
+                    f'theme.secondaryBackgroundColor', pgd.secondaryBackgroundColor_light
+                )
+                st._config.set_option(f'theme.textColor', pgd.textColor_light)
                 st.session_state['themebutton'] = 'light'
 
         if st.button(
@@ -321,22 +346,17 @@ class SetHeading:
             )
 
     def set_explore(self):
-        # st.subheader("Explore each page")
-        # st.markdown("**Simulation** Define your input parameters and run a simulation.")
-        # st.markdown("**Results** Download and visualize your results.")
-        # st.markdown(
-        #     "**Materials and Models** See which pre-defined materials and which simulation models are available."
-        # )
-        # Custom CSS for styling the info boxes
-        # Include Bootstrap Icons CDN correctly
+
+        bg_color = PageDesign().dynamic_secondary_background_color()
+
         st.markdown(
-            """
+            f"""
             <head>
                 <link rel="stylesheet" 
                     href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
             </head>
             <style>
-                .info-box {
+                .info-box {{
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -347,17 +367,17 @@ class SetHeading:
                     border: 3px solid #770737; /* Change border color as needed */
                     position: relative;
                     width: 100%;
-                    background-color: white;
+                    background-color: {bg_color};
                     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
                     min-height: 200px;
-                }
-                .info-box-icon {
+                }}
+                .info-box-icon {{
                     position: absolute;
                     top: 10px;
                     left: 10px;
                     font-size: 30px;
                     color: #770737; /* Icon color */
-                }
+                }}
             </style>
         """,
             unsafe_allow_html=True,
@@ -4824,7 +4844,10 @@ class RunSimulation:
         st.session_state.stop_simulation = False
 
         self.sim_start = st.empty()
-        self.sim_start.info("Pre-processing steps are being executed")
+        self.sim_start.info(
+            """**Precompilation:** Julia Language is precompiling parts of the code that is used to run your simulation. 
+                            This might take a little while and it only happens when the backend has been updated and those parts of the code haven't been run yet."""
+        )
         self.bar = st.empty()
 
         with self.bar:

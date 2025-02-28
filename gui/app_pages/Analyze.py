@@ -37,6 +37,7 @@ from app_scripts.app_controller import (
     set_acknowlegent_info,
 )
 from app_scripts import app_view
+from app_scripts.app_session_states import init_session_states
 
 # Get page name
 # url = str(st_javascript("await fetch('').then(r => window.parent.location.href)"))
