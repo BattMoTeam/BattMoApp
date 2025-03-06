@@ -1,0 +1,22 @@
+{
+   "name": "LiFePO4_Xu2015",   
+   "category": "positive_electrode_active_material",
+   "parameters": {
+      "maximum_concentration": 26390,
+      "volumetric_surface_area": 1878260,
+      "density": 3450,
+      "number_of_electrons_transferred": 1,
+      "activation_energy_of_reaction": 4000,
+      "reaction_rate_constant": 3.626e-11,
+      "maximum_lithium_stoichiometry": 0.14778,
+      "minimum_lithium_stoichiometry":0.999,
+      "open_circuit_potential": {
+         "functionname": "computeOCP_LFP_Xu2015",
+         "argument_list": [
+            "c",
+            "T",
+            "cmax"
+          ]
+      }
+   }
+}

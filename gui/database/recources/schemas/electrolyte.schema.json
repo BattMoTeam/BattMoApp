@@ -1,0 +1,53 @@
+{
+    "$schema": "https://json-schema.org/draft-04/schema",
+    "description": "electrolyte parameters",
+    "type": "object",
+    "additionalProperties": false,
+    "minProperties": 9,
+    "properties":{
+        "specific_heat_capacity":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "thermal_conductivity":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "density":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "charge_carrier_name":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "charge_carrier_charge_number":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "charge_carrier_transference_number":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "counter_ion_name":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "counter_ion_charge_number":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "counter_ion_transference_number":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "bruggeman_coefficient":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "concentration":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "EC_DMC_ratio":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "conductivity":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "diffusion_coefficient":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        }
+        
+    }
+
+}

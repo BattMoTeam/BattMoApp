@@ -1,0 +1,47 @@
+{
+    "$schema": "https://json-schema.org/draft-04/schema",
+    "description": "protocol parameters",
+    "type": "object",
+    "additionalProperties": false,
+    "minProperties": 12,
+    "properties":{
+        "use_ramp_up":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "number_of_ramp_up_steps":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "initial_step_type":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "initial_state_of_charge":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "number_of_cycles":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "d_rate":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "c_rate":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "lower_cutoff_voltage":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "upper_cutoff_voltage":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "d_idt_limit":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "d_edt_limit":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "time_step_duration":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        }
+        
+    }
+
+}

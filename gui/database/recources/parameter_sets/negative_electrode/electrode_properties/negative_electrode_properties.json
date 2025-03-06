@@ -1,0 +1,9 @@
+{
+   "name": "negative_electrode",
+   "category": "negative_electrode",
+   "parameters": {
+      "coating_thickness": 85,
+      "coating_porosity": 0.2,
+      "mass_loading": 10
+   }
+}

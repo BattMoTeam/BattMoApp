@@ -1,0 +1,76 @@
+{
+    "$id": "file://./category.schema.json",
+    "$schema": "https://json-schema.org/draft-04/schema",
+    "description": "category object",
+    "type": "object",
+    "required":["display_name", "is_material","is_cell_type", "category_parameters"],
+    "properties": {
+        "display_name": {
+            "type": "string",
+            " description": "The name of the template"
+        },
+        "is_material": {
+            "type": "boolean",
+            "description":"Whether the template represents a material or not.",
+            "enum": [true, false]
+        },
+        "is_cell_type": {
+            "type": "boolean",
+            "description":"Whether the template represents a cell type or not.",
+            "enum": [true, false]
+        },
+        "category_parameters":{
+            "type": "string",
+            "description": "name of the category_parameters file."
+
+        },
+        "materials":{
+            "anyOf": [
+                { "type": "string" },
+                {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1,
+                "uniqueItems": true
+                }
+            ],
+            "description": "name of the materials file."
+
+        },
+        "cell_designs":{
+            "anyOf": [
+                { "type": "string" },
+                {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1,
+                "uniqueItems": true
+                }
+            ],
+            "description": "name of the cell_designs file."
+
+        }
+    },
+    "if": {
+        "properties":{
+            "is_material": {
+                "const": true
+                }
+        }
+    },
+  "then": {
+    "required": ["materials"]
+  },
+  "else": {
+    "if": {
+        "properties":{
+            "is_cell_type": {
+            "const": true
+        }
+    }
+    },
+    "then": {
+      "required": ["cell_designs"]
+    }
+  }
+}

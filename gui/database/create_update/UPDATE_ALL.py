@@ -1,10 +1,10 @@
-from update_specific_tables.update_templates import UpdateTemplates
+from update_specific_tables.update_template_parameters import UpdateTemplateParameters
 from update_specific_tables.update_models import UpdateModels
-from update_specific_tables.update_tabs import UpdateTabs
-from update_specific_tables.update_components import UpdateComponents
 from update_specific_tables.update_materials import UpdateMaterials
 from update_specific_tables.update_categories import UpdateCategories
 from update_specific_tables.update_all_parameter_sets import UpdateParameterSets
+from update_specific_tables.update_cell_types import UpdateCellTypes
+from update_specific_tables.update_cell_designs import UpdateCellDesigns
 import os
 import sys
 
@@ -29,32 +29,33 @@ if __name__ == "__main__":
     # sql_template_parameter.drop_table(confirm=True)
     # os.system("db_model.py")
 
-    # 1. Templates (independent)
-    UpdateTemplates().execute_script()
-
-    # 2. Models (depends on templates)
+    # 1. Models (independent)
     UpdateModels().execute_script()
 
-    # 3. Tabs (depends on models)
-    UpdateTabs().execute_script()
+    # 2. Template parameters (independent)
+    UpdateTemplateParameters().execute_script()
 
-    # 4. Categories (depend on models, templates and tabs)
+    # 3. Categories (independent)
     UpdateCategories().execute_script()
 
-    # 5. Components (depend on models, templates and categories)
-    UpdateComponents().execute_script()
+    # 4. parameter sets (depends on categories, and template parameters)
+    ## parameters
+    UpdateParameterSets().execute_script()
 
-    # 6. Materials (depend on models, components)
+    # 5. Materials (depends on categories and parameter sets)
     UpdateMaterials().execute_script()
 
-    # 5. Parameter sets (depend on templates and components)
-    UpdateParameterSets().execute_script()
+    # 6. cell_types (depends on categories and parameter sets)
+    UpdateCellTypes().execute_script()
+
+    # 7. cell_designs (depends on categories and parameter sets)
+    UpdateCellDesigns().execute_script()
 
 
 # Uncomment to see data in material table:
 
 con, cur = app_access.get_sqlite_con_and_cur()
-data = cur.execute("""SELECT * FROM category""")
+data = cur.execute("""SELECT * FROM cell_design""")
 # Fetch all rows from the result
 data = cur.fetchall()
 

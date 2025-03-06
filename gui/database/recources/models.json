@@ -1,21 +1,12 @@
 {
     "models": {
-      "P2D": {
+      "lithium_ion_p2d": {
+         "display_name": "Lithium-ion P2D",
          "context_type":["battinfo:p2dModel", "schema:SoftwareApplication"],
-         "context_id":"https://battmoteam.github.io/BattMo/index.html",
-         "label": "P2D model",
+         "context_type_iri":"https://battmoteam.github.io/BattMo/index.html",
          "description": "The Pseudo Two-Dimensional (P2D) model was introduced by Newman et al. and describes the behaviour of a porous electrode battery. It is a one dimensional model, but assumes that at each point of the electrode there is a spherical particle that represents the active material. Therefore, the model has a second dimension in the ratial direction.",
-         "is_shown_to_user": true,
-         "default_template": "model_template"
-      },
-      "P3D": {
-        "context_type":["battinfo:p2dModel", "schema:SoftwareApplication"],
-        "context_id":"https://battmoteam.github.io/BattMo/index.html",
-        "label": "P3D model",
-        "description": "",
-        "is_shown_to_user": false,
-        "default_template": "model_template"
-     }
+         "is_shown_to_user": true
+      }
 
     }
 }

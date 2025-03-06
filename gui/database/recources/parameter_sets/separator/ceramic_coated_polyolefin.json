@@ -1,0 +1,11 @@
+{
+    "name": "ceramic_coated_polyolefin_Chen2020",
+    "category": "separator",
+   "parameters": {
+       
+       "specific_heat_capacity": 1692,
+       "thermal_conductivity": 0.334,
+       "density": 946
+       
+    }
+ }

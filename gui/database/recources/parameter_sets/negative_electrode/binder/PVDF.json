@@ -1,0 +1,10 @@
+{
+   "name": "PVDF",
+   "category": "negative_electrode_binder",
+   "parameters": {
+      "density": 1780,
+      "specific_heat_capacity": 1400,
+      "thermal_conductivity": 0.165
+      
+   }
+}

@@ -1,0 +1,26 @@
+{
+    "$schema": "https://json-schema.org/draft-04/schema",
+    "description": "separator parameters",
+    "type": "object",
+    "additionalProperties": false,
+    "minProperties": 5,
+    "properties":{
+        "density":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "porosity":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "bruggeman_coefficient":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "thermal_conductivity":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "specific_heat_capacity":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        }
+        
+    }
+
+}

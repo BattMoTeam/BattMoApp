@@ -1,0 +1,22 @@
+{
+    "$schema": "https://json-schema.org/draft-04/schema",
+    "description": "current_collector parameters",
+    "type": "object",
+    "additionalProperties": false,
+    "minProperties": 4,
+    "properties":{
+        "density":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "specific_heat_capacity":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "thermal_conductivity":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "electronic_conductivity":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        }
+    }
+
+}

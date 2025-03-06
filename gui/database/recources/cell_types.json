@@ -1,0 +1,18 @@
+{
+    "cell_types":{
+        "pouch":{
+            "display_name": "Pouch",
+            "category": "cell_type",
+            "context_type": "",
+            "context_type_iri": "",
+            "description": ""
+        },
+        "cylindrical":{
+            "display_name": "Cylindrical",
+            "category": "cell_type",
+            "context_type": "",
+            "context_type_iri": "",
+            "description": ""
+        }
+    }
+}

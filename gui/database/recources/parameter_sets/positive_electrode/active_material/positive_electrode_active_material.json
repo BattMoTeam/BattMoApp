@@ -1,0 +1,7 @@
+{
+   "name": "positive_electrode_active_material",
+   "category": "positive_electrode_active_material",
+   "parameters": {
+      "mass_fraction": 0.9
+   }
+}

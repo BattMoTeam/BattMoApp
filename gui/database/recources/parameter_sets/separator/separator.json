@@ -1,0 +1,8 @@
+{
+   "name": "separator",
+   "category": "separator",
+   "parameters": {
+      "thickness": 15,
+      "porosity": 0.4
+   }
+}

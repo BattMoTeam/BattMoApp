@@ -1,0 +1,22 @@
+{
+    "$schema": "https://json-schema.org/draft-04/schema",
+    "description": "boundary_conditions parameters",
+    "type": "object",
+    "additionalProperties": false,
+    "minProperties": 4,
+    "properties":{
+        "ambient_temperature":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "initial_temperature":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "reference_temperature":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        },
+        "external_heat_transfer_coefficient":{
+            "$ref": "file:///Users/lorenah/Documents/Test_scripts/database_automation/helpers/schemas/parameter.schema.json"
+        }
+    }
+
+}

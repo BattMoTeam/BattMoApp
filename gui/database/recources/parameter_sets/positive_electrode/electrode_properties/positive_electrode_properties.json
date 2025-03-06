@@ -1,0 +1,9 @@
+{
+   "name": "positive_electrode",
+   "category": "positive_electrode",
+   "parameters": {
+      "coating_thickness": 76,
+      "coating_porosity": 0.32,
+      "mass_loading": 10
+   }
+}

@@ -170,24 +170,10 @@ def get_path_to_database_recources_dir():
 
 
 @st.cache_data
-def get_path_to_database_recources_parameter_sets_dir():
+def get_path_to_parameter_sets():
     recources_path = get_path_to_database_recources_dir()
     parameter_sets_path = os.path.join(recources_path, "parameter_sets")
     return parameter_sets_path
-
-
-@st.cache_data
-def get_path_to_database_recources_parameter_sets_experimental_data_dir():
-    parameter_sets_path = get_path_to_database_recources_parameter_sets_dir()
-    experimental_data_path = os.path.join(parameter_sets_path, "data_sets")
-    return experimental_data_path
-
-
-@st.cache_data
-def get_path_to_database_recources_parameter_sets_meta_data_dir():
-    parameter_sets_path = get_path_to_database_recources_parameter_sets_dir()
-    meta_data_path = os.path.join(parameter_sets_path, "meta_data")
-    return meta_data_path
 
 
 @st.cache_data
@@ -205,9 +191,9 @@ def get_path_to_categories():
 
 
 @st.cache_data
-def get_path_to_components():
+def get_path_to_cell_designs():
     recources_path = get_path_to_database_recources_dir()
-    components_path = os.path.join(recources_path, "components.json")
+    components_path = os.path.join(recources_path, "cell_designs.json")
     return components_path
 
 
@@ -219,9 +205,16 @@ def get_path_to_materials():
 
 
 @st.cache_data
-def get_path_to_tabs():
+def get_path_to_template_parameters():
     recources_path = get_path_to_database_recources_dir()
-    tabs_path = os.path.join(recources_path, "tabs.json")
+    materials_path = os.path.join(recources_path, "template_parameters.json")
+    return materials_path
+
+
+@st.cache_data
+def get_path_to_cell_types():
+    recources_path = get_path_to_database_recources_dir()
+    tabs_path = os.path.join(recources_path, "cell_types.json")
     return tabs_path
 
 
@@ -233,20 +226,9 @@ def get_path_to_models():
 
 
 @st.cache_data
-def get_all_parameter_sets_experimental_data_files_path():
+def get_all_parameter_sets():
     all_files = []
-    for root, _, files in os.walk(
-        get_path_to_database_recources_parameter_sets_experimental_data_dir()
-    ):
-        for name in files:
-            all_files.append(os.path.join(root, name))
-    return all_files
-
-
-@st.cache_data
-def get_all_parameter_sets_meta_data_files_path():
-    all_files = []
-    for root, _, files in os.walk(get_path_to_database_recources_parameter_sets_meta_data_dir()):
+    for root, _, files in os.walk(get_path_to_parameter_sets()):
         for name in files:
             all_files.append(os.path.join(root, name))
     return all_files
@@ -261,6 +243,14 @@ def get_all_parameter_sets_meta_data_files_path():
 def get_sqlite_con_and_cur():
     database = get_path_to_database()
     con = sqlite3.connect(database, check_same_thread=False)
+    return con, con.cursor()
+
+
+@st.cache_resource
+def get_sqlite_con_and_cur_dict():
+    database = get_path_to_database()
+    con = sqlite3.connect(database, check_same_thread=False)
+    con.row_factory = sqlite3.Row
     return con, con.cursor()
 
 

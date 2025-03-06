@@ -1,0 +1,1013 @@
+{
+   "template_parameters":{
+
+  
+      "maximum_concentration": {
+         "display_name": "Maximum concentration",
+         "context_type": "MaximumConcentration",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_47287d09_6108_45ca_ac65_8b9451b1065e",
+         "max_value": 100000.0,
+         "min_value": 1000.0,
+         "description": "The saturation concentration of the guest molecule in the host material",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "mol\u00B7m\u207b\u00b3",
+         "unit_name": "emmo:MolePerCubicMetre",
+         "unit_iri": "https://w3id.org/emmo:MolePerCubicMetre"
+         
+      },
+      "volumetric_surface_area": {
+         "context_type": "VolumetricSurfaceArea",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_a5571263_f153_448f_84a3_cd18092cf8fa",
+         "max_value": 10000000.0,
+         "min_value": 1,
+         "description": "Surface area of the material per volume of electrode",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "m\u00b2m\u207b\u00b3",
+         "unit_name": "emmo:Metre",
+         "unit_iri": "https://w3id.org/emmo#Metre",
+         "display_name": "Volumetric surface area"
+      },
+      "density": {
+         "context_type": "Density",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_06448f64_8db6_4304_8b2c_e785dba82044",
+         "max_value": 10000.0,
+         "min_value": 100,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "kg\u00B7m\u207b\u00b3",
+         "unit_name": "emmo:GramPerCubicMetre",
+         "unit_iri": "https://w3id.org/emmo#GramPerCubicMetre",
+         "display_name": "Density"
+      },
+      "specific_heat_capacity": {
+         "context_type": "SpecificHeatCapacity",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_b4f4ed28_d24c_4a00_9583_62ab839abeca",
+         "max_value": 10000.0,
+         "min_value": 10,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "J\u00B7kg\u207b\u00b9\u00B7K\u207b\u00b9",
+         "unit_name": "emmo:JoulePerKiloGramKelvin",
+         "unit_iri": "https://w3id.org/emmo#JoulePerKiloGramKelvin",
+         "display_name": "Specific heat capacity"
+      },
+      "thermal_conductivity": {
+         "context_type": "ThermalConductivity",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_8dd40ec6_2c5a_43f3_bf64_cadcd447a1c1",
+         "max_value": 1000.0,
+         "min_value": 0.01,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "W\u00B7m\u207b\u00b9\u00B7K\u207b\u00b9",
+         "unit_name": "emmo:WattPerMetreKelvin",
+         "unit_iri": "https://w3id.org/emmo#WattPerMetreKelvin",
+         "display_name": "Thermal conductivity"
+      },
+      "electronic_conductivity": {
+         
+         "context_type": "ElectricConductivity",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_cde4368c_1d4d_4c94_8548_604749523c6d",
+         "max_value": 7e7,
+         "min_value": 0.1,
+         "description": "The electronic conductivity of the material",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "S\u00B7m\u207b\u00b9",
+         "unit_name": "emmo:SiemensPerMetre",
+         "unit_iri": "https://w3id.org/emmo#SiemensPerMetre",
+         "display_name": "Electronic conductivity"
+      },
+      "number_of_electrons_transferred": {
+         
+         "context_type": "NumberOfEntities",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
+         "max_value": 1,
+         "min_value": 1,
+         "description": "stoichiometric number of electrons transferred in the electrochemical reaction",
+         "is_shown_to_user": true,
+         "type": "int",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Number of electrons transferred"
+      },
+      "activation_energy_of_reaction": {
+         
+         "context_type": "Energy",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_31ec09ba_1713_42cb_83c7_b38bf6f9ced2",
+         "max_value": 100000.0,
+         "min_value": 1,
+         "description": "the activation energy of the electrochemical reaction",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "J\u00B7mol\u207b\u00b9\u00B7",
+         "unit_name": "emmo:JoulePerMole",
+         "unit_iri": "https://w3id.org/emmo#JoulePerMole",
+         "display_name": "Activation energy of reaction"
+      },
+      "reaction_rate_constant": {
+         
+         "context_type": "ReactionRateConstant",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_0335e3f6_d1d8_4daa_8376_a9285f1bc9f1",
+         "max_value": 0.001,
+         "min_value": 1e-20,
+         "description": "the reaction rate constant of the electrochemical reaction",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "mol\u00B7m\u207b\u00b2\u00B7s\u207b\u00b9",
+         "unit_name": "emmo:MolePerSquareMetrePerSecond",
+         "unit_iri": "https://w3id.org/emmo#MolePerSquareMetrePerSecond",
+         "display_name": "Reaction rate constant"
+      },
+      "maximum_lithium_stoichiometry": {
+         
+         "context_type": "StoichiometricNumberOfSubstance",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_cbba91a7_d639_461f_ae23_d021751029e4",
+         "max_value": 1,
+         "min_value": 0.01,
+         "description": "the maximum stoichiometry of the guest molecule in the host material at the chosen electric potential limit",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Maximum lithium stoichiometry"
+      },
+      "minimum_lithium_stoichiometry": {
+         
+         "context_type": "StoichiometricNumberOfSubstance",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_cbba91a7_d639_461f_ae23_d021751029e4",
+         "max_value": 0.999,
+         "min_value": 0.01,
+         "description": "the maximum stoichiometry of the guest molecule in the host material at the chosen electric potential limit",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Minimum lithium stoichiometry"
+      },
+      "activation_energy_of_diffusion": {
+         
+         "context_type": "ActivationEnergy",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_d7f8cab9_b035_4ecd_be63_292672572526",
+         "max_value": 100000.0,
+         "min_value": 0,
+         "description": "activation energy for diffusion of the guest molecule in the host material",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "J\u00B7mol\u207b\u00b9\u00B7",
+         "unit_name": "emmo:JoulePerMole",
+         "unit_iri": "https://w3id.org/emmo#JoulePerMole",
+         "display_name": "Activation energy of diffusion"
+      },
+      "diffusion_pre_exponential_factor": {
+         
+         "max_value": 1,
+         "min_value": 1e-15,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "s\u207b\u00b9",
+         "unit_name": "emmo:ReciprocalSecond",
+         "unit_iri": "https://w3id.org/emmo#ReciprocalSecond",
+         "display_name": "Diffusion pre exponential factor"
+      },
+      "particle_radius": {
+         
+         "context_type": "ParticleRadius",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_b92e382f_5109_4f60_ab5e_c89d340419a9",
+         "max_value": 1e-3,
+         "min_value": 1e-7,
+         "description": "radius of the material particle",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "m",
+         "unit_name": "emmo:Metre",
+         "unit_iri": "https://w3id.org/emmo#Metre",
+         "display_name": "Particle radius"
+      },
+      "open_circuit_potential": {
+         
+         "context_type": ["OpenCircuitVoltage","Expression"],
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_9c657fdc_b9d3_4964_907c_f9a6e8c5f52b",
+         "dscription": "the open-circuit potential of the active material under given concentration and temperature conditions",
+         "type": "function",
+         "unit":"V",
+         "unit_name":"emmo:Volt",
+         "unit_iri":"https://w3id.org/emmo#Volt",
+         "display_name": "Open circuit potential"
+      },
+      "ambient_temperature": {
+         
+         "context_type": "AmbientThermodynamicTemperature",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_39a44af0_0e1a_4859_b550_bdabad64386e",
+         "max_value": 373.15,
+         "min_value": 238.15,
+         "description": "the ambient temperature of the environment around the battery",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "K",
+         "unit_name": "emmo:Kelvin",
+         "unit_iri": "https://w3id.org/emmo#Kelvin",
+         "display_name": "Ambient temperature"
+      },
+      "initial_temperature": {
+         
+         "context_type": "InititalThermodynamicTemperature",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_9c9b80a4_a00b_4b91_8e17_3a7831f2bf2f",
+         "max_value": 373.15,
+         "min_value": 238.15,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "K",
+         "unit_name": "emmo:Kelvin",
+         "unit_iri": "https://w3id.org/emmo#Kelvin",
+         "display_name": "Initial temperature"
+      },
+      "reference_temperature": {
+         
+         "context_type": "ReferenceThermodynamicTemperature",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_db40df7e_1aa5_49a7_85cb_2aa2c1c70489",
+         "max_value": 373.15,
+         "min_value": 238.15,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "K",
+         "unit_name": "emmo:Kelvin",
+         "unit_iri": "https://w3id.org/emmo#Kelvin",
+         "display_name": "Reference temperature"
+      },
+      "external_heat_transfer_coefficient": {
+         
+         "context_type": "CoefficientOfHeatTransfer",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_43b349fc_c7ed_480d_b0ca_9db84b700813",
+         "max_value": 10000,
+         "min_value": 100,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "W\u00B7m\u207b\u00b2\u00B7K\u207b\u00b9",
+         "unit_name": "emmo:WattPerSquareMetreKelvin",
+         "unit_iri": "https://w3id.org/emmo#WattPerSquareMetreKelvin",
+         "display_name": "External heat transfer coefficient"
+      },
+      "packing_mass": {
+         
+         "context_type": "Mass",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_ed4af7ae_63a2_497e_bb88_2309619ea405",
+         "max_value": 200,
+         "min_value": 1,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "g",
+         "unit_name": "emmo:Gram",
+         "unit_iri": "https://w3id.org/emmo#Gram",
+         "display_name": "Packing mass"
+      },
+      "nominal_cell_capacity": {
+         
+         "context_type": "NominalCapacity",
+         "context_type_iri":"https://w3id.org/emmo/domain/electrochemistry#electrochemistry_8abde9d0_84f6_4b4f_a87e_86028a397100",
+         "max_value": 1000,
+         "min_value": 0,
+         "description": "",
+         "is_shown_to_user": false,
+         "type": "float",
+         "unit": "mAh",
+         "unit_name": "emmo:AmpereHour",
+         "unit_iri": "https://w3id.org/emmo#AmpereHour",
+         "display_name": "Nominal cell capacity"
+      },
+      "number_parallel_electrode_pairs_within_cell": {
+         
+         "context_type": "XXX",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
+         "max_value": 100,
+         "min_value": 0,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "int",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Number of parallel electrode pairs within cell"
+      },
+      "external_surface_area": {
+         
+         "context_type_iri":"https://w3id.org/emmo/domain/electrochemistry#electrochemistry_47ab1dad_cc09_4fd8_af23_acb36fb680dd",
+         "max_value": 10,
+         "min_value": 1e-06,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "m\u00b2",
+         "unit_name": "emmo:SquareMetre",
+         "unit_iri": "https://w3id.org/emmo#SquareMetre",
+         "display_name": "External surface area"
+      },
+      "volume": {
+         
+         "context_type": "Volume",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_f1a51559_aa3d_43a0_9327_918039f0dfed",
+         "max_value": 0.01,
+         "min_value": 1e-06,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "m\u00b3",
+         "unit_name": "emmo:CubicMetre",
+         "unit_iri": "https://w3id.org/emmo#CubicMetre",
+         "display_name": "Volume"
+      },
+      "n_to_p_ratio": {
+         
+         "context_type": "NPRatio",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_05012606_b93d_4016_bbc7_8a927efdf723",
+         "max_value": 100,
+         "min_value": 0.0,
+         "description": "",
+         "is_shown_to_user": false,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "N/P ratio"
+      },
+      "cell_mass": {
+         
+         "context_type": "Mass",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_ed4af7ae_63a2_497e_bb88_2309619ea405",
+         "max_value": 100,
+         "min_value": 0.0,
+         "description": "",
+         "is_shown_to_user": false,
+         "type": "float",
+         "unit": "g",
+         "unit_name": "emmo:Gram",
+         "unit_iri": "https://w3id.org/emmo#Gram",
+         "display_name": "Cell Mass"
+      },
+      "discharge_energy": {
+         
+         "context_type": "DischargeEnergy",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_ca36cbf3_1fed_4b88_9177_b4e16ad00cf7",
+         "max_value": 10000000,
+         "min_value": 0.0,
+         "description": "",
+         "is_shown_to_user": false,
+         "type": "float",
+         "unit": "Wh",
+         "unit_name": "emmo:WattHour",
+         "unit_iri": "https://w3id.org/emmo#Watthour",
+         "display_name": "Discharge Energy"
+      },
+      "specific_energy": {
+         
+         "context_type": "SpecificEnergyDischarging",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_9d57962c_e150_4e64_962b_8fd6a92c9234",
+         "max_value": 10000000,
+         "min_value": 0.0,
+         "description": "",
+         "is_shown_to_user": false,
+         "type": "float",
+         "unit": "Wh\u00B7kg\u207b\u00b9",
+         "unit_name": "emmo:WattHourPerKilogram",
+         "unit_iri": "https://w3id.org/emmo#WattHourPerKilogram",
+         "display_name": "Specific Energy"
+      },
+      "round_trip_efficiency": {
+         
+         "context_type": "EnergyEfficiency",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_79198264_cdf5_4fc3_8bcf_e5140a52547a",
+         "max_value": 1,
+         "min_value": 0.0,
+         "description": "",
+         "is_shown_to_user": false,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Round-trip efficiency"
+      },
+      "coating_porosity": {
+         
+         "context_type": "Porosity",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_3a6578ac_aee0_43b9_9bc6_1eb208c8c9a9",
+         "max_value": 0.9,
+         "min_value": 0.01,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Coating porosity"
+      },
+      "mass_loading": {
+         
+         "context_type": "MassLoading",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_3a6578ac_aee0_43b9_9bc6_1eb208c8c9a9",
+         "max_value": 10000,
+         "min_value": 0.01,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "mg\u00B7cm\u207b\u00b2",
+         "unit_name": "emmo:MiliGramPerCubicCentiMeter",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Mass loading"
+      },
+      "bruggeman_coefficient": {
+         
+         "context_type": "BruggemanCoefficient",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_5c34b3b5_c9c4_477d_809a_3f682f995aa9",
+         "max_value": 5,
+         "min_value": 0.1,
+         "description": "The Bruggeman coefficient for calculating effective transport parameters in porous media",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Bruggeman coefficient"
+      },
+      "electrode_capacity": {
+         
+         "context_type": "Capacity",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_791c1915_a791_4450_acd8_7f94764743b5",
+         "max_value": 100,
+         "min_value": 0.0,
+         "description": "",
+         "is_shown_to_user": false,
+         "type": "float",
+         "unit": "mAh",
+         "unit_name": "emmo:MilliAmpereHour",
+         "unit_iri": "https://w3id.org/emmo#MilliAmpereHour",
+         "display_name": "Capacity"
+      },
+      "active_material_mass_fraction": {
+         
+         "context_type": "MassFraction",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_a8eb87b5_4d10_4137_a75c_e04ee59ca095",
+         "max_value": 1.0,
+         "min_value": 0.01,
+         "description": "Mass fraction of the material",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Mass Fraction"
+      },
+      "binder_mass_fraction": {
+         
+         "context_type": "MassFraction",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_a8eb87b5_4d10_4137_a75c_e04ee59ca095",
+         "max_value": 1.0,
+         "min_value": 0.01,
+         "description": "Mass fraction of the material",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Mass Fraction"
+      },
+      "additive_mass_fraction": {
+         
+         "context_type": "MassFraction",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_a8eb87b5_4d10_4137_a75c_e04ee59ca095",
+         "max_value": 1.0,
+         "min_value": 0.01,
+         "description": "Mass fraction of the material",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Mass Fraction"
+      },
+      "number_of_discrete_cells_particle_radius": {
+         
+         "context_type": "NumberOfEntities",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
+         "max_value": 100,
+         "min_value": 1,
+         "description": "number of discrete cells used in the domain",
+         "is_shown_to_user": true,
+         "type": "int",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Number of discrete cells particle radius"
+      },
+      "specific_capacity": {
+         
+         "context_type": "SpecificCapacity",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_1e3dc60d_dd6b_47d6_8161_70004fc5ee30",
+         "max_value": 100,
+         "min_value": 0.0,
+         "description": "",
+         "is_shown_to_user": false,
+         "type": "float",
+         "unit": "mAh\u00B7g\u207b\u00b9",
+         "unit_name": "emmo:MilliAmpereHourPerGram",
+         "unit_iri": "https://w3id.org/emmo#MilliAmpereHourPerGram",
+         "display_name": "Specific Capacity"
+      },
+      
+      "charge_carrier_name": {
+         
+         "context_type": "ChargeCarrierIon",
+         "context_type_iri": "http://emmo.info/electrochemistry#electrochemistry_d1042a12_e4be_4992_86cb_59420ef4e05c",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Charge carrier name"
+      },
+      "charge_carrier_charge_number": {
+         
+         "context_type": "ChargeNumber",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_dc467621_3b49_4f31_9b09_82290f29da52",
+         "max_value": 1,
+         "min_value": 1,
+         "description": "charge number of the ion",
+         "is_shown_to_user": true,
+         "type": "int",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Charge carrier charge number"
+      },
+      "charge_carrier_transference_number": {
+         
+         "context_type": "IonTransportNumber",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_d97b27cb_61a4_4568_a38b_4edd4f224acc",
+         "max_value": 0.99,
+         "min_value": 0.01,
+         "description": "charge trensference of the ion in the electrolyte",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Charge carrier transference number"
+      },
+      "counter_ion_name": {
+         
+         "context_type": "ChargeCarrierIon",
+         "context_type_iri": "http://emmo.info/electrochemistry#electrochemistry_d1042a12_e4be_4992_86cb_59420ef4e05c",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Counter ion name"
+      },
+      "counter_ion_charge_number": {
+         
+         "context_type": "ChargeNumber",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_dc467621_3b49_4f31_9b09_82290f29da52",
+         "max_value": -1,
+         "min_value": -1,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "int",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Counter ion charge number"
+      },
+      "counter_ion_transference_number": {
+         
+         "context_type": "IonTransportNumber",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_d97b27cb_61a4_4568_a38b_4edd4f224acc",
+         "max_value": 0.99,
+         "min_value": 0.01,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Counter ion transference number"
+      },
+      
+      "concentration": {
+         
+         "context_type": "IonConcentration",
+         "context_type_iri":"https://w3id.org/emmo/domain/electrochemistry#electrochemistry_8177eae6_1631_430d_99f2_942669bcb784",
+         "max_value": 10000,
+         "min_value": 0.0,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "mol\u00B7L\u207b",
+         "unit_name": "emmo:MolPerLiter",
+         "unit_iri": "https://w3id.org/emmo#MolePerCubicDeciMetre",
+         "display_name": "Concentration"
+      },
+      "EC_DMC_ratio": {
+         
+         "max_value": 100,
+         "min_value": 0.0,
+         "description": "",
+         "is_shown_to_user": false,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "EC/DMC"
+      },
+      "conductivity": {
+         "context_type":["IonicConductivity", "Expression"],
+         "context_type_iri":"https://w3id.org/emmo/domain/electrochemistry#electrochemistry_25dabdc2_68bf_4a38_8cbe_11be017358bc",
+         "description": "the ionic conductivity of the electrolyte under given concentration and temparture conditions",
+         "type": "function",
+         "unit": "S\u00B7cm\u207b",
+         "unit_name":"emmo:SiemensPerCentiMetre",
+         "unit_iri":"https://w3id.org/emmo#SiemensPerCentiMetre",
+         "display_name": "Conductivity"
+      },
+      "diffusion_coefficient": {
+
+         "context_type":["DiffusionCoefficient", "Expression"],
+         "context_type_iri":"https://w3id.org/emmo#EMMO_931a725b_926d_4f60_8955_61fe17fce98b",
+         "unit": "A\u00B7t\u207b",
+         "unit_name":"emmo:AreaPerTimeUnit",
+         "unit_iri":"https://w3id.org/emmo#EMMO_10f703b5_8b2a_4c5a_a734_f0cfb29622ad",
+         "description": "the diffusion coefficient of the charge carrier in the electrolyte",
+         "type": "function",
+         "display_name": "Diffusion coefficient"
+      },
+      "use_thermal": {
+         
+         "context_type": ["ThermalModel"],
+         "label": "useThermalModel",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "bool"
+      },
+      "include_current_collector": {
+         
+         "context_type": ["CurrentCollector"],
+         "label": "includeCurrentCollector",
+         "description": "option to include current collectors in the simulation",
+         "is_shown_to_user": true,
+         "type": "bool"
+      },
+      "use_solid_diffusion_model": {
+         
+         "context_type": ["usediffusionModel"],
+         "label": "diffusionModel",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "bool"
+      },
+      "solid_diffusion_model_type": {
+         "context_type": ["diffusionModelType","parameter"],
+         "model_name": ["P2D","P3D","P4D"],
+         "label": "diffusionModelType",
+         "description": "",
+         "type": "str",
+         "is_shown_to_user": true
+         },
+
+      "length": {
+         
+         "context_type": "Length",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_cd2cd0de_e0cc_4ef1_b27e_2e88db027bac",
+         "max_value": 1,
+         "min_value": 0.001,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "m",
+         "unit_name": "emmo:Metre",
+         "unit_iri": "https://w3id.org/emmo#Metre",
+         "display_name": "Length"
+      },
+      "width": {
+         
+         "context_type": "Width",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_e4de48b1_dabb_4490_ac2b_040f926c64f0",
+         "max_value": 1,
+         "min_value": 0.001,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "m",
+         "unit_name": "emmo:Metre",
+         "unit_iri": "https://w3id.org/emmo#Metre",
+         "display_name": "Width"
+      },
+      "negative_electrode_coating_thickness": {
+         
+         "context_type": "Thickness",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
+         "max_value": 500,
+         "min_value": 1,
+         "description": "The thickness of the active material coating",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "\u03BCm",
+         "unit_name": "emmo:MicroMetre",
+         "unit_iri": "https://w3id.org/emmo#MicroMetre",
+         "display_name": "Coating thickness"
+      },
+      "negative_electrode_current_collector_thickness": {
+         
+         "context_type": "Thickness",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
+         "max_value": 200,
+         "min_value": 1,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "\u03BCm",
+         "unit_name": "emmo:MicroMetre",
+         "unit_iri": "https://w3id.org/emmo#MicroMetre",
+         "display_name": "Coating thickness"
+      },
+      "negative_electrode_number_of_discrete_cells_electrode": {
+         
+         "context_type": "NumberOfEntities",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
+         "max_value": 100,
+         "min_value": 1,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "int",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Number of discrete cells electrode"
+      },
+      "positive_electrode_coating_thickness": {
+         
+         "context_type": "Thickness",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
+         "max_value": 500,
+         "min_value": 1,
+         "description": "The thickness of the active material coating",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "\u03BCm",
+         "unit_name": "emmo:MicroMetre",
+         "unit_iri": "https://w3id.org/emmo#MicroMetre",
+         "display_name": "Coating thickness"
+      },
+      "positive_electrode_current_collector_thickness": {
+         
+         "context_type": "Thickness",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
+         "max_value": 200,
+         "min_value": 1,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "\u03BCm",
+         "unit_name": "emmo:MicroMetre",
+         "unit_iri": "https://w3id.org/emmo#MicroMetre",
+         "display_name": "Coating thickness"
+      },
+      "positive_electrode_number_of_discrete_cells_electrode": {
+         
+         "context_type": "NumberOfEntities",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
+         "max_value": 100,
+         "min_value": 1,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "int",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Number of discrete cells electrode"
+      },
+      "separator_thickness": {
+         
+         "context_type": "Thickness",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
+         "max_value": 100,
+         "min_value": 0.1,
+         "description": "the thickness of the separator",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "\u03BCm",
+         "unit_name": "emmo:MicroMetre",
+         "unit_iri": "https://w3id.org/emmo#MicroMetre",
+         "display_name": "Separator full template"
+      },
+      "number_of_discrete_cells_separator": {
+         
+         "context_type": "NumberOfEntities",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
+         "max_value": 30,
+         "min_value": 1,
+         "description": "number of discrete cells used in the domain",
+         "is_shown_to_user": true,
+         "type": "int",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Number of discrete cells"
+      },
+      "use_ramp_up": {
+         "context_type": ["LinearCurrentRamp"],
+         "model_name": ["P2D","P3D","P4D"],
+         "label": "useRampup",
+         "description": "simulation option to use a ramp up time at the beginning of the simulation",
+         "type": "bool",
+         "is_shown_to_user": false
+      },
+
+      "number_of_ramp_up_steps": {
+         
+         "max_value": 100,
+         "min_value": 0,
+         "context_type": ["LinearCurrentRamp", "NumberOfEntities"],
+         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
+         "description": "duration of the switch between changing from rest, discharging, or charging",
+         "type": "int",
+         "is_shown_to_user": true,
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978"
+      },
+      "initial_step_type": {
+         
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Initial step type"
+      },
+      "initial_state_of_charge": {
+         
+         "context_type": "StateOfCharge",
+         "context_type_iri": "https://w3id.org/emmo/domain/battery#battery_17591da0_34ec_41b9_b3c1_3a4446dc6f0a",
+         "max_value": 1,
+         "min_value": 0.01,
+         "description": "SOC, state of charge of the battery, where 1 is fully charged and 0 is fully discharged",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Initial state of charge"
+      },
+      "number_of_cycles": {
+         
+         "context_type": "NumberOfEntities",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
+         "max_value": 100,
+         "min_value": 1,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "int",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Number of cycles"
+      },
+      "d_rate": {
+         
+         "context_type": "DischargingCRate",
+         "context_type_iri":"https://w3id.org/emmo/domain/electrochemistry#electrochemistry_25e20915_c35d_4bee_ad31_736235a79780",
+         "max_value": 10,
+         "min_value": 0.01,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Crate"
+      },
+      "c_rate": {
+         
+         "context_type": "CRate",
+         "context_type_iri":"https://w3id.org/emmo/domain/electrochemistry#electrochemistry_e1fd84eb_acdb_4b2c_b90c_e899d552a3ee",
+         "max_value": 10,
+         "min_value": 0.01,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Crate"
+      },
+      "lower_cutoff_voltage": {
+         
+         "context_type": "LowerVoltageLimit",
+         "context_type_iri":"https://w3id.org/emmo/domain/electrochemistry#electrochemistry_534dd59c_904c_45d9_8550_ae9d2eb6bbc9",
+         "max_value": 4,
+         "min_value": 0,
+         "description": "lower voltage limit of the battery cell",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "V",
+         "unit_name": "emmo:Volt",
+         "unit_iri": "https://w3id.org/emmo#Volt",
+         "display_name": "Lower cutoff voltage"
+      },
+      "upper_cutoff_voltage": {
+         
+         "context_type": "UpperVoltageLimit",
+         "context_type_iri":"https://w3id.org/emmo/domain/electrochemistry#electrochemistry_6dcd5baf_58cd_43f5_a692_51508e036c88",
+         "max_value": 5,
+         "min_value": 3,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "V",
+         "unit_name": "emmo:Volt",
+         "unit_iri": "https://w3id.org/emmo#Volt",
+         "display_name": "Upper cutoff coltage"
+      },
+      "d_idt_limit": {
+         
+         "max_value": 0.1,
+         "min_value": 0.00001,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "A\u00B7s\u207b\u00b9",
+         "display_name": "d idt limit"
+      },
+      "d_edt_limit": {
+         
+         "max_value": 0.1,
+         "min_value": 0.00001,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "V\u00B7s\u207b\u00b9",
+         "unit_name": "emmo:VoltPerSecond",
+         "unit_iri": "https://w3id.org/emmo#VoltPerSecond",
+         "display_name": "d edt limit"
+      },
+      "time_step_duration": {
+         
+         "max_value": 1000,
+         "min_value": 1,
+         "context_type": "StepDuration",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_85e39686_9658_4c74_bb91_a935704c174a",
+         "description": "",
+         "type": "float",
+         "is_shown_to_user": true,
+         "unit": "s",
+         "unit_name": "emmo:Second",
+         "unit_iri": "https://w3id.org/emmo/domain/emmo#Second"
+      },
+      
+      "total_time": {
+         "context_type": ["Duration"],
+         "context_type_iri": "https://w3id.org/emmo#EMMO_0adabf6f_7404_44cb_9f65_32d83d8101a3",
+         "description": "",
+         "max_value": 100000,
+         "min_value": 0.0001,
+         "type": "float",
+         "is_shown_to_user": false,
+         "unit": "s",
+         "unit_name": "emmo:Second",
+         "unit_iri": "https://w3id.org/emmo/domain/emmo#Second"
+      },
+      "number_of_time_steps": {
+         "context_type": "NumberOfEntities",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_41efdf5d_0c9c_4ea0_bb65_f8236e663be5",
+         "description": "",
+         "max_value": 1000,
+         "min_value": 1,
+         "type": "int",
+         "is_shown_to_user": false,
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978"
+      },
+      "porosity": {
+         
+         "context_type": "Porosity",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_3a6578ac_aee0_43b9_9bc6_1eb208c8c9a9",
+         "max_value": 0.9,
+         "min_value": 0.1,
+         "description": "porosity of the separator",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Porosity"
+      }
+   }
+    
+ }
+ 

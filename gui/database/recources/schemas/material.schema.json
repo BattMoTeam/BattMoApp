@@ -1,0 +1,47 @@
+{
+    "$id": "file://./material.schema.json",
+    "$schema": "https://json-schema.org/draft-04/schema",
+    "description": "Material object",
+    "type": "object",
+    "required": ["display_name", "is_shown_to_user", "context_type", "context_type_iri", "reference", "reference_name", "reference_url"],
+    "properties": {
+        "display_name": {
+            "type": "string",
+            "description": "The name that is rendered in the app"
+        },
+        "is_shown_to_user":{
+            "type": "boolean",
+            "description": "Whether the material is rendered in the app or not.",
+            "enum": [true, false]
+        },
+        "context_type":{
+            "anyOf": [
+                { "type": "string" },
+                {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1,
+                "uniqueItems": true
+                }
+            ],
+            "description": "The ontology context type of the object."
+        },
+        "context_type_iri": {
+            "type": "string",
+            "description": "The iri of the ontology context type."
+        },
+        "reference": {
+            "type": "string",
+            "description": "The citation of the paper the object has been retrieved from."
+        },
+        "reference_name": {
+            "type": "string",
+            "description": "Display name of the citation."
+        },
+        "reference_url":{
+            "type": "string",
+            "description": "The url of the reference."
+        }
+    }
+
+}

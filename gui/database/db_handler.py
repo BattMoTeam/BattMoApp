@@ -13,9 +13,8 @@ from database import db_BaseHandler as db
 class ParameterHandler(db.BaseHandler):
     def __init__(self):
         self._table_name = "parameter"
-        self._columns = "name, parameter_set_id, template_parameter_id, value"
 
-    def insert_value(self, name, parameter_set_id, template_parameter_id, value=None):
+    def insert_value(self, name, display_name, parameter_set_id, template_parameter_id, value=None):
         assert name is not None, "parameter's name can't be None"
         assert parameter_set_id is not None, "parameter's parameter_set_id can't be None"
         assert template_parameter_id is not None, "parameter's template_parameter_id can't be None"
@@ -23,9 +22,10 @@ class ParameterHandler(db.BaseHandler):
         return self._insert_value_query(
             columns_and_values={
                 "name": name,
-                "value": value,
+                "display_name": display_name,
                 "parameter_set_id": parameter_set_id,
                 "template_parameter_id": template_parameter_id,
+                "value": value,
             }
         )
 
@@ -87,9 +87,8 @@ class ParameterHandler(db.BaseHandler):
 class ParameterSetHandler(db.BaseHandler):
     def __init__(self):
         self._table_name = "parameter_set"
-        self._columns = "name, component_id, material"
 
-    def insert_value(self, name, component_id, material, model_name, material_id):
+    def insert_value(self, name, category_id):
         assert name is not None, "parameter_set's name can't be None"
         # assert component_id is not None, "parameter_set's component_id can't be None"
         # assert material is not None, "parameter_set's component_id can't be None"
@@ -97,10 +96,7 @@ class ParameterSetHandler(db.BaseHandler):
         return self._insert_value_query(
             columns_and_values={
                 "name": name,
-                "component_id": component_id,
-                "material": material,
-                "model_name": model_name,
-                "material_id": material_id,
+                "category_id": category_id,
             }
         )
 
@@ -169,17 +165,12 @@ class TemplateHandler(db.BaseHandler):
 class TemplateParameterHandler(db.BaseHandler):
     def __init__(self):
         self._table_name = "template_parameter"
-        self._columns = "name, template_id,model_name,par_class,difficulty, context_type, context_type_iri, type, unit, unit_name, unit_iri, max_value, min_value, is_shown_to_user, description, display_name"
         self.types_handled = {"str", "bool", "int", "float", "function"}
         self.assert_all_types_are_handled()
 
     def insert_value(
         self,
         name,
-        template_id,
-        model_name,
-        par_class,
-        difficulty,
         context_type=None,
         context_type_iri=None,
         type=None,
@@ -188,21 +179,14 @@ class TemplateParameterHandler(db.BaseHandler):
         unit_iri=None,
         max_value=None,
         min_value=None,
-        is_shown_to_user=True,
         description=None,
         display_name=None,
     ):
         assert name is not None, "template parameter's name can't be None"
-        assert template_id is not None, "template parameter's template_id can't be None"
-        # assert model_id is not None, "template parameter's model_id can't be None"
 
         return self._insert_value_query(
             columns_and_values={
                 "name": name,
-                "template_id": template_id,
-                "model_name": model_name,
-                "par_class": par_class,
-                "difficulty": difficulty,
                 "context_type": context_type,
                 "context_type_iri": context_type_iri,
                 "type": type,
@@ -211,7 +195,6 @@ class TemplateParameterHandler(db.BaseHandler):
                 "unit_iri": unit_iri,
                 "max_value": max_value,
                 "min_value": min_value,
-                "is_shown_to_user": is_shown_to_user,
                 "description": description,
                 "display_name": display_name,
             }
@@ -271,15 +254,14 @@ class TemplateParameterHandler(db.BaseHandler):
 class ModelHandler(db.BaseHandler):
     def __init__(self):
         self._table_name = "model"
-        self._columns = "name, show_to_user, description"
 
     def insert_value(
         self,
         name,
-        model_name,
+        display_name,
+        context_type,
+        context_type_iri,
         is_shown_to_user,
-        default_template,
-        templates="{}",
         description="",
     ):
         assert name is not None, "Model's name can't be None"
@@ -287,9 +269,10 @@ class ModelHandler(db.BaseHandler):
         return self._insert_value_query(
             columns_and_values={
                 "name": name,
-                "model_name": model_name,
+                "display_name": display_name,
+                "context_type": context_type,
+                "context_type_iri": context_type_iri,
                 "is_shown_to_user": is_shown_to_user,
-                "default_template": default_template,
                 "description": description,
             }
         )
@@ -405,36 +388,23 @@ class TabHandler(db.BaseHandler):
 class CategoryHandler(db.BaseHandler):
     def __init__(self):
         self._table_name = "category"
-        self._columns = "name, model_name, difficulty, context_type, context_type_iri, emmo_relation, display_name, tab_id, default_template_id, description"
 
     def insert_value(
         self,
         name,
-        tab_id,
-        default_template_id,
         context_type=None,
-        model_name=None,
-        difficulty=None,
         context_type_iri=None,
-        emmo_relation=None,
         display_name=None,
         description="",
     ):
         assert name is not None, "Category's name can't be None"
-        assert tab_id is not None, "Category's tab_id can't be None"
-        assert default_template_id is not None, "Category's default_template_id can't be None"
-        print("model = ", model_name)
+
         return self._insert_value_query(
             columns_and_values={
                 "name": name,
-                "model_name": model_name,
-                "difficulty": difficulty,
                 "context_type": context_type,
                 "context_type_iri": context_type_iri,
-                "emmo_relation": emmo_relation,
                 "display_name": display_name,
-                "tab_id": tab_id,
-                "default_template_id": default_template_id,
                 "description": description,
             }
         )
@@ -449,10 +419,9 @@ class CategoryHandler(db.BaseHandler):
     def get_model_id_from_model_name(self, model_name):
         return self.select(values="id", where="model_name=%s" % model_name)
 
-    def get_id_from_name_and_model(self, name, model_name):
-        return self.select(
-            values="id", where="name = '%s' AND model_name='%s'" % (name, model_name)
-        )
+    def get_id_from_name(self, name):
+        res = self.select_one(values="id", where="name = '%s'" % (name))
+        return res[0] if res else None
 
     def get_default_template_id_by_id(self, id):
         res = self.select_one(values="default_template_id", where="id={}".format(id))
@@ -534,61 +503,41 @@ class ComponentHandler(db.BaseHandler):
 class MaterialHandler(db.BaseHandler):
     def __init__(self):
         self._table_name = "material"
-        self._columns = "name, model_name, difficulty, is_shown_to_user, context_type, context_type_iri, emmo_relation, display_name, tab_id, default_template_id, description"
 
     def insert_value(
         self,
         name,
-        component_id_1,
-        component_name_1,
         is_shown_to_user,
-        number_of_components,
-        default_material,
-        model_name=None,
-        component_id_2=None,
-        difficulty=None,
+        default_parameter_set,
+        category_id=None,
+        parameter_set_id=None,
         reference_name=None,
         reference=None,
         reference_url=None,
         context_type=None,
-        component_name_2=None,
         context_type_iri=None,
-        emmo_relation=None,
         display_name=None,
         description="",
     ):
         assert name is not None, "Category's name can't be None"
-        assert component_id_1 is not None, "Category's component_id_1 can't be None"
-        assert default_material is not None, "Category's default_material can't be None"
-        print(model_name)
+
         return self._insert_value_query(
             columns_and_values={
                 "name": name,
-                "model_name": model_name,
-                "difficulty": difficulty,
                 "is_shown_to_user": is_shown_to_user,
+                "default_parameter_set": default_parameter_set,
+                "category_id": category_id,
+                "parameter_set_id": parameter_set_id,
                 "reference_name": reference_name,
                 "reference": reference,
                 "reference_url": reference_url,
                 "context_type": context_type,
                 "context_type_iri": context_type_iri,
-                "emmo_relation": emmo_relation,
                 "display_name": display_name,
-                "component_id_1": component_id_1,
-                "component_id_2": component_id_2,
-                "default_material": default_material,
-                "number_of_components": number_of_components,
-                "component_name_1": component_name_1,
-                "component_name_2": component_name_2,
                 "description": description,
             }
         )
 
-    # def get_all_by_tab_id(self, tab_id):
-    #     return self.select(
-    #         values='*',
-    #         where='tab_id=%d' % tab_id
-    #     )
     def get_model_id_from_model_name(self, model_name):
         return self.select(values="id", where="model_name=%s" % model_name)
 
@@ -604,9 +553,82 @@ class MaterialHandler(db.BaseHandler):
     def get_all_by_component_id(_self, component_id):
         return _self.select(values="*", where="component_id=%d" % component_id)
 
-    # def get_default_template_id_by_id(self, id):
-    #     res = self.select_one(
-    #         values="default_template_id",
-    #         where="id={}".format(id)
-    #     )
-    #     return res[0] if res else None
+
+#####################################
+# Cell Type
+#####################################
+class CellTypeHandler(db.BaseHandler):
+    def __init__(self):
+        self._table_name = "cell_type"
+
+    def insert_value(
+        self,
+        name,
+        is_shown_to_user,
+        default_parameter_set,
+        category_id=None,
+        parameter_set_id=None,
+        context_type=None,
+        context_type_iri=None,
+        display_name=None,
+        description="",
+    ):
+        assert name is not None, "Cell type's name can't be None"
+
+        return self._insert_value_query(
+            columns_and_values={
+                "name": name,
+                "is_shown_to_user": is_shown_to_user,
+                "default_parameter_set": default_parameter_set,
+                "category_id": category_id,
+                "parameter_set_id": parameter_set_id,
+                "context_type": context_type,
+                "context_type_iri": context_type_iri,
+                "display_name": display_name,
+                "description": description,
+            }
+        )
+
+
+#####################################
+# Cell Design
+#####################################
+class CellDesignHandler(db.BaseHandler):
+    def __init__(self):
+        self._table_name = "cell_design"
+
+    def insert_value(
+        self,
+        name,
+        is_shown_to_user,
+        default_parameter_set,
+        cell_type_id=None,
+        category_id=None,
+        parameter_set_id=None,
+        reference_name=None,
+        reference=None,
+        reference_url=None,
+        context_type=None,
+        context_type_iri=None,
+        display_name=None,
+        description="",
+    ):
+        assert name is not None, "Cell design's name can't be None"
+
+        return self._insert_value_query(
+            columns_and_values={
+                "name": name,
+                "is_shown_to_user": is_shown_to_user,
+                "default_parameter_set": default_parameter_set,
+                "cell_type_id": cell_type_id,
+                "category_id": category_id,
+                "parameter_set_id": parameter_set_id,
+                "reference_name": reference_name,
+                "reference": reference,
+                "reference_url": reference_url,
+                "context_type": context_type,
+                "context_type_iri": context_type_iri,
+                "display_name": display_name,
+                "description": description,
+            }
+        )

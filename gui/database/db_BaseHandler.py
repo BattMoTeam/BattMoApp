@@ -3,6 +3,7 @@ import sys
 import streamlit as st
 from threading import Lock
 
+
 db_lock = Lock()
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -55,21 +56,52 @@ class BaseHandler:
             return cur.lastrowid
 
     def thread_safe_db_access(_self, query, params=None, fetch=None):
-        """Execute a database query safely with thread locking."""
+        """Execute a database query safely with thread locking.
+        -   Outputs a scalar in the case of 'fetchone'
+        -   Outputs a dict in the case of 'fetchall'
+
+        """
         with db_lock:
             con, cur = None, None
             try:
-                con, cur = app_access.get_sqlite_con_and_cur()
-                if params:
-                    cur.execute(query, params)
-                else:
-                    cur.execute(query)
 
-                if fetch == "fetchall":
+                if fetch == "fetchdict":
+                    con, cur = app_access.get_sqlite_con_and_cur_dict()
+
+                    if params:
+                        cur.execute(query, params)
+                    else:
+                        cur.execute(query)
+
+                    results = [dict(row) for row in cur.fetchall()]
+                    results = results[0]
+                elif fetch == "fetchall":
+                    con, cur = app_access.get_sqlite_con_and_cur()
+
+                    if params:
+                        cur.execute(query, params)
+                    else:
+                        cur.execute(query)
+
                     results = cur.fetchall()
                 elif fetch == "fetchone":
+
+                    con, cur = app_access.get_sqlite_con_and_cur()
+
+                    if params:
+                        cur.execute(query, params)
+                    else:
+                        cur.execute(query)
+
                     results = cur.fetchone()
                 else:
+                    con, cur = app_access.get_sqlite_con_and_cur()
+
+                    if params:
+                        cur.execute(query, params)
+                    else:
+                        cur.execute(query)
+
                     results = None
 
                 return results
@@ -119,6 +151,34 @@ class BaseHandler:
                 _self._table_name,
             )
         return _self.thread_safe_db_access(query, fetch="fetchall", params=params)
+
+    def select_dict(_self, values, where=None, like=None, params=None):
+        if where:
+            if like:
+                query = """
+                    SELECT %s FROM %s WHERE %s LIKE %s
+                """ % (
+                    values,
+                    _self._table_name,
+                    where,
+                    like,
+                )
+            else:
+                query = """
+                    SELECT %s FROM %s WHERE %s
+                """ % (
+                    values,
+                    _self._table_name,
+                    where,
+                )
+        else:
+            query = """
+                SELECT %s FROM %s 
+            """ % (
+                values,
+                _self._table_name,
+            )
+        return _self.thread_safe_db_access(query, fetch="fetchdict", params=params)
 
     def select_one(_self, values, where=None, like=None):
         if where:
@@ -225,6 +285,10 @@ class BaseHandler:
     def get_name_from_id(self, id):
         res = self.select_one(values="name", where="id=%d" % id)
         return res[0] if res else None
+
+    def get_all_from_id(self, id):
+        res = self.select_dict(values="*", where="id=%d" % id)
+        return res if res else None
 
     def get_all_ids(self):
         res = self.select(values="id")

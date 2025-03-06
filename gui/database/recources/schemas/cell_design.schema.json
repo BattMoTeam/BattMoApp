@@ -1,0 +1,39 @@
+{
+    "$id": "file://./cell_design.schema.json",
+    "$schema": "https://json-schema.org/draft-04/schema",
+    "description": "Cell design object",
+    "type": "object",
+    "required": ["display_name", "is_shown_to_user","cell_type", "context_type", "context_type_iri"],
+    "properties": {
+        "display_name": {
+            "type": "string",
+            "description": "The name that is rendered in the app"
+        },
+        "is_shown_to_user":{
+            "type": "boolean",
+            "description": "Whether the cell type is rendered in the app or not.",
+            "enum": [true, false]
+        },
+        "cell_type": {
+            "type": "string",
+            "description": "The cell type of the cell design."
+        },
+        "context_type":{
+            "anyOf": [
+                { "type": "string" },
+                {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1,
+                "uniqueItems": true
+                }
+            ],
+            "description": "The ontology context type of the object."
+        },
+        "context_type_iri": {
+            "type": "string",
+            "description": "The iri of the ontology context type."
+        }
+    }
+
+}

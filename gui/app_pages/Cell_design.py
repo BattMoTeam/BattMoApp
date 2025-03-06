@@ -22,8 +22,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app_scripts import app_access, app_view
 
 from app_scripts.app_controller import (
-    set_model_description,
-    set_material_description,
     get_app_controller,
 )
 

@@ -1,0 +1,10 @@
+{
+   "name": "CMC",
+   "category": "positive_electrode_binder",
+   "parameters": {
+      "density": 1600,
+      "specific_heat_capacity": 1400,
+      "thermal_conductivity": 0.06
+      
+   }
+}

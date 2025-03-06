@@ -21,14 +21,12 @@ class Parameter(object):
     def __init__(
         self,
         name,
-        model_name,
+        display_name,
         parameter_set_id,
         template_parameter_id,
-        display_name,
         value=None,
     ):
         self.name = name
-        self.model_name = model_name
         self.parameter_set_id = parameter_set_id
         self.template_parameter_id = template_parameter_id
         self.value = value
@@ -38,222 +36,81 @@ class Parameter(object):
 class UpdateParameterSets:
 
     def __init__(self, print_details=False):
-        self.template_type = "template"
         self.sql_parameter = db_handler.ParameterHandler()
         self.sql_parameter_set = db_handler.ParameterSetHandler()
-        # self.sql_component = db_handler.componentHandler()
-        self.sql_component = db_handler.ComponentHandler()
-        self.sql_materials = db_handler.MaterialHandler()
-        self.sql_template = db_handler.TemplateHandler()
+        self.sql_category = db_handler.CategoryHandler()
         self.sql_template_parameter = db_handler.TemplateParameterHandler()
-        self.sql_model = db_handler.ModelHandler()
+
         self.print_details = print_details
 
-    def update_parameter_set_from_json(self, parameter_set, path, component=None):
-        """
-        parameter_set: {
-            "Name": "file_name",
-            "component": "electrolyte",
-            "Parameters": {
-                "specific_heat_capacity": 1518.0,
-                "thermal_conductivity": 0.099,
-                "density": 1210,
-                "conductivity": {
-                    "functionname": "updateElectrolyteConductivityFunc_Xu",
-                    "argument_list": [
-                    "concentration",
-                    "temperature"
-                    ]
-                },
-                "charge_carrier_name": "Li",
-                "charge_carrier_charge_number": 1,
-                "charge_carrier_transference_number": 0.399
-                "etc": "etc"
-            }
-        }
-        """
-        name = parameter_set.get("Name")
-        type = parameter_set.get("Type")
+    def get_all_resources(self):
+        return app_access.get_all_parameter_sets()
 
-        component = parameter_set.get("component")
+    def update_parameter_set_from_json(self, parameter_set, path, category=None):
 
-        material = int(parameter_set.get("material"))
-        parameters = parameter_set.get("Parameters")
-
-        if type == self.template_type:
-            return None, False
+        # Get json details
+        name = parameter_set.get("name")
+        category = parameter_set.get("category")
+        parameters = parameter_set.get("parameters")
 
         assert name is not None, "Name of parameter_set {} must have a name".format(path)
-        # assert component is not None, "component of parameter_set {} is not defined".format(name)
         assert parameters is not None, "Parameters of parameter_set {} is not defined".format(name)
 
-        if isinstance(component, list):
-            component_id = []
-            for component_name in component:
-                print("name = ", component_name)
+        category_id = self.sql_category.get_id_from_name(category)
 
-                component_id.append(self.sql_component.get_id_from_name(component_name))
+        parameter_set_id, parameter_set_already_exists = self.create_or_update_parameter_set(
+            name=name, category_id=category_id
+        )
+
+        formatted_parameters = self.format_parameters(
+            parameters=parameters, parameter_set_id=parameter_set_id
+        )
+
+        if parameter_set_already_exists:
+            if self.print_details:
+                print("\n Updating {}".format(name))
+            self.update_parameters(parameters=formatted_parameters)
+
         else:
-            component_id = self.sql_component.get_id_from_name(component)
+            if self.print_details:
+                print("\n Creating {}".format(name))
+            self.add_parameters(parameters=formatted_parameters)
 
-        display_name = parameter_set.get("display_name")
-        model_names = parameter_set.get("model_name")
-        # assert component_id is not None, "component = {} is not specified in components.json. path={}".format(component, path)
+        return parameter_set_id, parameter_set_already_exists, name
 
-        # test = self.sql_materials.get_material_id_by_parameter_set_name(component_id)
-        # print("test=", test)
-        # material = int(self.sql_parameter_set.get_material_from_name(name))
+    def create_or_update_parameter_set(self, name, category_id):
 
-        for model_name in model_names:
-
-            if material == True:
-
-                print("name = ", name)
-                material_id = np.squeeze(
-                    db_helper.get_material_id_by_parameter_set_name_and_model_name(name, model_name)
-                ).astype(str)
-
-                if isinstance(component, list):
-                    for id in component_id:
-
-                        parameter_set_id, parameter_set_already_exists = (
-                            self.create_or_update_parameter_set(
-                                name=name,
-                                component_id=id,
-                                material=material,
-                                model_name=model_name,
-                                material_id=material_id,
-                            )
-                        )
-
-                        formatted_parameters = self.format_parameters(
-                            parameters=parameters,
-                            parameter_set_id=parameter_set_id,
-                            component_id=id,
-                            display_name=display_name,
-                            parameter_set_name=name,
-                            model_name=model_name,
-                        )
-
-                    if parameter_set_already_exists:
-                        if self.print_details:
-                            print("\n Updating {}".format(name))
-                        self.update_parameters(parameters=formatted_parameters)
-
-                    else:
-                        if self.print_details:
-                            print("\n Creating {}".format(name))
-                        self.add_parameters(parameters=formatted_parameters)
-
-                    return parameter_set_id, parameter_set_already_exists, name
-                else:
-                    parameter_set_id, parameter_set_already_exists = (
-                        self.create_or_update_parameter_set(
-                            name=name,
-                            component_id=component_id,
-                            material=material,
-                            model_name=model_name,
-                            material_id=material_id,
-                        )
-                    )
-
-            else:
-
-                parameter_set_id, parameter_set_already_exists = (
-                    self.create_or_update_parameter_set(
-                        name=name,
-                        component_id=component_id,
-                        material=material,
-                        model_name=model_name,
-                        material_id=None,
-                    )
-                )
-
-            formatted_parameters = self.format_parameters(
-                parameters=parameters,
-                parameter_set_id=parameter_set_id,
-                component_id=component_id,
-                display_name=display_name,
-                parameter_set_name=name,
-                model_name=model_name,
-            )
-
-            if parameter_set_already_exists:
-                if self.print_details:
-                    print("\n Updating {}".format(name))
-                self.update_parameters(parameters=formatted_parameters)
-
-            else:
-                if self.print_details:
-                    print("\n Creating {}".format(name))
-                self.add_parameters(parameters=formatted_parameters)
-
-            return parameter_set_id, parameter_set_already_exists, name
-
-    def create_or_update_parameter_set(self, name, component_id, material, model_name, material_id):
-
-        if name == "P2D":
-            parameter_set_id = self.sql_parameter_set.get_id_from_name(name)
-        else:
-            parameter_set_id = self.sql_parameter_set.get_id_by_name_and_category_and_model_name(
-                name, component_id, model_name
-            )
+        parameter_set_id = self.sql_parameter_set.get_id_from_name(name)
 
         if parameter_set_id:
             return parameter_set_id, True
         else:
             return (
-                self.sql_parameter_set.insert_value(
-                    name=name,
-                    component_id=component_id,
-                    material=material,
-                    model_name=model_name,
-                    material_id=material_id,
-                ),
+                self.sql_parameter_set.insert_value(name=name, category_id=category_id),
                 False,
             )
 
-    def format_parameters(
-        self,
-        parameters,
-        parameter_set_id,
-        component_id,
-        display_name,
-        parameter_set_name,
-        model_name,
-    ):
-        try:
-            template_id = self.sql_component.get_default_template_id_by_id(component_id)
-        except:
-            template_name = self.sql_model.get_default_template_name_by_name_and_model_name(
-                parameter_set_name, model_name
-            )
-            template_id = self.sql_template.get_id_from_name(template_name)
-
-        raw_template_parameters = self.sql_template_parameter.get_id_name_and_type_by_template_id(
-            template_id, model_name
-        )
-        template_parameters = {}
-        template_parameters_types = {}
-        for tp_id, tp_name, tp_type in raw_template_parameters:
-            template_parameters[tp_name + model_name] = tp_id
-            template_parameters_types[tp_name + model_name] = tp_type
+    def format_parameters(self, parameters, parameter_set_id):
 
         formatted_parameters = []
         for parameter_name in parameters:
 
-            template_parameter_id = template_parameters.get(parameter_name + model_name)
+            template_parameter_id = self.sql_template_parameter.get_id_from_name(parameter_name)
+            print(template_parameter_id)
             if template_parameter_id is None:
-                print(
-                    "Warning !! parameter {} has no corresponding template parameter".format(
-                        parameter_name
-                    )
+                assert "Warning !! parameter {} has no corresponding template parameter".format(
+                    parameter_name
                 )
                 formatted_value = None
 
             else:
+                template_parameter_dict = self.sql_template_parameter.get_all_from_id(
+                    template_parameter_id
+                )
+                template_parameter_type = template_parameter_dict["type"]
+                display_name = template_parameter_dict["display_name"]
                 value = parameters.get(parameter_name)
-                value_type = template_parameters_types.get(parameter_name + model_name)
+                value_type = template_parameter_type
                 formatted_value = self.format_value(value, value_type)
 
             if formatted_value:
@@ -261,7 +118,6 @@ class UpdateParameterSets:
                 formatted_parameters.append(
                     Parameter(
                         name=parameter_name,
-                        model_name=model_name,
                         parameter_set_id=parameter_set_id,
                         template_parameter_id=template_parameter_id,
                         value=formatted_value,
@@ -289,6 +145,7 @@ class UpdateParameterSets:
         for parameter in parameters:
             self.sql_parameter.insert_value(
                 name=parameter.name,
+                display_name=parameter.display_name,
                 parameter_set_id=parameter.parameter_set_id,
                 template_parameter_id=parameter.template_parameter_id,
                 value=parameter.value,
@@ -318,7 +175,7 @@ class UpdateParameterSets:
                         id=parameter_id,
                         columns_and_values={
                             "name": parameter.name,
-                            "model_name": parameter.model_name,
+                            "display_name": parameter.display_name,
                             "parameter_set_id": parameter.parameter_set_id,
                             "template_parameter_id": parameter.template_parameter_id,
                             "value": parameter.value,
@@ -367,8 +224,6 @@ class UpdateParameterSets:
     #####################################
     #    RUN SCRIPT
     #####################################
-    def get_all_resources(self):
-        return app_access.get_all_parameter_sets_experimental_data_files_path()
 
     def execute_script(self):
         all_file_path = self.get_all_resources()
@@ -379,12 +234,13 @@ class UpdateParameterSets:
 
         for file_path in all_file_path:
             file_as_json = app_access.get_json_from_path(file_path)
-            print("file = ", file_as_json)
+
             parameter_set_id, parameter_set_already_exists, name = (
                 self.update_parameter_set_from_json(file_as_json, file_path)
             )
             new_or_updated.append(name)
-            if parameter_set_already_exists:
+
+            if parameter_set_already_exists and existing_ids_to_be_deleted:
                 existing_ids_to_be_deleted.remove(parameter_set_id)
 
         if existing_ids_to_be_deleted:

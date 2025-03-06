@@ -1,0 +1,7 @@
+{
+   "name": "negative_electrode_binder",
+   "category": "negative_electrode_binder",
+   "parameters": {
+      "mass_fraction": 0.05
+   }
+}

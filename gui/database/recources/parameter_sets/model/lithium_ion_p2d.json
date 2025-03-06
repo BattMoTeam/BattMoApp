@@ -1,0 +1,12 @@
+{
+      "name": "lithium_ion_p2d",
+      "category": "model",
+      "parameters": { 
+            "use_thermal": false,
+            "include_current_collector": false,
+            "use_solid_diffusion_model": true,
+            "solid_diffusion_model_type": "full",
+            "use_ramp_up": true
+      }                 
+   
+ }

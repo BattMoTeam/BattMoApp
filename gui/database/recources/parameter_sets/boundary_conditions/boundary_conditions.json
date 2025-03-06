@@ -1,0 +1,11 @@
+{
+    "name": "boundary_conditions",
+    "category": "boundary_conditions",
+    "parameters": {
+        "external_heat_transfer_coefficient": 1000,
+        "ambient_temperature": 298.15,
+        "initial_temperature": 298.15,
+        "reference_temperature": 298.15
+    }
+
+}
