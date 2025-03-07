@@ -398,7 +398,7 @@
          "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
          "display_name": "Round-trip efficiency"
       },
-      "coating_porosity": {
+      "negative_electrode_coating_porosity": {
          
          "context_type": "Porosity",
          "context_type_iri": "https://w3id.org/emmo#EMMO_3a6578ac_aee0_43b9_9bc6_1eb208c8c9a9",
@@ -412,7 +412,21 @@
          "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
          "display_name": "Coating porosity"
       },
-      "mass_loading": {
+      "positive_electrode_coating_porosity": {
+         
+         "context_type": "Porosity",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_3a6578ac_aee0_43b9_9bc6_1eb208c8c9a9",
+         "max_value": 0.9,
+         "min_value": 0.01,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Coating porosity"
+      },
+      "negative_electrode_mass_loading": {
          
          "context_type": "MassLoading",
          "context_type_iri": "https://w3id.org/emmo#EMMO_3a6578ac_aee0_43b9_9bc6_1eb208c8c9a9",
@@ -426,6 +440,22 @@
          "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
          "display_name": "Mass loading"
       },
+      
+      "positive_electrode_mass_loading": {
+         
+         "context_type": "MassLoading",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_3a6578ac_aee0_43b9_9bc6_1eb208c8c9a9",
+         "max_value": 10000,
+         "min_value": 0.01,
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "mg\u00B7cm\u207b\u00b2",
+         "unit_name": "emmo:MiliGramPerCubicCentiMeter",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Mass loading"
+      },
+      
       "bruggeman_coefficient": {
          
          "context_type": "BruggemanCoefficient",
@@ -454,7 +484,7 @@
          "unit_iri": "https://w3id.org/emmo#MilliAmpereHour",
          "display_name": "Capacity"
       },
-      "active_material_mass_fraction": {
+      "negative_electrode_active_material_mass_fraction": {
          
          "context_type": "MassFraction",
          "context_type_iri": "https://w3id.org/emmo#EMMO_a8eb87b5_4d10_4137_a75c_e04ee59ca095",
@@ -468,7 +498,7 @@
          "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
          "display_name": "Mass Fraction"
       },
-      "binder_mass_fraction": {
+      "positive_electrode_active_material_mass_fraction": {
          
          "context_type": "MassFraction",
          "context_type_iri": "https://w3id.org/emmo#EMMO_a8eb87b5_4d10_4137_a75c_e04ee59ca095",
@@ -482,7 +512,49 @@
          "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
          "display_name": "Mass Fraction"
       },
-      "additive_mass_fraction": {
+      "negative_electrode_binder_mass_fraction": {
+         
+         "context_type": "MassFraction",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_a8eb87b5_4d10_4137_a75c_e04ee59ca095",
+         "max_value": 1.0,
+         "min_value": 0.01,
+         "description": "Mass fraction of the material",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Mass Fraction"
+      },
+      "positive_electrode_binder_mass_fraction": {
+         
+         "context_type": "MassFraction",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_a8eb87b5_4d10_4137_a75c_e04ee59ca095",
+         "max_value": 1.0,
+         "min_value": 0.01,
+         "description": "Mass fraction of the material",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Mass Fraction"
+      },
+      "negative_electrode_additive_mass_fraction": {
+         
+         "context_type": "MassFraction",
+         "context_type_iri": "https://w3id.org/emmo#EMMO_a8eb87b5_4d10_4137_a75c_e04ee59ca095",
+         "max_value": 1.0,
+         "min_value": 0.01,
+         "description": "Mass fraction of the material",
+         "is_shown_to_user": true,
+         "type": "float",
+         "unit": "1",
+         "unit_name": "emmo:UnitOne",
+         "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+         "display_name": "Mass Fraction"
+      },
+      "positive_electrode_additive_mass_fraction": {
          
          "context_type": "MassFraction",
          "context_type_iri": "https://w3id.org/emmo#EMMO_a8eb87b5_4d10_4137_a75c_e04ee59ca095",
@@ -713,7 +785,7 @@
          "context_type": "Thickness",
          "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
          "max_value": 500,
-         "min_value": 1,
+         "min_value": 0.1e-6,
          "description": "The thickness of the active material coating",
          "is_shown_to_user": true,
          "type": "float",
@@ -727,7 +799,7 @@
          "context_type": "Thickness",
          "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
          "max_value": 200,
-         "min_value": 1,
+         "min_value": 0.1e-6,
          "description": "",
          "is_shown_to_user": true,
          "type": "float",
@@ -755,7 +827,7 @@
          "context_type": "Thickness",
          "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
          "max_value": 500,
-         "min_value": 1,
+         "min_value": 0.1e-6,
          "description": "The thickness of the active material coating",
          "is_shown_to_user": true,
          "type": "float",
@@ -769,7 +841,7 @@
          "context_type": "Thickness",
          "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
          "max_value": 200,
-         "min_value": 1,
+         "min_value": 0.1e-6,
          "description": "",
          "is_shown_to_user": true,
          "type": "float",
@@ -797,7 +869,7 @@
          "context_type": "Thickness",
          "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
          "max_value": 100,
-         "min_value": 0.1,
+         "min_value": 0.1e-6,
          "description": "the thickness of the separator",
          "is_shown_to_user": true,
          "type": "float",
@@ -993,7 +1065,7 @@
          "unit_name": "emmo:UnitOne",
          "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978"
       },
-      "porosity": {
+      "separator_porosity": {
          
          "context_type": "Porosity",
          "context_type_iri": "https://w3id.org/emmo#EMMO_3a6578ac_aee0_43b9_9bc6_1eb208c8c9a9",

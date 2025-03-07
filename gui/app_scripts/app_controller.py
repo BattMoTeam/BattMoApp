@@ -39,6 +39,9 @@ class AppController:
     def set_cell_design(self):
         return view.SetCellDesign()
 
+    def set_build_cell(self):
+        return view.SetBuildCell()
+
     def set_upload_input_file(self):
         return view.SetUploadInputFile()
 

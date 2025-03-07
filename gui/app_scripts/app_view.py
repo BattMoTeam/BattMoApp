@@ -40,13 +40,13 @@ import uuid
 
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from app_scripts.app_parameter_model import *
+from app_scripts.app_objects import *
+from app_scripts.app_formatter import *
+from app_scripts.app_session_states import *
 from database import db_helper, db_handler
 from app_scripts import app_access, match_json_LD, app_controller
 from app_scripts import app_calculations as calc
 import app_pages as pg
-
-# con, cur = app_access.get_sqlite_con_and_cur()
 
 
 #####################################
@@ -579,6 +579,84 @@ class SetExternalLinks:
 
 
 #########################################
+# Class to setup Build Cell page
+#########################################
+
+
+class SetBuildCell:
+    """
+    Rendering of the "Build Cell" page
+    """
+
+    def __init__(self):
+
+        # initialize database handlers
+        self.sql_cell_design = db_handler.CellDesignHandler()
+        self.sql_category = db_handler.CategoryHandler()
+        self.sql_material = db_handler.MaterialHandler()
+        self.sql_parameter = db_handler.ParameterHandler()
+        self.sql_parameter_set = db_handler.ParameterSetHandler()
+        self.sql_template_parameter = db_handler.TemplateParameterHandler()
+
+        # initialize formatter
+        self.formatter = FormatParameters()
+
+        # initialize SessionState
+        self.ss = SessionStates()
+
+        # render page
+        self.render_build_cell_page()
+
+    def render_build_cell_page(self):
+
+        self.render_geometry()
+
+        self.render_negative_electrode()
+
+    def render_negative_electrode(self):
+
+        st.markdown("#### " + "Negative electrode")
+
+        st.markdown("Current collector")
+        category_id = self.sql_category.get_id_from_name("negative_electrode_current_collector")
+        materials = self.sql_material.get_all_from_category_id(category_id)
+
+        display_names = []
+        for material in materials:
+            display_name = material["display_name"]
+            display_names.append(display_name)
+
+        selected_material = st.selectbox("", display_names)
+
+    def render_geometry(self):
+
+        st.markdown("#### " + "Cell geometry")
+
+        cell_geometries = self.sql_cell_design.get_all_ids_and_names()
+
+        ids = []
+        display_names = []
+        for cell_geometry in cell_geometries:
+            cell_geometry_id, display_name = cell_geometry
+            ids.append(cell_geometry_id)
+            display_names.append(display_name)
+
+        selected_cell_type = st.selectbox("", display_names)
+        selected_cell_type_index = display_names.index(selected_cell_type)
+        selected_cell_type_id = ids[selected_cell_type_index]
+
+        parameter_set_id = self.sql_cell_design.get_parameter_set_id_from_id(selected_cell_type_id)
+        parameters = self.sql_parameter.get_all_from_parameter_set_id(parameter_set_id)
+
+        template_parameter_ids = [parameter["template_parameter_id"] for parameter in parameters]
+        template_parameters = self.sql_template_parameter.get_all_from_ids(template_parameter_ids)
+
+        parameter_object = self.formatter.format_parameters(parameters, template_parameters)
+
+        return parameter_set_id, parameter_object
+
+
+#########################################
 # Class to setup Cell design page
 #########################################
 
@@ -590,13 +668,32 @@ class SetCellDesign:
 
     def __init__(self):
 
-        pass
+        # initialize database handlers
+        self.sql_cell_type = db_handler.CellTypeHandler()
+        self.sql_parameter = db_handler.ParameterHandler()
+        self.sql_template_parameter = db_handler.TemplateParameterHandler()
+
+        # initialize formatter
+        self.formatter = FormatParameters()
+
+        # initialize SessionState
+        self.ss = SessionStates()
+
+        # render page
+        self.render_cell_design()
 
     def render_cell_design(self):
-        self.cell_type_choice()
-        # self.retrieve_data()
-        self.set_visualization()
-        self.render_parameters()
+
+        parameter_set_id, parameter_object = self.cell_type_choice()
+
+        graph_container = self.set_visualization_container()
+
+        geometry_dict = self.render_parameters(parameter_set_id, parameter_object)
+
+        self.render_visualization(graph_container, geometry_dict)
+
+    def set_visualization_container(self):
+        return st.empty()
 
     def cell_type_choice(self):
         col1, col2 = st.columns((1, 3))
@@ -605,57 +702,162 @@ class SetCellDesign:
             st.text("")
             st.markdown("#### " + "Select cell type:")
 
-            # st.text("")
-            st.markdown("#### " + "Use a common cell design:")
-
         with col2:
-            st.selectbox("", ("Pouch", "Cylindrical"))
-            common_design = st.toggle("", key="common design", label_visibility="hidden")
-            if common_design:
-                st.selectbox("", ("cell_example1", "cell_example2"))
 
-    def set_visualization(self):
+            cell_types = self.sql_cell_type.get_all_ids_and_names()
 
-        gui_parameters = st.session_state.json_linked_data_input
+            ids = []
+            display_names = []
+            for cell_type in cell_types:
+                cell_type_id, display_name = cell_type
+                ids.append(cell_type_id)
+                display_names.append(display_name)
 
-        with stylable_container(
-            key="green_button",
-            css_styles="""
-                {
-                    background-color: #FFFFFF;
-                    color: white;
-                    # border-radius: 20px;
-                }
-                """,
-        ):
+            selected_cell_type = st.selectbox("", display_names)
+            selected_cell_type_index = display_names.index(selected_cell_type)
+            selected_cell_type_id = ids[selected_cell_type_index]
 
-            cont1 = st.container()
+            parameter_set_id = self.sql_cell_type.get_parameter_set_id_from_id(
+                selected_cell_type_id
+            )
+            parameters = self.sql_parameter.get_all_from_parameter_set_id(parameter_set_id)
 
-        _, col1, _ = cont1.columns((0.5, 1.5, 0.5))
+            template_parameter_ids = [
+                parameter["template_parameter_id"] for parameter in parameters
+            ]
+            template_parameters = self.sql_template_parameter.get_all_from_ids(
+                template_parameter_ids
+            )
+
+            parameter_object = self.formatter.format_parameters(parameters, template_parameters)
+
+        return parameter_set_id, parameter_object
+
+    def render_visualization(self, graph_container, geometry_dict):
+
+        _, col1, _ = graph_container.columns((0.1, 3, 0.1))
 
         with col1:
             # geom1, geom2 = st.tabs(("Cell design", "Geometry used for the simulation"))
             st.text("")
             # with geom1:
-            SetGeometryVisualization(gui_parameters)
+            SetGeometryVisualization(geometry_dict).set_3d_visualization()
 
             st.text("")
 
-    def render_parameters(self):
+    def render_parameters(self, parameter_set_id, parameter_object):
 
-        col3, col4 = st.columns((1, 4))
+        geometry_dict = {}
 
-        with col3:
-            st.text("")
-            st.text("")
-            st.write("Cell length")
-            st.text("")
-            st.text("")
-            st.write("Cell width")
+        selected_parameter_set_id = parameter_set_id
 
-        with col4:
-            st.number_input("", value=100, key="1")
-            st.number_input("", value=100, key="2")
+        # Retrieve the parameter objects
+        cell_length = parameter_object.get("length")
+        cell_width = parameter_object.get("width")
+        ne_thickness = parameter_object.get("negative_electrode_coating_thickness")
+        pe_thickness = parameter_object.get("positive_electrode_coating_thickness")
+        ne_cc_thickness = parameter_object.get("negative_electrode_current_collector_thickness")
+        pe_cc_thickness = parameter_object.get("positive_electrode_current_collector_thickness")
+        separator_thickness = parameter_object.get("separator_thickness")
+
+        cell_length_id = cell_length.id
+        cell_width_id = cell_width.id
+        ne_thickness_id = ne_thickness.id
+        pe_thickness_id = pe_thickness.id
+        ne_cc_thickness_id = ne_cc_thickness.id
+        pe_cc_thickness_id = pe_cc_thickness.id
+        separator_thickness_id = separator_thickness.id
+
+        cell_length_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                cell_length_id, parameter_set_id
+            )
+        )
+        cell_width_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                cell_width_id, parameter_set_id
+            )
+        )
+        ne_thickness_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                ne_thickness_id, parameter_set_id
+            )
+        )
+        pe_thickness_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                pe_thickness_id, parameter_set_id
+            )
+        )
+        ne_cc_thickness_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                ne_cc_thickness_id, parameter_set_id
+            )
+        )
+        pe_cc_thickness_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                pe_cc_thickness_id, parameter_set_id
+            )
+        )
+        separator_thickness_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                separator_thickness_id, parameter_set_id
+            )
+        )
+
+        col1, col2 = st.columns((1, 4))
+
+        with col1:
+            st.text("")
+            st.text("")
+            st.write(cell_length.display_name)
+            st.text("")
+            st.text("")
+            st.write(cell_width.display_name)
+
+        with col2:
+            user_input = st.number_input(
+                label=cell_length.name,
+                value=cell_length.options.get(cell_length_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    cell_length_parameter_id,
+                    cell_length.options.get(cell_length_parameter_id).value,
+                ),
+                min_value=cell_length.min_value,
+                max_value=cell_length.max_value,
+                format=self.formatter.set_format(
+                    cell_length.options.get(cell_length_parameter_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    cell_length.options.get(cell_length_parameter_id).value
+                ),
+            )
+
+            cell_length.set_selected_value(user_input)
+            geometry_dict[cell_length.name] = user_input
+
+            user_input = st.number_input(
+                label=cell_width.name,
+                value=cell_width.options.get(cell_width_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    cell_width_parameter_id,
+                    cell_width.options.get(cell_width_parameter_id).value,
+                ),
+                min_value=cell_width.min_value,
+                max_value=cell_width.max_value,
+                format=self.formatter.set_format(
+                    cell_width.options.get(cell_width_parameter_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    cell_width.options.get(cell_width_parameter_id).value
+                ),
+            )
+
+            cell_width.set_selected_value(user_input)
+            geometry_dict[cell_width.name] = user_input
 
         st.text("")
         st.text("")
@@ -668,27 +870,129 @@ class SetCellDesign:
             st.text("")
             st.text("")
             st.text("")
-            st.write("Thicknesses:")
+            st.write("Thickness:")
 
         with cola:
             st.write("Current Collector (NE)")
-            st.number_input("", value=10, key="3")
+            user_input = st.number_input(
+                label=ne_cc_thickness.name,
+                value=ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    ne_cc_thickness_parameter_id,
+                    ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value,
+                ),
+                min_value=ne_cc_thickness.min_value,
+                max_value=ne_cc_thickness.max_value,
+                format=self.formatter.set_format(
+                    ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value
+                ),
+            )
+
+            ne_cc_thickness.set_selected_value(user_input)
+            geometry_dict[ne_cc_thickness.name] = user_input
 
         with colb:
             st.write("Negative Electrode")
-            st.number_input("", value=10, key="4")
+            user_input = st.number_input(
+                label=ne_thickness.name,
+                value=ne_thickness.options.get(ne_thickness_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    ne_thickness_parameter_id,
+                    ne_thickness.options.get(ne_thickness_parameter_id).value,
+                ),
+                min_value=ne_thickness.min_value,
+                max_value=ne_thickness.max_value,
+                format=self.formatter.set_format(
+                    ne_thickness.options.get(ne_thickness_parameter_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    ne_thickness.options.get(ne_thickness_parameter_id).value
+                ),
+            )
+
+            ne_thickness.set_selected_value(user_input)
+            geometry_dict[ne_thickness.name] = user_input
 
         with colc:
             st.write("Separator")
-            st.number_input("", value=10, key="5")
+            user_input = st.number_input(
+                label=separator_thickness.name,
+                value=separator_thickness.options.get(separator_thickness_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    separator_thickness_parameter_id,
+                    separator_thickness.options.get(separator_thickness_parameter_id).value,
+                ),
+                min_value=separator_thickness.min_value,
+                max_value=separator_thickness.max_value,
+                format=self.formatter.set_format(
+                    separator_thickness.options.get(separator_thickness_parameter_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    separator_thickness.options.get(separator_thickness_parameter_id).value
+                ),
+            )
+
+            separator_thickness.set_selected_value(user_input)
+            geometry_dict[separator_thickness.name] = user_input
 
         with cold:
             st.write("Positive Electrode")
-            st.number_input("", value=10, key="6")
+            user_input = st.number_input(
+                label=pe_thickness.name,
+                value=pe_thickness.options.get(pe_thickness_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    pe_thickness_parameter_id,
+                    pe_thickness.options.get(pe_thickness_parameter_id).value,
+                ),
+                min_value=pe_thickness.min_value,
+                max_value=pe_thickness.max_value,
+                format=self.formatter.set_format(
+                    pe_thickness.options.get(pe_thickness_parameter_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    pe_thickness.options.get(pe_thickness_parameter_id).value
+                ),
+            )
+
+            pe_thickness.set_selected_value(user_input)
+            geometry_dict[pe_thickness.name] = user_input
 
         with cole:
             st.write("Current Collector (PE)")
-            st.number_input("", value=10, key="7")
+            user_input = st.number_input(
+                label=pe_cc_thickness.name,
+                value=pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    pe_cc_thickness_parameter_id,
+                    pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value,
+                ),
+                min_value=pe_cc_thickness.min_value,
+                max_value=pe_cc_thickness.max_value,
+                format=self.formatter.set_format(
+                    pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value
+                ),
+            )
+
+            pe_cc_thickness.set_selected_value(user_input)
+            geometry_dict[pe_cc_thickness.name] = user_input
+
+        return geometry_dict
 
 
 #########################################
@@ -6699,25 +7003,25 @@ class SetGeometryVisualization:
     Used to render the geometry in a Plotly 3D volume plot on the 'Cell design' page.
     """
 
-    def __init__(self, gui_parameters):
+    def __init__(self, geometry_data):
         self.header = "Visualize geometry"
         self.info = """This geometry visualization is an approximation based on the input parameters specified above.
                         The particles are for example visualized using a random data generator."""
-        self.gui_parameters = gui_parameters
-        self.set_geometry_visualization()
+        self.geometry_data = geometry_data
 
-    def set_geometry_visualization(self):
+    def set_3d_visualization(self):
         # with st.sidebar:
         # self.set_header_info()
-        geometry_data = self.get_data()
-        self.create_graphs(geometry_data)
+        geometry_data = self.geometry_data
+        self.create_3d_graph(geometry_data)
+
+    def set_2d_visualization(self):
+
+        geometry_data = self.geometry_data
+        # self.create_2d_graph(geometry_data)
 
     def set_header_info(self):
         st.markdown("## " + self.header)
-
-    def get_data(self):
-        geometry_data = match_json_LD.get_geometry_data_from_gui_dict(self.gui_parameters)
-        return geometry_data
 
     def generate_random_particles(self, width, thickness, num_particles, particle_radius):
         # Generate random particle coordinates within the specified dimensions
@@ -6729,131 +7033,64 @@ class SetGeometryVisualization:
         radii = 2 * np.ones(num_particles) * particle_radius  # get diameter instead of radius
         return pts, radii
 
-    def create_graphs(_self, geometry_data):
-
-        _self.create_3d_graph_box_scaled(geometry_data)
-
     @st.cache_data
-    def create_3d_graph_box_scaled(_self, geometry_data):
+    def create_3d_graph(_self, geometry_data):
+        # Extract geometry data from input
+        thickness_ne = geometry_data["negative_electrode_coating_thickness"]
+        thickness_pe = geometry_data["positive_electrode_coating_thickness"]
+        thickness_sep = geometry_data["separator_thickness"]
+        thickness_ne_cc = geometry_data["negative_electrode_current_collector_thickness"]
+        thickness_pe_cc = geometry_data["positive_electrode_current_collector_thickness"]
+        total_thickness = (
+            thickness_ne_cc + thickness_ne + thickness_sep + thickness_pe + thickness_pe_cc
+        )
+        length = geometry_data["length"] * 10**6  # Convert to micrometers
+        width = geometry_data["width"] * 10**6  # Convert to micrometers
+        tab_length = geometry_data.get("tab_length", 2 * 10**6)  # Default tab length of 2 mm
+        tab_thickness = geometry_data.get(
+            "tab_thickness", 0.1 * 10**6
+        )  # Default tab thickness of 0.1 mm
 
-        thickness_ne = geometry_data["thickness_ne"]
-        thickness_pe = geometry_data["thickness_pe"]
-        thickness_sep = geometry_data["thickness_sep"]
-        total_thickness = thickness_ne + thickness_pe + thickness_sep
-        length = geometry_data["length"] * 10**6
-        width = geometry_data["width"] * 10**6
-        porosity_ne = geometry_data["porosity_ne"]
-        porosity_pe = geometry_data["porosity_pe"]
-        porosity_sep = geometry_data["porosity_sep"]
-
-        # Define the dimensions and colors of the boxes
+        # Define the dimensions and fixed colors for each component
         dimensions = [
-            (thickness_ne, total_thickness, total_thickness),
-            (thickness_sep, total_thickness, total_thickness),
-            (thickness_pe, total_thickness, total_thickness),
-        ]  # (length, width, height) for each box
-        # Colors for negative electrode, separator, and positive electrode
-        # BattMo-inspired colorscale
+            (length, width, thickness_ne_cc),  # Negative current collector
+            (length, width, thickness_ne),  # Negative electrode
+            (length, width, thickness_sep),  # Separator
+            (length, width, thickness_pe),  # Positive electrode
+            (length, width, thickness_pe_cc),  # Positive current collector
+        ]
+        colors = [
+            "#B0BEC5",  # Grey for current collectors
+            "#E67E22",  # Orange for negative electrode
+            "#FFC107",  # Yellow for separator
+            "#770737",  # Purple for positive electrode
+            "#B0BEC5",  # Grey for positive current collector
+        ]
+        components = [
+            "Negative current collector",
+            "Negative electrode",
+            "Separator",
+            "Positive electrode",
+            "Positive current collector",
+        ]
 
-        colorscale_teal_cyan = [
-            [0, "#FFFFE0"],
-            [0.5, "#E67E22"],
-            [1, "#770737"],
-        ]  # Yellow at normalized value 0
-        # colorscale_earth = ([0.5, "#E67E22"],)  # Orange at normalized value 0.5
-        colorscale_purple_pink = ([1, "#770737"],)  # Red/Purple at normalized value 1
-
-        colorscales = [colorscale_teal_cyan, colorscale_teal_cyan, colorscale_teal_cyan]
-        colorbarxs = [-0.3, -0.26, -0.22]
-        showscales = [False, False, True]
-        colorbar_titles = ["_____", "_____", "_____"]
-        thickmodes = ["array", "array", "auto"]
-        components = ["Negative electrode", "Separator", "Positive electrode"]
-
-        # Define the porosities for each component (between 0 and 1)
-        porosities = [
-            porosity_ne,
-            porosity_sep,
-            porosity_pe,
-        ]  # Porosity for negative electrode, separator, and positive electrode
-
+        # Create the figure for the 3D plot
         fig = go.Figure()
-
-        # Add boxes for each component
         start = 0
-        for (
-            dim,
-            colorscale,
-            porosity,
-            colorbarx,
-            showscale,
-            colorbar_title,
-            thickmode,
-            component,
-        ) in zip(
-            dimensions,
-            colorscales,
-            porosities,
-            colorbarxs,
-            showscales,
-            colorbar_titles,
-            thickmodes,
-            components,
-        ):
-            opacity = 1 - porosity  # Calculate opacity based on porosity
-            intensity = np.full(10, porosity)
+
+        # Add the main components (current collectors, electrodes, separator) to the plot
+        for dim, color, component in zip(dimensions, colors, components):
             x, y, z = dim
-            end = start + x
+            end = start + z
             fig.add_trace(
                 go.Mesh3d(
-                    x=[
-                        start,
-                        end,
-                        end,
-                        start,
-                        start,
-                        end,
-                        end,
-                        start,
-                    ],  # Define x-coordinates for the box
-                    y=[
-                        0,
-                        0,
-                        y,
-                        y,
-                        0,
-                        0,
-                        y,
-                        y,
-                    ],  # Define y-coordinates for the box
-                    z=[
-                        0,
-                        0,
-                        0,
-                        0,
-                        z,
-                        z,
-                        z,
-                        z,
-                    ],  # Define z-coordinates for the box
-                    intensity=intensity,
-                    # i, j and k give the vertices of triangles
+                    x=[0, x, x, 0, 0, x, x, 0],
+                    y=[0, 0, y, y, 0, 0, y, y],
+                    z=[start, start, start, start, end, end, end, end],
                     i=[7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
                     j=[3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
                     k=[0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-                    # opacity=opacity,  # Set opacity based on porosity
-                    # color=color,
-                    reversescale=True,
-                    colorscale=colorscale,
-                    cmin=0,
-                    cmax=0.6,
-                    showscale=showscale,
-                    colorbar=dict(
-                        title=colorbar_title,
-                        x=colorbarx,
-                        tickmode=thickmode,
-                        tickvals=[],
-                    ),
+                    color=color,
                     name=f"{component}",
                     showlegend=True,
                     flatshading=True,
@@ -6861,64 +7098,91 @@ class SetGeometryVisualization:
             )
             start = end
 
-        # Define the custom colorbar title annotation
-        title_annotation = dict(
-            text="Porosity",
-            font_size=20,
-            font_family="arial",
-            font_color="black",
-            textangle=0,
-            showarrow=False,
-            # ^^ appearance
-            xref="paper",
-            yref="paper",
-            x=-0.23,
-            y=1,
-            # ^^ position
-        )
+        # Add the tabs for current collectors (protrusions at the edges)
+        tab_positions = [
+            (0, 0),  # Tab 1 position (Negative side)
+            (0, width),  # Tab 2 position (Positive side)
+        ]
+        tab_colors = ["#B0BEC5", "#B0BEC5"]  # Same color as current collectors (grey)
 
-        # Define representative colors for the legend
-        legend_colors = ["#FFFFE0", "#E67E22", "#770737"]  # Example: Yellow, Orange, Purple
+        for i, tab_position in enumerate(tab_positions):
+            tab_x, tab_y = (
+                tab_position  # Unpack the tuple (this should be fine if the structure is correct)
+            )
 
-        # Add invisible scatter points to create custom legend colors
-        for component, color in zip(components, legend_colors):
+            # Define the 3D coordinates for the tab (sticking out at the end of the current collector)
             fig.add_trace(
-                go.Scatter3d(
-                    x=[None],  # Invisible point
-                    y=[None],
-                    z=[None],
-                    mode="markers",
-                    marker=dict(size=8, color=color),
-                    name=component,  # Label in the legend
+                go.Mesh3d(
+                    x=[
+                        tab_x,
+                        tab_x + tab_length,
+                        tab_x + tab_length,
+                        tab_x,
+                        tab_x,
+                        tab_x + tab_length,
+                        tab_x + tab_length,
+                        tab_x,
+                    ],
+                    y=[
+                        tab_y,
+                        tab_y,
+                        tab_y + tab_thickness,
+                        tab_y + tab_thickness,
+                        tab_y,
+                        tab_y,
+                        tab_y + tab_thickness,
+                        tab_y + tab_thickness,
+                    ],
+                    z=[
+                        start,
+                        start,
+                        start,
+                        start,
+                        start + tab_thickness,
+                        start + tab_thickness,
+                        start + tab_thickness,
+                        start + tab_thickness,
+                    ],
+                    i=[7, 0, 0, 0, 4, 4, 6, 6],
+                    j=[3, 4, 1, 2, 5, 6, 5, 2],
+                    k=[0, 7, 2, 3, 6, 7, 1, 1],
+                    color=tab_colors[i],
+                    name=f"Tab {i + 1}",
                     showlegend=True,
+                    flatshading=True,
                 )
             )
 
+        # Determine the maximum dimension for scaling the view
+        max_dim = max(total_thickness, length, width)
+        camera_distance = max_dim * 0.5  # Adjust camera distance to scale the view
+
+        # Automatically scale the camera for better visibility of the entire cell
         fig.update_layout(
             legend=dict(
-                orientation="h",  # Horizontal legend
-                yanchor="bottom",  # Align to the bottom
-                y=-0.2,  # Adjust position below the plot
+                orientation="h",
+                yanchor="bottom",
+                y=-0.2,
                 xanchor="center",
-                x=0.5,  # Center align
+                x=0.5,
             ),
-            annotations=[title_annotation],
             paper_bgcolor='#F0F0F0',
             scene_aspectmode="data",
             scene=dict(
-                xaxis=dict(autorange="reversed", nticks=10),
-                xaxis_title="Thickness  /  \u03BCm",
-                yaxis_title="Scaled length  /  \u03BCm",
-                zaxis_title="Scaled width  /  \u03BCm",
+                xaxis_title="Scaled length  /  μm",
+                yaxis_title="Scaled width  /  μm",
+                zaxis_title="Thickness  /  μm",
+                camera=dict(
+                    eye=dict(
+                        x=camera_distance, y=camera_distance, z=camera_distance
+                    )  # Adjusted zoom level
+                ),
             ),
-            xaxis=dict(range=[0, total_thickness]),
             width=700,
             margin=dict(r=20, b=10, l=10, t=10),
-            # coloraxis_colorbar_x=colorbarx,#, colorbar_y=0.95, colorbar_yanchor='top', colorbar_ypad=0),
-            # colorbar2=dict(coloraxis_colorbar_x=0.6),#, colorbar_y=0.95, colorbar_yanchor='top', colorbar_ypad=0),
-            # colorbar3=dict(coloraxis_colorbar_x=0.75)#, colorbar_y=0.95, colorbar_yanchor='top', colorbar_ypad=0)
         )
 
+        # Display the plot with Streamlit
         st.plotly_chart(fig, theme=None, use_container_width=True)
 
 
@@ -7627,7 +7891,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=_self.electrolyte_potential,
             title="Electrolyte - Potential",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Time  /  h",
             cbar_label="Potential  /  V",
             horizontal_line=_self.time_values[state],
@@ -7640,7 +7904,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=_self.electrolyte_concentration,
             title="Electrolyte - Liquid phase lithium concentration",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Time  /  h",
             cbar_label="Concentration  /  mol . L-1",
             horizontal_line=_self.time_values[state],
@@ -7653,7 +7917,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=_self.positive_electrode_potential,
             title="Positive Electrode - Potential",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Time  /  h",
             cbar_label="Potential  /  V",
             horizontal_line=_self.time_values[state],
@@ -7666,7 +7930,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=np.array(_self.positive_electrode_concentration),
             title="Positive Electrode - Solid phase lithium concentration",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Time  /  h",
             cbar_label="Concentration  /  mol . L-1",
             horizontal_line=_self.time_values[state],
@@ -7679,7 +7943,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=_self.negative_electrode_concentration,
             title="Negative Electrode - Solid phase lithium concentration",
-            x_label="Position  / \u00B5m",
+            x_label="Position  / \u00b5m",
             y_label="Time  /  h",
             cbar_label="Concentration  /  mol . L-1",
             horizontal_line=_self.time_values[state],
@@ -7692,7 +7956,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=_self.negative_electrode_potential,
             title="Negative Electrode - Potential",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Time  /  h",
             cbar_label="Potential  /  V",
             horizontal_line=_self.time_values[state],
@@ -7966,7 +8230,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=negative_electrode_concentration_ext_list,
             title="Negative Electrode - Solid phase lithium concentration  /  mol . L-1",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Concentration  /  mol . L-1",
             x_min=xmin,
             x_max=xmax,
@@ -8002,7 +8266,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=elyte_concentration_ext_list,
             title="Electrolyte - Liquid phase lithium concentration  /  mol . L-1",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Concentration  /  mol . L-1",
             x_min=xmin,
             x_max=xmax,
@@ -8048,7 +8312,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=positive_electrode_concentration_ext_list,
             title="Positive Electrode - Solid phase lithium concentration  /  mol . L-1",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Concentration  /  mol . L-1",
             x_min=xmin,
             x_max=xmax,
@@ -8124,7 +8388,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=negative_electrode_potential_ext_list,
             title="Negative Electrode - Potential  /  V",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Potential  /  V",
             x_min=xmin,
             x_max=xmax,
@@ -8159,7 +8423,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=elyte_potential_ext_list,
             title="Electrolyte - Potential  /  V",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Potential  /  V",
             x_min=xmin,
             x_max=xmax,
@@ -8203,7 +8467,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=positive_electrode_potential_ext_list,
             title="Positive Electrode - Potential  /  V",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Potential  /  V",
             x_min=xmin,
             x_max=xmax,

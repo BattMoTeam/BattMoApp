@@ -74,7 +74,7 @@ class BaseHandler:
                         cur.execute(query)
 
                     results = [dict(row) for row in cur.fetchall()]
-                    results = results[0]
+
                 elif fetch == "fetchall":
                     con, cur = app_access.get_sqlite_con_and_cur()
 
@@ -288,11 +288,15 @@ class BaseHandler:
 
     def get_all_from_id(self, id):
         res = self.select_dict(values="*", where="id=%d" % id)
-        return res if res else None
+        return res[0] if res else None
 
     def get_all_ids(self):
         res = self.select(values="id")
         return [a[0] for a in res] if res else None
+
+    def get_all_ids_and_names(self):
+        res = self.select(values="id,display_name")
+        return res if res else None
 
     def drop_table(self, other_table=None, confirm=False):
         if other_table:

@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 import shutil
 from app_scripts.app_access import get_path_to_pages_dir
 import json
-from app_scripts.app_session_states import init_session_states
+from app_scripts.app_session_states import SessionStates
 
 ##############################
 # Page Config
@@ -86,7 +86,7 @@ def inject_ga():
 inject_ga()
 
 # Initiate session states
-init_session_states()
+SessionStates().init_global_session_states()
 
 ####################
 # Page navigation

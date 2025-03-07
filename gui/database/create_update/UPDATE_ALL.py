@@ -55,7 +55,7 @@ if __name__ == "__main__":
 # Uncomment to see data in material table:
 
 con, cur = app_access.get_sqlite_con_and_cur()
-data = cur.execute("""SELECT * FROM cell_design""")
+data = cur.execute("""SELECT * FROM cell_type""")
 # Fetch all rows from the result
 data = cur.fetchall()
 

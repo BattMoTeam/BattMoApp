@@ -7,3 +7,4 @@ from .Simulator_file import show_simulator_file
 from .Analyze import show_analyze
 from .Cycling_protocol import show_cycling_protocol
 from .Materials import show_materials
+from .Build_cell import show_build_cell

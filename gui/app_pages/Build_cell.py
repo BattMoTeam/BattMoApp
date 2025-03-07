@@ -22,23 +22,13 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app_scripts import app_access, app_view
 
 from app_scripts.app_controller import (
-    set_model_description,
-    set_material_description,
     get_app_controller,
 )
 
 
-def show_library():
-
+def show_build_cell():
     app = get_app_controller()
 
-    # Set header color
-    app.set_page_design().color_headers()
+    app.set_build_cell()
 
-    app.set_footer(page="Library")
-
-    st.text("")
-    st.text("")
-    set_model_description()
-
-    set_material_description()
+    app.set_footer(page="Analyze")

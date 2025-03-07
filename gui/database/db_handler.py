@@ -43,8 +43,8 @@ class ParameterHandler(db.BaseHandler):
         res = self.select(values="id", where="parameter_set_id=%d" % parameter_set_id)
         return [a[0] for a in res]
 
-    def get_all_by_parameter_set_id(self, parameter_set_id):
-        res = self.select(
+    def get_all_from_parameter_set_id(self, parameter_set_id):
+        res = self.select_dict(
             values="*",
             where="parameter_set_id=%d  " % (parameter_set_id),
         )
@@ -221,6 +221,14 @@ class TemplateParameterHandler(db.BaseHandler):
     def get_all_by_name(self, name):
         res = self.select(values="*", where="name='%s'" % name)
         return res[0]
+
+    def get_all_from_ids(self, ids):
+        ids_str = ",".join(map(str, ids))
+        res = self.select_dict(
+            values="*",
+            where="id IN (%s)" % ids_str,
+        )
+        return res
 
     def get_all_by_template_id(self, template_id):
         return self.select(values="*", where="template_id=%d" % template_id)
@@ -550,8 +558,8 @@ class MaterialHandler(db.BaseHandler):
         )
 
     @st.cache_data
-    def get_all_by_component_id(_self, component_id):
-        return _self.select(values="*", where="component_id=%d" % component_id)
+    def get_all_from_category_id(_self, category_id):
+        return _self.select_dict(values="*", where="category_id=%d" % category_id)
 
 
 #####################################
@@ -588,6 +596,10 @@ class CellTypeHandler(db.BaseHandler):
                 "description": description,
             }
         )
+
+    def get_parameter_set_id_from_id(self, id):
+        res = self.select_one(values="parameter_set_id", where="id={}".format(id))
+        return res[0] if res else None
 
 
 #####################################
@@ -632,3 +644,7 @@ class CellDesignHandler(db.BaseHandler):
                 "description": description,
             }
         )
+
+    def get_parameter_set_id_from_id(self, id):
+        res = self.select_one(values="parameter_set_id", where="id={}".format(id))
+        return res[0] if res else None

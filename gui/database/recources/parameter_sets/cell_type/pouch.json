@@ -1,12 +1,20 @@
 {
-      "name": "cylindrical",
+      "name": "pouch",
       "category": "cell_type",
       "parameters": {
-            "nominal_cell_capacity": 12.5,
-            "number_parallel_electrode_pairs_within_cell": 1,
-            "external_surface_area": 0.0379,
-            "packing_mass": 11,
-            "volume": 0.000128
+            "length": 0.01,
+            "width": 0.005,
+            "negative_electrode_coating_thickness": 85,
+            "negative_electrode_current_collector_thickness": 17.3,
+            "negative_electrode_number_of_discrete_cells_electrode": 20,
+            "positive_electrode_coating_thickness": 76,
+            "positive_electrode_current_collector_thickness": 17.3,
+            "positive_electrode_number_of_discrete_cells_electrode": 20,
+            "separator_thickness": 15,
+            "number_of_discrete_cells_separator": 10 
+
+
+
       }
       
 }

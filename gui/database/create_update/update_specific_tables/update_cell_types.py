@@ -46,7 +46,9 @@ class UpdateCellTypes:
 
             category = details.get("category")
             category_id = self.sql_category.get_id_from_name(category)
+
             parameter_set_id = self.sql_parameter_set.get_id_from_name(name)
+
             cell_type_id = self.sql_cell_type.get_id_from_name(name)
             if cell_type_id:  # existing type
                 self.sql_cell_type.update_by_id(

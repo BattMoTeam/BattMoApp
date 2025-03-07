@@ -14,7 +14,6 @@ from app_scripts.app_controller import (
     set_acknowlegent_info,
 )
 from app_scripts import app_view
-from app_scripts.app_session_states import init_session_states
 
 # ##############################
 # # Remember user changed values
@@ -32,9 +31,6 @@ def show_home():
     st.text("")
 
     app = get_app_controller()
-
-    # Initiate session states
-    # init_session_states()
 
     # Set header color
     app.set_page_design().color_headers()
