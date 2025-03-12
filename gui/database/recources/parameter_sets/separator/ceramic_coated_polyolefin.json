@@ -5,6 +5,7 @@
        
        "specific_heat_capacity": 1692,
        "thermal_conductivity": 0.334,
+       "bruggeman_coefficient": 2.57,
        "density": 946
        
     }

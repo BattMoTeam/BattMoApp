@@ -23,6 +23,62 @@ class UpdateMaterials:
     def get_resource_as_json(self):
         return app_access.get_json_from_path(app_access.get_path_to_materials())
 
+    def update_values(
+        self, material_name, details, category, updated_types, new_types, existing_ids_to_be_deleted
+    ):
+
+        is_shown_to_user = details.get("is_shown_to_user")
+        reference_name = details.get("reference_name")
+        reference = details.get("reference")
+        reference_url = details.get("reference_url")
+        context_type = details.get("context_type")
+        context_type_iri = details.get("context_type_iri")
+        description = details.get("description")
+        display_name = details.get("display_name")
+        default_parameter_set = details.get("default_parameter_set")
+        category_id = self.sql_category.get_id_from_name(category)
+        parameter_set_id = self.sql_parameter_set.get_id_from_name(material_name)
+        material_id = self.sql_material.get_id_from_name_and_category_id(material_name, category_id)
+        if material_id:  # existing type
+            self.sql_material.update_by_id(
+                id=material_id,
+                columns_and_values={
+                    "display_name": display_name,
+                    "category_id": category_id,
+                    "parameter_set_id": parameter_set_id,
+                    "default_parameter_set": default_parameter_set,
+                    "is_shown_to_user": is_shown_to_user,
+                    "reference_name": reference_name,
+                    "reference": reference,
+                    "reference_url": reference_url,
+                    "context_type": context_type,
+                    "context_type_iri": context_type_iri,
+                    "description": description,
+                },
+            )
+            updated_types.append(material_name)
+            if existing_ids_to_be_deleted:
+                existing_ids_to_be_deleted.remove(material_id)
+
+        else:  # non-existing type, create it
+            self.sql_material.insert_value(
+                name=material_name,
+                display_name=display_name,
+                category_id=category_id,
+                parameter_set_id=parameter_set_id,
+                default_parameter_set=default_parameter_set,
+                is_shown_to_user=is_shown_to_user,
+                reference_name=reference_name,
+                reference=reference,
+                reference_url=reference_url,
+                context_type=context_type,
+                context_type_iri=context_type_iri,
+                description=description,
+            )
+            new_types.append(material_name)
+
+        return updated_types, new_types, existing_ids_to_be_deleted
+
     def update_material_from_json(self, resource_file):
 
         materials = resource_file.get("materials")
@@ -37,57 +93,29 @@ class UpdateMaterials:
         for material_name in materials:
             details = materials.get(material_name)
 
-            is_shown_to_user = details.get("is_shown_to_user")
-            reference_name = details.get("reference_name")
-            reference = details.get("reference")
-            reference_url = details.get("reference_url")
-            context_type = details.get("context_type")
-            context_type_iri = details.get("context_type_iri")
-            description = details.get("description")
-            display_name = details.get("display_name")
-            default_parameter_set = details.get("default_parameter_set")
+            categories = details.get("category")
 
-            category = details.get("category")
-            category_id = self.sql_category.get_id_from_name(category)
-            parameter_set_id = self.sql_parameter_set.get_id_from_name(material_name)
-            material_id = self.sql_material.get_id_from_name(material_name)
-            if material_id:  # existing type
-                self.sql_material.update_by_id(
-                    id=material_id,
-                    columns_and_values={
-                        "display_name": display_name,
-                        "category_id": category_id,
-                        "parameter_set_id": parameter_set_id,
-                        "default_parameter_set": default_parameter_set,
-                        "is_shown_to_user": is_shown_to_user,
-                        "reference_name": reference_name,
-                        "reference": reference,
-                        "reference_url": reference_url,
-                        "context_type": context_type,
-                        "context_type_iri": context_type_iri,
-                        "description": description,
-                    },
-                )
-                updated_types.append(material_name)
-                if existing_ids_to_be_deleted:
-                    existing_ids_to_be_deleted.remove(material_id)
+            if isinstance(categories, list):
+                for category in categories:
+                    updated_types, new_types, existing_ids_to_be_deleted = self.update_values(
+                        material_name,
+                        details,
+                        category,
+                        updated_types,
+                        new_types,
+                        existing_ids_to_be_deleted,
+                    )
 
-            else:  # non-existing type, create it
-                self.sql_material.insert_value(
-                    name=material_name,
-                    display_name=display_name,
-                    category_id=category_id,
-                    parameter_set_id=parameter_set_id,
-                    default_parameter_set=default_parameter_set,
-                    is_shown_to_user=is_shown_to_user,
-                    reference_name=reference_name,
-                    reference=reference,
-                    reference_url=reference_url,
-                    context_type=context_type,
-                    context_type_iri=context_type_iri,
-                    description=description,
+            else:
+                category = categories
+                updated_types, new_types, existing_ids_to_be_deleted = self.update_values(
+                    material_name,
+                    details,
+                    category,
+                    updated_types,
+                    new_types,
+                    existing_ids_to_be_deleted,
                 )
-                new_types.append(material_name)
 
         # Delete unused types which remain in the sql table
         deleted_types = []

@@ -2,8 +2,8 @@
       "name": "pouch",
       "category": "cell_type",
       "parameters": {
-            "length": 0.01,
-            "width": 0.005,
+            "length": 0.1,
+            "width": 0.05,
             "negative_electrode_coating_thickness": 85,
             "negative_electrode_current_collector_thickness": 17.3,
             "negative_electrode_number_of_discrete_cells_electrode": 20,
@@ -11,7 +11,10 @@
             "positive_electrode_current_collector_thickness": 17.3,
             "positive_electrode_number_of_discrete_cells_electrode": 20,
             "separator_thickness": 15,
-            "number_of_discrete_cells_separator": 10 
+            "number_of_discrete_cells_separator": 10,
+            "negative_electrode_coating_porosity": 0.4,
+            "positive_electrode_coating_porosity": 0.3,
+            "separator_porosity": 0.45
 
 
 

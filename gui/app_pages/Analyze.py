@@ -68,7 +68,7 @@ def show_analyze():
 
     app = get_app_controller()
 
-    app.set_footer(page="Analyze")
+    app.set_footer(case="toggle_eu")
 
     app.set_hdf5_upload().set_results_uploader()
     selected_data_sets = app.set_data_set_selector().set_selector()

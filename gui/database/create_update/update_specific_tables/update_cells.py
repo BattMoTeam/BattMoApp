@@ -13,27 +13,27 @@ from database import db_handler
 from app_scripts import app_access
 
 
-class UpdateCellDesigns:
+class UpdateCells:
 
     def __init__(self):
-        self.sql_cell_design = db_handler.CellDesignHandler()
+        self.sql_cell = db_handler.CellHandler()
         self.sql_category = db_handler.CategoryHandler()
         self.sql_parameter_set = db_handler.ParameterSetHandler()
         self.sql_cell_type = db_handler.CellTypeHandler()
 
     def get_resource_as_json(self):
-        return app_access.get_json_from_path(app_access.get_path_to_cell_designs())
+        return app_access.get_json_from_path(app_access.get_path_to_cells())
 
     def update_material_from_json(self, resource_file):
 
-        cell_designs = resource_file.get("cell_designs")
+        cell_designs = resource_file.get("cells")
         assert cell_designs is not None, "This input format is not handled"
 
         new_types = []
         updated_types = []
 
         # every item which is not updated will be deleted, so we don't keep useless items in db
-        existing_ids_to_be_deleted = self.sql_cell_design.get_all_ids()
+        existing_ids_to_be_deleted = self.sql_cell.get_all_ids()
 
         for name in cell_designs:
             details = cell_designs.get(name)
@@ -53,9 +53,9 @@ class UpdateCellDesigns:
             cell_type = details.get("cell_type")
             cell_type_id = self.sql_cell_type.get_id_from_name(cell_type)
             parameter_set_id = self.sql_parameter_set.get_id_from_name(name)
-            cell_design_id = self.sql_cell_design.get_id_from_name(name)
+            cell_design_id = self.sql_cell.get_id_from_name(name)
             if cell_design_id:  # existing type
-                self.sql_cell_design.update_by_id(
+                self.sql_cell.update_by_id(
                     id=cell_design_id,
                     columns_and_values={
                         "display_name": display_name,
@@ -74,10 +74,10 @@ class UpdateCellDesigns:
                 )
                 updated_types.append(name)
                 if existing_ids_to_be_deleted:
-                    existing_ids_to_be_deleted.remove(cell_design_ids)
+                    existing_ids_to_be_deleted.remove(cell_design_id)
 
             else:  # non-existing type, create it
-                self.sql_cell_design.insert_value(
+                self.sql_cell.insert_value(
                     name=name,
                     display_name=display_name,
                     cell_type_id=cell_type_id,
@@ -98,8 +98,8 @@ class UpdateCellDesigns:
         deleted_types = []
         if existing_ids_to_be_deleted:
             for id_to_delete in existing_ids_to_be_deleted:
-                deleted_types.append(self.sql_cell_design.get_name_from_id(id_to_delete))
-                self.sql_cell_design.delete_by_id(id_to_delete)
+                deleted_types.append(self.sql_cell.get_name_from_id(id_to_delete))
+                self.sql_cell.delete_by_id(id_to_delete)
 
             print(
                 "\n SQL table component is up to date according to the resource file materials.json"
@@ -116,4 +116,4 @@ class UpdateCellDesigns:
 
 
 if __name__ == "__main__":
-    UpdateCellDesigns().execute_script()
+    UpdateCells().execute_script()

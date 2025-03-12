@@ -35,7 +35,7 @@ def show_library():
     # Set header color
     app.set_page_design().color_headers()
 
-    app.set_footer(page="Library")
+    app.set_footer(case="toggle_eu")
 
     st.text("")
     st.text("")

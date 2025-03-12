@@ -31,4 +31,4 @@ def show_cell_design():
 
     app.set_cell_design()
 
-    app.set_footer(page="Analyze")
+    app.set_footer(case="toggle_eu")

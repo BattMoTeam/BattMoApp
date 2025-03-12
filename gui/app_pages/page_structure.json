@@ -14,11 +14,6 @@
                     "bootstrap_icon": "battery-full",
                     "execute": "show_build_cell"
                 },
-                "Cell_design": {
-                    "display_name": "Create Geometries",
-                    "bootstrap_icon": "battery",
-                    "execute": "show_cell_design"
-                },
                 "Materials": {
                     "display_name": "Create materials",
                     "bootstrap_icon": "card-list",
@@ -50,7 +45,20 @@
         "Library": {
             "display_name": "Library",
             "bootstrap_icon": "book",
-            "execute": "show_library"
+            "sub_pages": {
+                "Library_default":{
+
+                    "display_name": "Default sets",
+                    "bootstrap_icon": "book",
+                    "execute": "show_library"
+                },
+                "Library_user":{
+
+                    "display_name": "Your sets",
+                    "bootstrap_icon": "book",
+                    "execute": "show_library_user"
+                }
+            }
         }
         
         

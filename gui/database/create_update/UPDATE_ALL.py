@@ -4,7 +4,7 @@ from update_specific_tables.update_materials import UpdateMaterials
 from update_specific_tables.update_categories import UpdateCategories
 from update_specific_tables.update_all_parameter_sets import UpdateParameterSets
 from update_specific_tables.update_cell_types import UpdateCellTypes
-from update_specific_tables.update_cell_designs import UpdateCellDesigns
+from update_specific_tables.update_cells import UpdateCells
 import os
 import sys
 
@@ -29,14 +29,14 @@ if __name__ == "__main__":
     # sql_template_parameter.drop_table(confirm=True)
     # os.system("db_model.py")
 
-    # 1. Models (independent)
-    UpdateModels().execute_script()
-
-    # 2. Template parameters (independent)
+    # 1. Template parameters (independent)
     UpdateTemplateParameters().execute_script()
 
-    # 3. Categories (independent)
+    # 2. Categories (independent)
     UpdateCategories().execute_script()
+
+    # 3. Models (depends on categories)
+    UpdateModels().execute_script()
 
     # 4. parameter sets (depends on categories, and template parameters)
     ## parameters
@@ -49,13 +49,13 @@ if __name__ == "__main__":
     UpdateCellTypes().execute_script()
 
     # 7. cell_designs (depends on categories and parameter sets)
-    UpdateCellDesigns().execute_script()
+    UpdateCells().execute_script()
 
 
 # Uncomment to see data in material table:
 
 con, cur = app_access.get_sqlite_con_and_cur()
-data = cur.execute("""SELECT * FROM cell_type""")
+data = cur.execute("""SELECT * FROM cell""")
 # Fetch all rows from the result
 data = cur.fetchall()
 

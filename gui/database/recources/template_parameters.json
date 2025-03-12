@@ -398,6 +398,78 @@
          "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
          "display_name": "Round-trip efficiency"
       },
+      "negative_electrode_active_material": {
+         
+         "context_type": "ActiveMaterial",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_79d1b273-58cd-4be6-a250-434817f7c261",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Active Material"
+      },
+      "negative_electrode_binder": {
+         
+         "context_type": "Binder",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_68eb5e35_5bd8_47b1_9b7f_f67224fa291e",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Binder"
+      },
+      "negative_electrode_additive": {
+         
+         "context_type": "Additive",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_82fef384_8eec_4765_b707_5397054df594",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Additive"
+      },
+      "positive_electrode_active_material": {
+         
+         "context_type": "ActiveMaterial",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_79d1b273-58cd-4be6-a250-434817f7c261",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Active Material"
+      },
+      "positive_electrode_binder": {
+         
+         "context_type": "Binder",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_68eb5e35_5bd8_47b1_9b7f_f67224fa291e",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Binder"
+      },
+      "positive_electrode_additive": {
+         
+         "context_type": "Additive",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_82fef384_8eec_4765_b707_5397054df594",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Additive"
+      },
+      "positive_electrode_current_collector": {
+         
+         "context_type": "Additive",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_82fef384_8eec_4765_b707_5397054df594",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Additive"
+      },
+      "negative_electrode_current_collector": {
+         
+         "context_type": "Additive",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_82fef384_8eec_4765_b707_5397054df594",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Additive"
+      },
       "negative_electrode_coating_porosity": {
          
          "context_type": "Porosity",
@@ -721,6 +793,7 @@
       },
       "use_thermal": {
          
+         "display_name": "Thermal model",
          "context_type": ["ThermalModel"],
          "label": "useThermalModel",
          "description": "",
@@ -729,6 +802,7 @@
       },
       "include_current_collector": {
          
+         "display_name": "Current collector model",
          "context_type": ["CurrentCollector"],
          "label": "includeCurrentCollector",
          "description": "option to include current collectors in the simulation",
@@ -737,6 +811,7 @@
       },
       "use_solid_diffusion_model": {
          
+         "display_name": "Solid diffusion model",
          "context_type": ["usediffusionModel"],
          "label": "diffusionModel",
          "description": "",
@@ -744,6 +819,7 @@
          "type": "bool"
       },
       "solid_diffusion_model_type": {
+         "display_name": "Solid diffusion type",
          "context_type": ["diffusionModelType","parameter"],
          "model_name": ["P2D","P3D","P4D"],
          "label": "diffusionModelType",
@@ -864,6 +940,24 @@
          "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
          "display_name": "Number of discrete cells electrode"
       },
+      "separator": {
+         
+         "context_type": "Separator",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_331e6cca_f260_4bf8_af55_35304fe1bbe0",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Separator"
+      },
+      "electrolyte": {
+         
+         "context_type": "Electrolyte",
+         "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_fb0d9eef_92af_4628_8814_e065ca255d59",
+         "description": "",
+         "is_shown_to_user": true,
+         "type": "str",
+         "display_name": "Electrolyte"
+      },
       "separator_thickness": {
          
          "context_type": "Thickness",
@@ -893,6 +987,7 @@
          "display_name": "Number of discrete cells"
       },
       "use_ramp_up": {
+         "display_name": "Linear current ramp up",
          "context_type": ["LinearCurrentRamp"],
          "model_name": ["P2D","P3D","P4D"],
          "label": "useRampup",

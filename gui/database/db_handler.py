@@ -267,6 +267,7 @@ class ModelHandler(db.BaseHandler):
         self,
         name,
         display_name,
+        category_id,
         context_type,
         context_type_iri,
         is_shown_to_user,
@@ -278,12 +279,17 @@ class ModelHandler(db.BaseHandler):
             columns_and_values={
                 "name": name,
                 "display_name": display_name,
+                "category_id": category_id,
                 "context_type": context_type,
                 "context_type_iri": context_type_iri,
                 "is_shown_to_user": is_shown_to_user,
                 "description": description,
             }
         )
+
+    def get_all(self):
+        res = self.select_dict(values="*")
+        return res if res else None
 
     def get_model_id_from_model_name(self, name):
         res = self.select_one(values="id", where="name='%s'" % name)
@@ -431,6 +437,10 @@ class CategoryHandler(db.BaseHandler):
         res = self.select_one(values="id", where="name = '%s'" % (name))
         return res[0] if res else None
 
+    def get_all_from_name(self, name):
+        res = self.select_dict(values="*", where="name = '%s'" % (name))
+        return res[0] if res else None
+
     def get_default_template_id_by_id(self, id):
         res = self.select_one(values="default_template_id", where="id={}".format(id))
         return res[0] if res else None
@@ -552,14 +562,18 @@ class MaterialHandler(db.BaseHandler):
     def create_index(self, index_name, columns):
         return self._create_index(index_name, self._table_name, columns)
 
-    def get_id_from_name_and_model(self, name, model_name):
+    def get_id_from_name_and_category_id(self, name, category_id):
         return self.select(
-            values="id", where="name = '%s' AND model_name='%s'" % (name, model_name)
+            values="id", where="name = '%s' AND category_id=%d" % (name, category_id)
         )
 
     @st.cache_data
     def get_all_from_category_id(_self, category_id):
         return _self.select_dict(values="*", where="category_id=%d" % category_id)
+
+    def get_all_default_materials(self):
+        res = self.select_dict(values="*", where="default_parameter_set = 'True' GROUP BY name")
+        return res if res else None
 
 
 #####################################
@@ -605,9 +619,9 @@ class CellTypeHandler(db.BaseHandler):
 #####################################
 # Cell Design
 #####################################
-class CellDesignHandler(db.BaseHandler):
+class CellHandler(db.BaseHandler):
     def __init__(self):
-        self._table_name = "cell_design"
+        self._table_name = "cell"
 
     def insert_value(
         self,
@@ -617,6 +631,7 @@ class CellDesignHandler(db.BaseHandler):
         cell_type_id=None,
         category_id=None,
         parameter_set_id=None,
+        user_uuid=None,
         reference_name=None,
         reference=None,
         reference_url=None,
@@ -635,6 +650,7 @@ class CellDesignHandler(db.BaseHandler):
                 "cell_type_id": cell_type_id,
                 "category_id": category_id,
                 "parameter_set_id": parameter_set_id,
+                "user_uuid": user_uuid,
                 "reference_name": reference_name,
                 "reference": reference,
                 "reference_url": reference_url,
@@ -648,3 +664,14 @@ class CellDesignHandler(db.BaseHandler):
     def get_parameter_set_id_from_id(self, id):
         res = self.select_one(values="parameter_set_id", where="id={}".format(id))
         return res[0] if res else None
+
+    def get_all(self):
+        res = self.select_dict(values="*")
+        return res if res else None
+
+    def get_all_user(self, user_uuid):
+        res = self.select_dict(
+            values="*",
+            where="default_parameter_set = 'False' AND user_uuid = '{}'".format(user_uuid),
+        )
+        return res if res else None

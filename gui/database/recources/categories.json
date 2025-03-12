@@ -15,11 +15,11 @@
             "display_name": "Cell type"
         },
 
-        "cell_design": {
+        "cell": {
             "context_type": "BatteryCell",
             "context_type_iri": "https://w3id.org/emmo/domain/battery#battery_68ed592a_7924_45d0_a108_94d6275d57f0",
             "description": "",
-            "display_name": "Cell design"
+            "display_name": "Cell"
         },
 
         "protocol": {

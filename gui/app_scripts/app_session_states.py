@@ -1,6 +1,7 @@
 import streamlit as st
 import uuid
 import tempfile
+import numpy as np
 
 
 class SessionStates:
@@ -79,6 +80,19 @@ class SessionStates:
 
         if "json_indicator_quantities" not in st.session_state:
             st.session_state.json_indicator_quantities = {}
+
+        #################################
+        # Build Cells session states
+        #################################
+
+        if "save_cell" not in st.session_state:
+            st.session_state.save_cell = False
+
+        if "cell_name" not in st.session_state:
+            rand = np.random.rand()
+            cell_name = "Cell_{}".format(rand)
+
+            st.session_state.cell_name = cell_name
 
         #################################
         # Simulation session states

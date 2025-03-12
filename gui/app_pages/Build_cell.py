@@ -29,6 +29,9 @@ from app_scripts.app_controller import (
 def show_build_cell():
     app = get_app_controller()
 
-    app.set_build_cell()
+    # Set header color
+    app.set_page_design().color_headers()
 
-    app.set_footer(page="Analyze")
+    cell_dict = app.set_build_cell().cell_dict
+
+    app.set_footer(case="toggle_eu_save_cell", parameter_dict=cell_dict)

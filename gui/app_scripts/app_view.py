@@ -43,8 +43,9 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app_scripts.app_objects import *
 from app_scripts.app_formatter import *
 from app_scripts.app_session_states import *
+from app_scripts import app_json_formatter
 from database import db_helper, db_handler
-from app_scripts import app_access, match_json_LD, app_controller
+from app_scripts import app_access, app_controller
 from app_scripts import app_calculations as calc
 import app_pages as pg
 
@@ -137,9 +138,16 @@ class SetFooter:
     Used to render the footer on each page.
     """
 
-    def __init__(self, page=None):
+    def __init__(self, case=None, parameter_dict=None):
 
-        self.page = page
+        self.sql_cell = db_handler.CellHandler()
+        self.sql_parameter = db_handler.ParameterHandler()
+        self.sql_parameter_set = db_handler.ParameterSetHandler()
+        self.sql_template_parameter = db_handler.TemplateParameterHandler()
+        self.sql_category = db_handler.CategoryHandler()
+
+        self.case = case
+        self.parameter_dict = parameter_dict
 
         # Path to the EU logo
         self.image_path = os.path.join(app_access.get_path_to_images_dir(), "flag_of_europe.jpg")
@@ -158,6 +166,46 @@ class SetFooter:
         st.html(
             f'<img src="data:image/jpeg;base64,{image_base64}" id="flag_of_europe" style="width: 80px;">'
         )
+
+    def save_cell_parameter_set(self, parameter_dict, cell_name):
+
+        category_id = self.sql_category.get_id_from_name("cell")
+
+        self.sql_parameter_set.insert_value(name=cell_name, category_id=category_id)
+        parameter_set_id = self.sql_parameter_set.get_id_from_name(cell_name)
+
+        parameters = parameter_dict["parameters"]
+
+        for parameter_name in parameters.keys():
+
+            template_parameter_id = self.sql_template_parameter.get_id_from_name(parameter_name)
+
+            self.sql_parameter.insert_value(
+                name=parameter_name,
+                display_name=None,
+                parameter_set_id=parameter_set_id,
+                template_parameter_id=template_parameter_id,
+                value=parameters[parameter_name],
+            )
+
+        self.sql_cell.insert_value(
+            name=cell_name,
+            is_shown_to_user=True,
+            default_parameter_set=False,
+            cell_type_id=parameter_dict["cell_type_id"],
+            category_id=category_id,
+            parameter_set_id=parameter_set_id,
+            user_uuid=st.session_state.uuid_user_session,
+            reference_name=None,
+            reference=None,
+            reference_url=None,
+            context_type="battery:BatteryCell",
+            context_type_iri="https://w3id.org/emmo/domain/battery#battery_68ed592a_7924_45d0_a108_94d6275d57f0",
+            display_name=cell_name,
+            description="",
+        )
+
+        st.session_state.save_cell = True
 
     def render_theme_toggle(self):
 
@@ -194,88 +242,149 @@ class SetFooter:
         st.session_state.upload = False
         st.session_state.clear_upload = True
 
-    def render_footer(self):
+    def render_toggle_footer(self):
+        with bottom():
 
-        if self.page == "Home":
+            col1, col2 = st.columns((8, 0.7))
 
-            with bottom():
+            with col2:
+                self.render_theme_toggle()
 
-                col1, col2 = st.columns((8, 0.7))
+    def render_toggle_eu(self):
+        with bottom():
+            col1, col2, col3 = st.columns((7, 0.7, 0.5))
 
-                with col2:
-                    self.render_theme_toggle()
+            with col1:
+                st.text("")
 
-                # with col1:
-                # SetExternalLinks()
-        elif self.page == "Input_upload" or self.page == "Parameter_sets":
-            with bottom():
+            with col3:
 
-                col1, col2, col3 = st.columns((7, 0.7, 0.5))
+                self.render_eu_logo()
 
-                with col1:
-                    upload = st.session_state.upload
-                    if upload == True:
+            with col2:
+                st.text("")
+                self.render_theme_toggle()
+
+    def render_toggle_eu_upload_check(self):
+        with bottom():
+
+            col1, col2, col3 = st.columns((7, 0.7, 0.5))
+
+            with col1:
+                upload = st.session_state.upload
+                if upload == True:
+                    st.write(":heavy_check_mark: JSON LD file is uploaded and used")
+
+                else:
+                    st.write(":red_circle: No JSON LD file uploaded")
+
+            with col3:
+
+                self.render_eu_logo()
+
+            with col2:
+                st.text("")
+                self.render_theme_toggle()
+
+    def render_toggle_eu_upload_check_clear(self):
+
+        with bottom():
+
+            col1, col2, _, col3, col4 = st.columns((3, 0.5, 3, 0.7, 0.5))
+
+            with col1:
+                upload = st.session_state.upload
+                if upload == True:
+                    cola, colb = st.columns((2, 1))
+                    with cola:
                         st.write(":heavy_check_mark: JSON LD file is uploaded and used")
 
+                    with colb:
+                        clear = st.button(
+                            "Clear Upload",
+                            on_click=self.set_sessions_state_clear_upload,
+                            use_container_width=False,
+                            type="secondary",
+                        )
+                else:
+                    st.write(":red_circle: No JSON LD file uploaded")
+
+            with col2:
+                # DownloadParameters(st.session_state.json_linked_data_input)
+                st.text("")
+
+            with col4:
+
+                self.render_eu_logo()
+
+            with col3:
+                st.text("")
+                self.render_theme_toggle()
+
+    def render_toggle_eu_save_cell(self):
+        with bottom():
+
+            col1a, col1b, col2, _, col3, col4 = st.columns((1, 2, 2, 2, 0.7, 0.5))
+            save_cell = st.session_state.save_cell
+
+            with col1b:
+                cell_name = st.text_input(
+                    label="Name of you cell parameter set",
+                    value=st.session_state.cell_name,
+                )
+                st.session_state.cell_name = cell_name
+
+            with col2:
+                if save_cell == True:
+
+                    if self.parameter_dict:
+
+                        st.write(":heavy_check_mark: Cell parameter set has been saved")
                     else:
-                        st.write(":red_circle: No JSON LD file uploaded")
+                        st.error("The parameter_dict is not defined")
 
-                with col3:
+            with col1a:
 
-                    self.render_eu_logo()
+                id = np.random.rand()
 
-                with col2:
-                    st.text("")
-                    self.render_theme_toggle()
+                SessionStates().set_key_and_session_state(label="json_cell", id=id, value={})
 
-        elif self.page == "Analyze" or self.page == "Library":
-            with bottom():
-                col1, col2, col3 = st.columns((7, 0.7, 0.5))
+                save = st.button(
+                    "SAVE CELL",
+                    on_click=self.save_cell_parameter_set,
+                    args=(self.parameter_dict, st.session_state.cell_name),
+                    use_container_width=False,
+                    type="primary",
+                    help="Save your cell parameter set in the app library",
+                )
 
-                with col1:
-                    st.text("")
+            with col4:
 
-                with col3:
+                self.render_eu_logo()
 
-                    self.render_eu_logo()
+            with col3:
+                st.text("")
+                self.render_theme_toggle()
 
-                with col2:
-                    st.text("")
-                    self.render_theme_toggle()
+    def render_footer(self):
+
+        if self.case == "toggle":
+            self.render_toggle_footer()
+
+        elif self.case == "toggle_eu":
+            self.render_toggle_eu()
+
+        elif self.case == "toggle_eu_upload_check":
+            self.render_toggle_eu_upload_check()
+
+        elif self.case == "toggle_eu_upload_check_clear":
+            self.render_toggle_eu_upload_check_clear()
+
+        elif self.case == "toggle_eu_save_cell":
+            self.render_toggle_eu_save_cell()
 
         else:
-            with bottom():
-
-                col1, col2, _, col3, col4 = st.columns((3, 0.5, 3, 0.7, 0.5))
-
-                with col1:
-                    upload = st.session_state.upload
-                    if upload == True:
-                        cola, colb = st.columns((2, 1))
-                        with cola:
-                            st.write(":heavy_check_mark: JSON LD file is uploaded and used")
-
-                        with colb:
-                            clear = st.button(
-                                "Clear Upload",
-                                on_click=self.set_sessions_state_clear_upload,
-                                use_container_width=False,
-                                type="secondary",
-                            )
-                    else:
-                        st.write(":red_circle: No JSON LD file uploaded")
-
-                with col2:
-                    # DownloadParameters(st.session_state.json_linked_data_input)
-                    st.text("")
-
-                with col4:
-
-                    self.render_eu_logo()
-
-                with col3:
-                    st.text("")
-                    self.render_theme_toggle()
+            ValueError("This case for render_footer is not handled.")
 
 
 #########################################
@@ -591,7 +700,8 @@ class SetBuildCell:
     def __init__(self):
 
         # initialize database handlers
-        self.sql_cell_design = db_handler.CellDesignHandler()
+        self.sql_cell = db_handler.CellHandler()
+        self.sql_cell_type = db_handler.CellTypeHandler()
         self.sql_category = db_handler.CategoryHandler()
         self.sql_material = db_handler.MaterialHandler()
         self.sql_parameter = db_handler.ParameterHandler()
@@ -604,35 +714,529 @@ class SetBuildCell:
         # initialize SessionState
         self.ss = SessionStates()
 
+        # initialize parmater dict
+        self.cell_dict = {}
+
         # render page
         self.render_build_cell_page()
 
     def render_build_cell_page(self):
+        cell_dict = {}
+        cell_dict["parameters"] = {}
 
-        self.render_geometry()
+        cell_dict, parameter_set_id, parameter_object = self.cell_type_choice(cell_dict)
 
-        self.render_negative_electrode()
+        graph_container = self.set_visualization_container()
 
-    def render_negative_electrode(self):
+        cell_dict = self.render_cell_design(cell_dict, parameter_set_id, parameter_object)
 
-        st.markdown("#### " + "Negative electrode")
+        cell_dict = self.render_negative_electrode(cell_dict, parameter_object, parameter_set_id)
 
-        st.markdown("Current collector")
-        category_id = self.sql_category.get_id_from_name("negative_electrode_current_collector")
+        cell_dict = self.render_positive_electrode(cell_dict, parameter_object, parameter_set_id)
+
+        cell_dict = self.render_separator(cell_dict, parameter_object, parameter_set_id)
+
+        cell_dict = self.render_electrolyte(cell_dict)
+
+        self.render_visualization(graph_container, cell_dict)
+
+        self.cell_dict = cell_dict
+
+    def render_cell_design(self, cell_dict, parameter_set_id, parameter_object):
+
+        selected_parameter_set_id = parameter_set_id
+
+        # Retrieve the parameter objects
+        cell_length = parameter_object.get("length")
+        cell_width = parameter_object.get("width")
+
+        cell_length_id = cell_length.id
+        cell_width_id = cell_width.id
+
+        cell_length_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                cell_length_id, parameter_set_id
+            )
+        )
+        cell_width_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                cell_width_id, parameter_set_id
+            )
+        )
+
+        col1, col2 = st.columns((1, 4))
+
+        with col1:
+            st.text("")
+            st.text("")
+            st.write(cell_length.display_name)
+            st.text("")
+            st.text("")
+            st.write(cell_width.display_name)
+
+        with col2:
+            user_input = st.number_input(
+                label=cell_length.name,
+                value=cell_length.options.get(cell_length_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    cell_length_parameter_id,
+                    cell_length.options.get(cell_length_parameter_id).value,
+                ),
+                min_value=cell_length.min_value,
+                max_value=cell_length.max_value,
+                format=self.formatter.set_format(
+                    cell_length.options.get(cell_length_parameter_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    cell_length.options.get(cell_length_parameter_id).value
+                ),
+            )
+
+            cell_length.set_selected_value(user_input)
+            cell_dict["parameters"][cell_length.name] = user_input
+
+            user_input = st.number_input(
+                label=cell_width.name,
+                value=cell_width.options.get(cell_width_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    cell_width_parameter_id,
+                    cell_width.options.get(cell_width_parameter_id).value,
+                ),
+                min_value=cell_width.min_value,
+                max_value=cell_width.max_value,
+                format=self.formatter.set_format(
+                    cell_width.options.get(cell_width_parameter_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    cell_width.options.get(cell_width_parameter_id).value
+                ),
+            )
+
+            cell_width.set_selected_value(user_input)
+            cell_dict["parameters"][cell_width.name] = user_input
+
+        return cell_dict
+
+    def set_visualization_container(self):
+        return st.empty()
+
+    def render_visualization(self, graph_container, cell_dict):
+
+        parameters = cell_dict["parameters"]
+        _, col1, _ = graph_container.columns((0.1, 3, 0.1))
+
+        with col1:
+            geom1, geom2 = st.tabs(("Realistic", "Scaled"))
+            st.text("")
+            with geom1:
+                scale = 'data'
+                factor = 10**6
+                SetGeometryVisualization().set_pouch_visualization(parameters, scale, factor)
+
+            with geom2:
+                scale = 'cube'
+                factor = 10**2
+                SetGeometryVisualization().set_pouch_visualization(parameters, scale, factor)
+            # SetGeometryVisualization(geometry_dict).set_cylindrical_visualization()
+
+            st.text("")
+
+    def cell_type_choice(self, cell_dict):
+
+        st.subheader("Cell design", divider="orange")
+        col1, col2 = st.columns((1, 3))
+
+        with col1:
+            st.text("")
+            st.markdown("#### " + "Select cell type:")
+
+        with col2:
+
+            cell_types = self.sql_cell_type.get_all_ids_and_names()
+
+            ids = []
+            display_names = []
+            for cell_type in cell_types:
+                cell_type_id, display_name = cell_type
+                ids.append(cell_type_id)
+                display_names.append(display_name)
+
+            selected_cell_type = st.selectbox("", display_names)
+            selected_cell_type_index = display_names.index(selected_cell_type)
+            selected_cell_type_id = ids[selected_cell_type_index]
+
+            parameter_set_id = self.sql_cell_type.get_parameter_set_id_from_id(
+                selected_cell_type_id
+            )
+            parameters = self.sql_parameter.get_all_from_parameter_set_id(parameter_set_id)
+
+            template_parameter_ids = [
+                parameter["template_parameter_id"] for parameter in parameters
+            ]
+            template_parameters = self.sql_template_parameter.get_all_from_ids(
+                template_parameter_ids
+            )
+
+            parameter_object = self.formatter.format_parameters(parameters, template_parameters)
+
+            cell_dict["cell_type_id"] = selected_cell_type_id
+
+        return cell_dict, parameter_set_id, parameter_object
+
+    def render_select_box(self, cell_dict, category_name, coating=None, electrode=None):
+
+        if coating:
+            name, select, mass_fraction = st.columns(3)
+        elif electrode:
+            name = None
+            select = st
+            mass_fraction = None
+        else:
+            name, select = st.columns((1, 3))
+            mass_fraction = None
+
+        category = self.sql_category.get_all_from_name(category_name)
+        category_id = category["id"]
+        category_display_name = category["display_name"]
+        category_context_type_iri = category["context_type_iri"]
+
         materials = self.sql_material.get_all_from_category_id(category_id)
 
         display_names = []
+        material_names = []
         for material in materials:
             display_name = material["display_name"]
+            material_name = material["name"]
             display_names.append(display_name)
+            material_names.append(material_name)
 
-        selected_material = st.selectbox("", display_names)
+        if name:
+            name.text("")
+            name.write("[{}]({})".format(category_display_name, category_context_type_iri))
+
+        selected_material = select.selectbox(
+            "", display_names, key="select_{}".format(category_id), label_visibility="collapsed"
+        )
+
+        index = display_names.index(selected_material)
+        cell_dict["parameters"][category_name] = material_names[index]
+
+        return cell_dict
+
+    def render_separator(self, cell_dict, parameter_object, parameter_set_id):
+
+        st.subheader("Separator", divider="orange")
+
+        col1, col2 = st.columns((1, 3))
+
+        selected_parameter_set_id = parameter_set_id
+
+        # Retrieve the parameter objects
+        thickness = parameter_object.get("separator_thickness")
+        porosity = parameter_object.get("separator_porosity")
+
+        thickness_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                thickness.id, parameter_set_id
+            )
+        )
+
+        porosity_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                porosity.id, parameter_set_id
+            )
+        )
+
+        with col1:
+
+            st.write("thickness")
+
+            st.text("")
+            st.text("")
+            st.text("")
+            st.text("")
+            st.write("porosity")
+
+        with col2:
+
+            user_thickness = st.number_input(
+                label=thickness.name,
+                value=thickness.options.get(thickness_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    thickness_parameter_id,
+                    thickness.options.get(thickness_parameter_id).value,
+                ),
+                min_value=thickness.min_value,
+                max_value=thickness.max_value,
+                format=self.formatter.set_format(
+                    thickness.options.get(thickness_parameter_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    thickness.options.get(thickness_parameter_id).value
+                ),
+            )
+
+            thickness.set_selected_value(user_thickness)
+
+            user_porosity = st.number_input(
+                label=porosity.name,
+                value=porosity.options.get(porosity_parameter_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    porosity_parameter_id,
+                    porosity.options.get(porosity_parameter_id).value,
+                ),
+                min_value=porosity.min_value,
+                max_value=porosity.max_value,
+                format=self.formatter.set_format(porosity.options.get(porosity_parameter_id).value),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    porosity.options.get(porosity_parameter_id).value
+                ),
+            )
+
+            porosity.set_selected_value(user_porosity)
+
+        cell_dict["parameters"][thickness.name] = user_thickness
+        cell_dict["parameters"][porosity.name] = user_porosity
+
+        category = "separator"
+
+        cell_dict = self.render_select_box(cell_dict, category, None)
+
+        return cell_dict
+
+    def render_electrolyte(self, cell_dict):
+
+        st.subheader("Electrolyte", divider="orange")
+
+        category = "electrolyte"
+
+        cell_dict = self.render_select_box(cell_dict, category, None)
+
+        return cell_dict
+
+    def render_negative_electrode(self, cell_dict, parameter_object, parameter_set_id):
+
+        selected_parameter_set_id = parameter_set_id
+
+        # Retrieve the parameter objects
+        coating_thickness = parameter_object.get("negative_electrode_coating_thickness")
+        coating_porosity = parameter_object.get("negative_electrode_coating_porosity")
+        cc_thickness = parameter_object.get("negative_electrode_current_collector_thickness")
+
+        ne_thickness_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                coating_thickness.id, parameter_set_id
+            )
+        )
+
+        ne_porosity_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                coating_porosity.id, parameter_set_id
+            )
+        )
+
+        ne_cc_thickness_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                cc_thickness.id, parameter_set_id
+            )
+        )
+
+        st.subheader("Negative electrode", divider="orange")
+
+        categories = [
+            "negative_electrode_active_material",
+            "negative_electrode_binder",
+            "negative_electrode_additive",
+            "negative_electrode_current_collector",
+        ]
+
+        cell_dict = self.render_electrode(
+            coating_thickness,
+            coating_porosity,
+            cc_thickness,
+            ne_thickness_parameter_id,
+            ne_porosity_parameter_id,
+            ne_cc_thickness_parameter_id,
+            categories,
+            cell_dict,
+        )
+
+        return cell_dict
+
+    def render_electrode(
+        self,
+        coating_thickness,
+        coating_porosity,
+        cc_thickness,
+        coating_thickness_par_id,
+        coating_porosity_par_id,
+        cc_thickness_par_id,
+        categories,
+        cell_dict,
+    ):
+        st.text("")
+        par, cola_1, cola_2 = st.columns((1, 2, 1))
+
+        with par:
+            st.text("")
+            st.text("")
+            st.text("")
+            st.text("")
+            st.write("Thickness")
+            st.text("")
+            st.text("")
+
+            st.write("Material")
+            st.text("")
+            st.text("")
+            st.text("")
+            st.write("Porosity")
+
+        with cola_1:
+
+            st.write("Coating")
+            user_coating_thickness = st.number_input(
+                label=coating_thickness.name,
+                value=coating_thickness.options.get(coating_thickness_par_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    coating_thickness_par_id,
+                    coating_thickness.options.get(coating_thickness_par_id).value,
+                ),
+                min_value=coating_thickness.min_value,
+                max_value=coating_thickness.max_value,
+                format=self.formatter.set_format(
+                    coating_thickness.options.get(coating_thickness_par_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    coating_thickness.options.get(coating_thickness_par_id).value
+                ),
+            )
+
+            coating_thickness.set_selected_value(user_coating_thickness)
+
+            with st.popover("Electrode coating", use_container_width=True):
+
+                for category in categories[0:3]:
+                    coating = True
+                    cell_dict = self.render_select_box(cell_dict, category, coating)
+
+            user_coating_porosity = st.number_input(
+                label=coating_porosity.name,
+                value=coating_porosity.options.get(coating_porosity_par_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    coating_porosity_par_id,
+                    coating_porosity.options.get(coating_porosity_par_id).value,
+                ),
+                min_value=coating_porosity.min_value,
+                max_value=coating_porosity.max_value,
+                format=self.formatter.set_format(
+                    coating_porosity.options.get(coating_porosity_par_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    coating_porosity.options.get(coating_porosity_par_id).value
+                ),
+            )
+
+            coating_porosity.set_selected_value(user_coating_porosity)
+
+        with cola_2:
+
+            st.write("Current Collector")
+            user_cc_thickness = st.number_input(
+                label=cc_thickness.name,
+                value=cc_thickness.options.get(cc_thickness_par_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    cc_thickness_par_id,
+                    cc_thickness.options.get(cc_thickness_par_id).value,
+                ),
+                min_value=cc_thickness.min_value,
+                max_value=cc_thickness.max_value,
+                format=self.formatter.set_format(
+                    cc_thickness.options.get(cc_thickness_par_id).value
+                ),
+                label_visibility="hidden",
+                step=self.formatter.set_increment(
+                    cc_thickness.options.get(cc_thickness_par_id).value
+                ),
+            )
+
+            cc_thickness.set_selected_value(user_cc_thickness)
+
+            cell_dict["parameters"][coating_thickness.name] = user_coating_thickness
+            cell_dict["parameters"][coating_porosity.name] = user_coating_porosity
+            cell_dict["parameters"][cc_thickness.name] = user_cc_thickness
+
+            cell_dict = self.render_select_box(cell_dict, categories[3], None, electrode=True)
+
+        return cell_dict
+
+    def render_positive_electrode(self, cell_dict, parameter_object, parameter_set_id):
+
+        st.subheader("Positive electrode", divider="orange")
+
+        selected_parameter_set_id = parameter_set_id
+
+        # Retrieve the parameter objects
+        coating_thickness = parameter_object.get("positive_electrode_coating_thickness")
+        coating_porosity = parameter_object.get("positive_electrode_coating_porosity")
+        cc_thickness = parameter_object.get("positive_electrode_current_collector_thickness")
+
+        ne_thickness_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                coating_thickness.id, parameter_set_id
+            )
+        )
+
+        ne_porosity_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                coating_porosity.id, parameter_set_id
+            )
+        )
+
+        ne_cc_thickness_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                cc_thickness.id, parameter_set_id
+            )
+        )
+
+        categories = [
+            "positive_electrode_active_material",
+            "positive_electrode_binder",
+            "positive_electrode_additive",
+            "positive_electrode_current_collector",
+        ]
+
+        cell_dict = self.render_electrode(
+            coating_thickness,
+            coating_porosity,
+            cc_thickness,
+            ne_thickness_parameter_id,
+            ne_porosity_parameter_id,
+            ne_cc_thickness_parameter_id,
+            categories,
+            cell_dict,
+        )
+
+        return cell_dict
 
     def render_geometry(self):
 
         st.markdown("#### " + "Cell geometry")
 
-        cell_geometries = self.sql_cell_design.get_all_ids_and_names()
+        cell_geometries = self.sql_cell.get_all_ids_and_names()
 
         ids = []
         display_names = []
@@ -645,7 +1249,7 @@ class SetBuildCell:
         selected_cell_type_index = display_names.index(selected_cell_type)
         selected_cell_type_id = ids[selected_cell_type_index]
 
-        parameter_set_id = self.sql_cell_design.get_parameter_set_id_from_id(selected_cell_type_id)
+        parameter_set_id = self.sql_cell.get_parameter_set_id_from_id(selected_cell_type_id)
         parameters = self.sql_parameter.get_all_from_parameter_set_id(parameter_set_id)
 
         template_parameter_ids = [parameter["template_parameter_id"] for parameter in parameters]
@@ -679,18 +1283,19 @@ class SetCellDesign:
         # initialize SessionState
         self.ss = SessionStates()
 
-        # render page
-        self.render_cell_design()
-
     def render_cell_design(self):
 
         parameter_set_id, parameter_object = self.cell_type_choice()
 
         graph_container = self.set_visualization_container()
 
-        geometry_dict = self.render_parameters(parameter_set_id, parameter_object)
+        geometry_dict, par, ne_cc, ne_c, sep, pe_c, pe_cc = self.render_parameters(
+            parameter_set_id, parameter_object
+        )
 
         self.render_visualization(graph_container, geometry_dict)
+
+        return geometry_dict, par, ne_cc, ne_c, sep, pe_c, pe_cc
 
     def set_visualization_container(self):
         return st.empty()
@@ -738,10 +1343,18 @@ class SetCellDesign:
         _, col1, _ = graph_container.columns((0.1, 3, 0.1))
 
         with col1:
-            # geom1, geom2 = st.tabs(("Cell design", "Geometry used for the simulation"))
+            geom1, geom2 = st.tabs(("Realistic", "Scaled"))
             st.text("")
-            # with geom1:
-            SetGeometryVisualization(geometry_dict).set_3d_visualization()
+            with geom1:
+                scale = 'data'
+                factor = 10**6
+                SetGeometryVisualization().set_pouch_visualization(geometry_dict, scale, factor)
+
+            with geom2:
+                scale = 'cube'
+                factor = 10**2
+                SetGeometryVisualization().set_pouch_visualization(geometry_dict, scale, factor)
+            # SetGeometryVisualization(geometry_dict).set_cylindrical_visualization()
 
             st.text("")
 
@@ -756,17 +1369,23 @@ class SetCellDesign:
         cell_width = parameter_object.get("width")
         ne_thickness = parameter_object.get("negative_electrode_coating_thickness")
         pe_thickness = parameter_object.get("positive_electrode_coating_thickness")
+        ne_porosity = parameter_object.get("negative_electrode_coating_porosity")
+        pe_porosity = parameter_object.get("positive_electrode_coating_porosity")
         ne_cc_thickness = parameter_object.get("negative_electrode_current_collector_thickness")
         pe_cc_thickness = parameter_object.get("positive_electrode_current_collector_thickness")
         separator_thickness = parameter_object.get("separator_thickness")
+        separator_porosity = parameter_object.get("separator_porosity")
 
         cell_length_id = cell_length.id
         cell_width_id = cell_width.id
         ne_thickness_id = ne_thickness.id
         pe_thickness_id = pe_thickness.id
+        ne_porosity_id = ne_porosity.id
+        pe_porosity_id = pe_porosity.id
         ne_cc_thickness_id = ne_cc_thickness.id
         pe_cc_thickness_id = pe_cc_thickness.id
         separator_thickness_id = separator_thickness.id
+        separator_porosity_id = separator_porosity.id
 
         cell_length_parameter_id = (
             self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
@@ -788,6 +1407,17 @@ class SetCellDesign:
                 pe_thickness_id, parameter_set_id
             )
         )
+
+        ne_porosity_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                ne_porosity_id, parameter_set_id
+            )
+        )
+        pe_porosity_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                pe_porosity_id, parameter_set_id
+            )
+        )
         ne_cc_thickness_parameter_id = (
             self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
                 ne_cc_thickness_id, parameter_set_id
@@ -801,6 +1431,11 @@ class SetCellDesign:
         separator_thickness_parameter_id = (
             self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
                 separator_thickness_id, parameter_set_id
+            )
+        )
+        separator_porosity_parameter_id = (
+            self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                separator_porosity_id, parameter_set_id
             )
         )
 
@@ -862,7 +1497,7 @@ class SetCellDesign:
         st.text("")
         st.text("")
 
-        col, cola, colb, colc, cold, cole = st.columns(6)
+        col, cola, colb, colc = st.columns((0.5, 2, 0.5, 2))
 
         with col:
             st.text("")
@@ -870,58 +1505,94 @@ class SetCellDesign:
             st.text("")
             st.text("")
             st.text("")
+            st.text("")
+            st.text("")
+            st.text("")
             st.write("Thickness:")
+            st.text("")
+            st.text("")
+            st.text("")
+            st.write("Porosity")
 
         with cola:
-            st.write("Current Collector (NE)")
-            user_input = st.number_input(
-                label=ne_cc_thickness.name,
-                value=ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value,
-                key=self.ss.set_key_and_session_state(
-                    "user_input",
-                    ne_cc_thickness_parameter_id,
-                    ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value,
-                ),
-                min_value=ne_cc_thickness.min_value,
-                max_value=ne_cc_thickness.max_value,
-                format=self.formatter.set_format(
-                    ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value
-                ),
-                label_visibility="hidden",
-                step=self.formatter.set_increment(
-                    ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value
-                ),
-            )
 
-            ne_cc_thickness.set_selected_value(user_input)
-            geometry_dict[ne_cc_thickness.name] = user_input
+            st.subheader("Negative electrode", divider="orange")
+
+            cola_1, cola_2 = cola.columns(2)
+
+            with cola_1:
+                st.write("Current Collector")
+                user_input = st.number_input(
+                    label=ne_cc_thickness.name,
+                    value=ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value,
+                    key=self.ss.set_key_and_session_state(
+                        "user_input",
+                        ne_cc_thickness_parameter_id,
+                        ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value,
+                    ),
+                    min_value=ne_cc_thickness.min_value,
+                    max_value=ne_cc_thickness.max_value,
+                    format=self.formatter.set_format(
+                        ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value
+                    ),
+                    label_visibility="hidden",
+                    step=self.formatter.set_increment(
+                        ne_cc_thickness.options.get(ne_cc_thickness_parameter_id).value
+                    ),
+                )
+
+                ne_cc_thickness.set_selected_value(user_input)
+                geometry_dict[ne_cc_thickness.name] = user_input
+
+            with cola_2:
+                st.write("Coating")
+                user_input = st.number_input(
+                    label=ne_thickness.name,
+                    value=ne_thickness.options.get(ne_thickness_parameter_id).value,
+                    key=self.ss.set_key_and_session_state(
+                        "user_input",
+                        ne_thickness_parameter_id,
+                        ne_thickness.options.get(ne_thickness_parameter_id).value,
+                    ),
+                    min_value=ne_thickness.min_value,
+                    max_value=ne_thickness.max_value,
+                    format=self.formatter.set_format(
+                        ne_thickness.options.get(ne_thickness_parameter_id).value
+                    ),
+                    label_visibility="hidden",
+                    step=self.formatter.set_increment(
+                        ne_thickness.options.get(ne_thickness_parameter_id).value
+                    ),
+                )
+
+                ne_thickness.set_selected_value(user_input)
+                geometry_dict[ne_thickness.name] = user_input
+
+                user_input = st.number_input(
+                    label=ne_porosity.name,
+                    value=ne_porosity.options.get(ne_porosity_parameter_id).value,
+                    key=self.ss.set_key_and_session_state(
+                        "user_input",
+                        ne_porosity_parameter_id,
+                        ne_porosity.options.get(ne_porosity_parameter_id).value,
+                    ),
+                    min_value=ne_porosity.min_value,
+                    max_value=ne_porosity.max_value,
+                    format=self.formatter.set_format(
+                        ne_porosity.options.get(ne_porosity_parameter_id).value
+                    ),
+                    label_visibility="hidden",
+                    step=self.formatter.set_increment(
+                        ne_porosity.options.get(ne_porosity_parameter_id).value
+                    ),
+                )
+
+                ne_porosity.set_selected_value(user_input)
+                geometry_dict[ne_porosity.name] = user_input
 
         with colb:
-            st.write("Negative Electrode")
-            user_input = st.number_input(
-                label=ne_thickness.name,
-                value=ne_thickness.options.get(ne_thickness_parameter_id).value,
-                key=self.ss.set_key_and_session_state(
-                    "user_input",
-                    ne_thickness_parameter_id,
-                    ne_thickness.options.get(ne_thickness_parameter_id).value,
-                ),
-                min_value=ne_thickness.min_value,
-                max_value=ne_thickness.max_value,
-                format=self.formatter.set_format(
-                    ne_thickness.options.get(ne_thickness_parameter_id).value
-                ),
-                label_visibility="hidden",
-                step=self.formatter.set_increment(
-                    ne_thickness.options.get(ne_thickness_parameter_id).value
-                ),
-            )
-
-            ne_thickness.set_selected_value(user_input)
-            geometry_dict[ne_thickness.name] = user_input
-
-        with colc:
-            st.write("Separator")
+            st.subheader("Separator", divider="violet")
+            # st.header("", "violet")
             user_input = st.number_input(
                 label=separator_thickness.name,
                 value=separator_thickness.options.get(separator_thickness_parameter_id).value,
@@ -944,55 +1615,104 @@ class SetCellDesign:
             separator_thickness.set_selected_value(user_input)
             geometry_dict[separator_thickness.name] = user_input
 
-        with cold:
-            st.write("Positive Electrode")
             user_input = st.number_input(
-                label=pe_thickness.name,
-                value=pe_thickness.options.get(pe_thickness_parameter_id).value,
+                label=separator_porosity.name,
+                value=separator_porosity.options.get(separator_porosity_parameter_id).value,
                 key=self.ss.set_key_and_session_state(
                     "user_input",
-                    pe_thickness_parameter_id,
-                    pe_thickness.options.get(pe_thickness_parameter_id).value,
+                    separator_porosity_parameter_id,
+                    separator_porosity.options.get(separator_porosity_parameter_id).value,
                 ),
-                min_value=pe_thickness.min_value,
-                max_value=pe_thickness.max_value,
+                min_value=separator_porosity.min_value,
+                max_value=separator_porosity.max_value,
                 format=self.formatter.set_format(
-                    pe_thickness.options.get(pe_thickness_parameter_id).value
+                    separator_porosity.options.get(separator_porosity_parameter_id).value
                 ),
                 label_visibility="hidden",
                 step=self.formatter.set_increment(
-                    pe_thickness.options.get(pe_thickness_parameter_id).value
+                    separator_porosity.options.get(separator_porosity_parameter_id).value
                 ),
             )
 
-            pe_thickness.set_selected_value(user_input)
-            geometry_dict[pe_thickness.name] = user_input
+            separator_porosity.set_selected_value(user_input)
+            geometry_dict[separator_porosity.name] = user_input
 
-        with cole:
-            st.write("Current Collector (PE)")
-            user_input = st.number_input(
-                label=pe_cc_thickness.name,
-                value=pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value,
-                key=self.ss.set_key_and_session_state(
-                    "user_input",
-                    pe_cc_thickness_parameter_id,
-                    pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value,
-                ),
-                min_value=pe_cc_thickness.min_value,
-                max_value=pe_cc_thickness.max_value,
-                format=self.formatter.set_format(
-                    pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value
-                ),
-                label_visibility="hidden",
-                step=self.formatter.set_increment(
-                    pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value
-                ),
-            )
+        with colc:
+            st.subheader("Positive electrode", divider="orange")
 
-            pe_cc_thickness.set_selected_value(user_input)
-            geometry_dict[pe_cc_thickness.name] = user_input
+            colc_1, colc_2 = colc.columns(2)
 
-        return geometry_dict
+            with colc_1:
+                st.write("Coating")
+                user_input = st.number_input(
+                    label=pe_thickness.name,
+                    value=pe_thickness.options.get(pe_thickness_parameter_id).value,
+                    key=self.ss.set_key_and_session_state(
+                        "user_input",
+                        pe_thickness_parameter_id,
+                        pe_thickness.options.get(pe_thickness_parameter_id).value,
+                    ),
+                    min_value=pe_thickness.min_value,
+                    max_value=pe_thickness.max_value,
+                    format=self.formatter.set_format(
+                        pe_thickness.options.get(pe_thickness_parameter_id).value
+                    ),
+                    label_visibility="hidden",
+                    step=self.formatter.set_increment(
+                        pe_thickness.options.get(pe_thickness_parameter_id).value
+                    ),
+                )
+
+                pe_thickness.set_selected_value(user_input)
+                geometry_dict[pe_thickness.name] = user_input
+
+                user_input = st.number_input(
+                    label=pe_porosity.name,
+                    value=pe_porosity.options.get(pe_porosity_parameter_id).value,
+                    key=self.ss.set_key_and_session_state(
+                        "user_input",
+                        pe_porosity_parameter_id,
+                        pe_porosity.options.get(pe_porosity_parameter_id).value,
+                    ),
+                    min_value=pe_porosity.min_value,
+                    max_value=pe_porosity.max_value,
+                    format=self.formatter.set_format(
+                        pe_porosity.options.get(pe_porosity_parameter_id).value
+                    ),
+                    label_visibility="hidden",
+                    step=self.formatter.set_increment(
+                        pe_porosity.options.get(pe_porosity_parameter_id).value
+                    ),
+                )
+
+                pe_porosity.set_selected_value(user_input)
+                geometry_dict[pe_porosity.name] = user_input
+
+            with colc_2:
+                st.write("Current Collector")
+                user_input = st.number_input(
+                    label=pe_cc_thickness.name,
+                    value=pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value,
+                    key=self.ss.set_key_and_session_state(
+                        "user_input",
+                        pe_cc_thickness_parameter_id,
+                        pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value,
+                    ),
+                    min_value=pe_cc_thickness.min_value,
+                    max_value=pe_cc_thickness.max_value,
+                    format=self.formatter.set_format(
+                        pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value
+                    ),
+                    label_visibility="hidden",
+                    step=self.formatter.set_increment(
+                        pe_cc_thickness.options.get(pe_cc_thickness_parameter_id).value
+                    ),
+                )
+
+                pe_cc_thickness.set_selected_value(user_input)
+                geometry_dict[pe_cc_thickness.name] = user_input
+
+        return geometry_dict, col, cola_1, cola_2, colb, colc_1, colc_2
 
 
 #########################################
@@ -1000,7 +1720,7 @@ class SetCellDesign:
 #########################################
 
 
-class SetModelChoice:
+class SetChoice:
     """
     Rendering of small section for model choice.
     For now (03/07/23) only P2D is used, so there's no "real" choice; could be removed if we stick to P2D only
@@ -1008,62 +1728,38 @@ class SetModelChoice:
 
     def __init__(self):
 
-        self.title = "Model"
-        self.selected_model = None
+        self.sql_model = db_handler.ModelHandler()
+        self.sql_cell = db_handler.CellHandler()
 
-        # Set Model choice
-        self.set_model_choice()
+        self.selected_id = None
 
     def set_model_choice(self):
-        self.set_title()
-        self.set_dropdown()
+        st.header("Model")
+        selected_id = self.set_dropdown(self.sql_model, "model_choice")
+        return selected_id
 
-    def set_title(self):
-        st.header(self.title)
+    def set_cell_choice(self):
+        st.header("Cell")
+        selected_id = self.set_dropdown(self.sql_cell, "cell_choice")
+        return selected_id
 
-    def set_dropdown(self):
-        models_as_dict = db_helper.get_models_as_dict()
-        selected_model_id = st.selectbox(
-            label="model choice",
-            options=[model_id for model_id in models_as_dict],
-            format_func=lambda x: models_as_dict.get(x),
-            key="model_choice",
+    def set_dropdown(self, sql, label):
+        sets = sql.get_all()
+
+        sets_dict = {}
+        for set in sets:
+            sets_dict[set["id"]] = set["display_name"]
+
+        selected_id = st.selectbox(
+            label=label,
+            options=[id for id in sets_dict],
+            format_func=lambda x: sets_dict.get(x),
+            key=label,
             label_visibility="collapsed",
         )
-        self.selected_model = selected_model_id
+        self.selected_id = selected_id
 
-
-class SetCellDesignChoice:
-    """
-    Rendering of small section for cell design choice.
-
-    """
-
-    def __init__(self):
-
-        self.title = "Cell design"
-        self.selected_cell_design = None
-
-        # Set Model choice
-        self.set_cell_design_choice()
-
-    def set_cell_design_choice(self):
-        self.set_title()
-        # self.set_dropdown()
-
-    def set_title(self):
-        st.header(self.title)
-
-    # def set_dropdown(self):
-    #     models_as_dict = db_helper.get_cell_designs_as_dict()
-    #     selected_model_id = st.selectbox(
-    #         label="cell_design_choice",
-    #         options=[model_id for model_id in models_as_dict],
-    #         format_func=lambda x: models_as_dict.get(x),
-    #         key="cell_design_choice",
-    #         label_visibility="collapsed",
-    #     )
-    #     self.selected_model = selected_model_id
+        return selected_id
 
 
 class SetupLinkedDataStruct:
@@ -1547,11 +2243,13 @@ class SetUploadInputFile:
                         with open(app_access.get_path_to_uploaded_input(), "w") as outfile:
                             json.dump(uploaded_file_dict, outfile, indent=3)
 
-                        uploaded_input_gui_dict = match_json_LD.get_gui_dict_from_linked_data(
+                        uploaded_input_gui_dict = app_json_formatter.get_gui_dict_from_linked_data(
                             uploaded_file_dict
                         )
 
-                        uploaded_input_gui_dict = match_json_LD.GuiDict(uploaded_input_gui_dict)
+                        uploaded_input_gui_dict = app_json_formatter.GuiDict(
+                            uploaded_input_gui_dict
+                        )
 
                         st.session_state.json_uploaded_input = uploaded_input_gui_dict
 
@@ -1692,11 +2390,13 @@ class SetTabs:
                         with open(app_access.get_path_to_uploaded_input(), "w") as outfile:
                             json.dump(uploaded_file_dict, outfile, indent=3)
 
-                        uploaded_input_gui_dict = match_json_LD.get_gui_dict_from_linked_data(
+                        uploaded_input_gui_dict = app_json_formatter.get_gui_dict_from_linked_data(
                             uploaded_file_dict
                         )
 
-                        uploaded_input_gui_dict = match_json_LD.GuiDict(uploaded_input_gui_dict)
+                        uploaded_input_gui_dict = app_json_formatter.GuiDict(
+                            uploaded_input_gui_dict
+                        )
 
                         st.session_state.json_uploaded_input = uploaded_input_gui_dict
 
@@ -1987,7 +2687,7 @@ class SetTabs:
         path_to_battmo_formatted_input = app_access.get_path_to_battmo_formatted_input()
 
         # save formatted parameters in json file
-        battmo_input = match_json_LD.get_batt_mo_dict_from_gui_dict(self.user_input)
+        battmo_input = app_json_formatter.get_batt_mo_dict_from_gui_dict(self.user_input)
         with open(path_to_battmo_formatted_input, "w") as new_file:
             json.dump(
                 battmo_input,
@@ -1999,7 +2699,7 @@ class SetTabs:
 
     def calc_indicators(_self, user_input):
 
-        input_dict = match_json_LD.GuiDict(user_input)
+        input_dict = app_json_formatter.GuiDict(user_input)
         try:
             # with open(app_access.get_path_to_calculated_values(), "r") as f:
             #     parameters_dict = json.load(f)
@@ -5011,7 +5711,7 @@ class RunSimulation:
         path_to_battmo_formatted_input = app_access.get_path_to_battmo_formatted_input()
 
         # save formatted parameters in json file
-        battmo_input = match_json_LD.get_batt_mo_dict_from_gui_dict(self.gui_parameters)
+        battmo_input = app_json_formatter.get_batt_mo_dict_from_gui_dict(self.gui_parameters)
         with open(path_to_battmo_formatted_input, "w") as new_file:
             json.dump(
                 battmo_input,
@@ -5598,7 +6298,7 @@ class DivergenceCheck:
 
                     gui_parameters = st.session_state.json_linked_data_input
                     # self.save_run.write(gui_parameters)
-                    indicators = match_json_LD.get_indicators_from_gui_dict(gui_parameters)
+                    indicators = app_json_formatter.get_indicators_from_gui_dict(gui_parameters)
 
                     with open(app_access.get_path_to_indicator_values(), "w") as f:
                         json.dump(indicators, f, indent=3)
@@ -5671,7 +6371,7 @@ class DownloadParameters:
 
     def collect_unique_references(self, LD_dict):
 
-        gui_dict = match_json_LD.GuiDict(LD_dict)
+        gui_dict = app_json_formatter.GuiDict(LD_dict)
         dict_list = [
             gui_dict.ne.am,
             gui_dict.ne.binder,
@@ -6073,7 +6773,7 @@ class DownloadParameters:
         path_to_battmo_formatted_input = app_access.get_path_to_battmo_formatted_input()
 
         # save formatted parameters in json file
-        battmo_input = match_json_LD.get_batt_mo_dict_from_gui_dict(self.gui_parameters)
+        battmo_input = app_json_formatter.get_batt_mo_dict_from_gui_dict(self.gui_parameters)
         with open(path_to_battmo_formatted_input, "w") as new_file:
             json.dump(
                 battmo_input,
@@ -6229,6 +6929,10 @@ class SetModelDescription:
 
     def __init__(self):
 
+        self.sql_model = db_handler.ModelHandler()
+        self.sql_parameter_set = db_handler.ParameterSetHandler()
+        self.sql_parameter = db_handler.ParameterHandler()
+
         self.model = "P2D"
         self.hasNumericalValue = "hasNumericalValue"
         self.hasNumericalPart = "hasNumericalPart"
@@ -6237,44 +6941,26 @@ class SetModelDescription:
         self.set_model_description()
 
     def set_model_description(self):
-        models_as_dict = db_helper.get_models_as_dict()
-        P2D_model = db_helper.get_model_parameters_as_dict("P2D")
-        P2D_model_description = db_helper.get_model_description(self.model)[0][0]
+        models = self.sql_model.get_all()
+        # P2D_model = db_helper.get_model_parameters_as_dict("P2D")
+        # P2D_model_description = db_helper.get_model_description(self.model)[0][0]
 
         st.subheader("The available models")
 
-        model = st.expander(self.model)
+        for model in models:
+            name = model["name"]
+            display_name = model["display_name"]
+            parameter_set_id = self.sql_parameter_set.get_id_from_name(name)
+            parameters = self.sql_parameter.get_all_from_parameter_set_id(parameter_set_id)
 
-        with model:
+            model_expander = st.expander(display_name)
 
-            st.markdown("""**Includes** """)
-            st.markdown(
-                "- Thermal effects = <span style='color: blue;'>"
-                + str(bool(P2D_model[0][self.hasNumericalPart][self.hasNumericalValue]))
-                + "</span>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                "- Current collector = <span style='color: blue;'>"
-                + str(bool(P2D_model[1][self.hasNumericalPart][self.hasNumericalValue]))
-                + "</span>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                "- Solid Diffusion model = <span style='color: blue;'>"
-                + str(bool(P2D_model[2][self.hasNumericalPart][self.hasNumericalValue]))
-                + "</span>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                "- Solid Diffusion model type = <span style='color: blue;'>"
-                + str(P2D_model[3][self.hasStringPart][self.hasStringValue])
-                + "</span>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(" ")
-            st.markdown("**Description**")
-            st.markdown(P2D_model_description)
+            with model_expander:
+                for parameter in parameters:
+                    st.markdown("- {} = {}".format(parameter["display_name"], parameter["value"]))
+
+                st.markdown("**Description**")
+                st.markdown(model["description"])
 
 
 class GetResultsData:
@@ -6643,7 +7329,7 @@ class SetIndicators:
 
         gui_parameters = st.session_state.json_linked_data_input
 
-        indicators = match_json_LD.get_indicators_from_gui_dict(gui_parameters)
+        indicators = app_json_formatter.get_indicators_from_gui_dict(gui_parameters)
 
         return indicators
 
@@ -7003,17 +7689,20 @@ class SetGeometryVisualization:
     Used to render the geometry in a Plotly 3D volume plot on the 'Cell design' page.
     """
 
-    def __init__(self, geometry_data):
+    def __init__(self):
         self.header = "Visualize geometry"
         self.info = """This geometry visualization is an approximation based on the input parameters specified above.
                         The particles are for example visualized using a random data generator."""
-        self.geometry_data = geometry_data
 
-    def set_3d_visualization(self):
+    def set_pouch_visualization(self, geometry_data, scale, factor):
+
+        self.create_pouch_graph(geometry_data, scale, factor)
+
+    def set_cylindrical_visualization(self):
         # with st.sidebar:
         # self.set_header_info()
         geometry_data = self.geometry_data
-        self.create_3d_graph(geometry_data)
+        self.create_cylindrical_graph()
 
     def set_2d_visualization(self):
 
@@ -7033,157 +7722,297 @@ class SetGeometryVisualization:
         radii = 2 * np.ones(num_particles) * particle_radius  # get diameter instead of radius
         return pts, radii
 
+    def create_cylindrical_graph(self):
+        # Parameters for the cylinder
+        radius = 5
+        height = 15
+        n_points = 100
+
+        # Create theta (angular) and z (height) data for the cylinder
+        theta = np.linspace(0, 2 * np.pi, n_points)
+        z = np.linspace(0, height, n_points)
+
+        # Parametric equations for the cylinder
+        x = radius * np.cos(theta)
+        y = radius * np.sin(theta)
+
+        # Create the surface of the cylinder
+        fig = go.Figure(
+            data=go.Surface(
+                x=np.outer(x, np.ones(n_points)),
+                y=np.outer(y, np.ones(n_points)),
+                z=np.outer(np.ones(n_points), z),
+                colorscale='Viridis',
+            )
+        )
+
+        # Set up the layout of the plot
+        fig.update_layout(
+            scene=dict(
+                xaxis=dict(title='X Axis'),
+                yaxis=dict(title='Y Axis'),
+                zaxis=dict(title='Z Axis'),
+            ),
+            title="3D Cylindrical Battery Cell Geometry",
+        )
+
+        # Display the plot in Streamlit
+        st.plotly_chart(fig, use_container_width=True)
+
     @st.cache_data
-    def create_3d_graph(_self, geometry_data):
-        # Extract geometry data from input
+    def create_pouch_graph(_self, geometry_data, scale, factor):
+
+        # Extract geometry data
         thickness_ne = geometry_data["negative_electrode_coating_thickness"]
         thickness_pe = geometry_data["positive_electrode_coating_thickness"]
         thickness_sep = geometry_data["separator_thickness"]
         thickness_ne_cc = geometry_data["negative_electrode_current_collector_thickness"]
         thickness_pe_cc = geometry_data["positive_electrode_current_collector_thickness"]
+
         total_thickness = (
             thickness_ne_cc + thickness_ne + thickness_sep + thickness_pe + thickness_pe_cc
         )
-        length = geometry_data["length"] * 10**6  # Convert to micrometers
-        width = geometry_data["width"] * 10**6  # Convert to micrometers
-        tab_length = geometry_data.get("tab_length", 2 * 10**6)  # Default tab length of 2 mm
-        tab_thickness = geometry_data.get(
-            "tab_thickness", 0.1 * 10**6
-        )  # Default tab thickness of 0.1 mm
 
-        # Define the dimensions and fixed colors for each component
-        dimensions = [
-            (length, width, thickness_ne_cc),  # Negative current collector
-            (length, width, thickness_ne),  # Negative electrode
-            (length, width, thickness_sep),  # Separator
-            (length, width, thickness_pe),  # Positive electrode
-            (length, width, thickness_pe_cc),  # Positive current collector
-        ]
-        colors = [
-            "#B0BEC5",  # Grey for current collectors
-            "#E67E22",  # Orange for negative electrode
-            "#FFC107",  # Yellow for separator
-            "#770737",  # Purple for positive electrode
-            "#B0BEC5",  # Grey for positive current collector
-        ]
-        components = [
-            "Negative current collector",
-            "Negative electrode",
-            "Separator",
-            "Positive electrode",
-            "Positive current collector",
+        length = geometry_data["length"] * factor  # Convert to micrometers
+        width = geometry_data["width"] * factor  # Convert to micrometers
+
+        # Define layers with their thickness and colors
+        layers = [
+            (thickness_ne_cc, "#B0BEC5", "Negative Current Collector"),
+            (thickness_ne, "#E67E22", "Negative Electrode"),
+            (thickness_sep, "#FFC107", "Separator"),
+            (thickness_pe, "#770737", "Positive Electrode"),
+            (thickness_pe_cc, "#B0BEC5", "Positive Current Collector"),
         ]
 
-        # Create the figure for the 3D plot
-        fig = go.Figure()
-        start = 0
+        # Initialize z-coordinate to start from 0
+        z_start = 0
+        layer_rectangles = []
 
-        # Add the main components (current collectors, electrodes, separator) to the plot
-        for dim, color, component in zip(dimensions, colors, components):
-            x, y, z = dim
-            end = start + z
-            fig.add_trace(
+        # Function to define the 8 vertices of a rectangular prism
+        def get_vertices(length, width, z_start, thickness):
+            return [
+                [0, 0, z_start],  # Vertex 0 (front-bottom-left)
+                [length, 0, z_start],  # Vertex 1 (front-bottom-right)
+                [length, width, z_start],  # Vertex 2 (back-bottom-right)
+                [0, width, z_start],  # Vertex 3 (back-bottom-left)
+                [0, 0, z_start + thickness],  # Vertex 4 (front-top-left)
+                [length, 0, z_start + thickness],  # Vertex 5 (front-top-right)
+                [length, width, z_start + thickness],  # Vertex 6 (back-top-right)
+                [0, width, z_start + thickness],  # Vertex 7 (back-top-left)
+            ]
+
+        # Define the faces for a rectangular prism, split into two triangles per face
+        def get_faces():
+            return [
+                # Bottom face (split into two triangles)
+                [0, 1, 2],
+                [0, 2, 3],
+                # Top face (split into two triangles)
+                [4, 5, 6],
+                [4, 6, 7],
+                # Front face (split into two triangles)
+                [0, 1, 5],
+                [0, 5, 4],
+                # Back face (split into two triangles)
+                [2, 3, 7],
+                [2, 7, 6],
+                # Left face (split into two triangles)
+                [0, 3, 7],
+                [0, 7, 4],
+                # Right face (split into two triangles)
+                [1, 2, 6],
+                [1, 6, 5],
+            ]
+
+        # Create each layer as a colored rectangular prism
+        for thickness, color, label in layers:
+            # Get the vertices for the current layer
+            vertices = get_vertices(length, width, z_start, thickness)
+
+            # Extract the individual coordinates (x, y, z)
+            x = [v[0] for v in vertices]
+            y = [v[1] for v in vertices]
+            z = [v[2] for v in vertices]
+
+            # Get the faces (splitting each square into two triangles)
+            faces = get_faces()
+
+            # Create a Mesh3d object for the layer (rectangular prism)
+            layer_rectangles.append(
                 go.Mesh3d(
-                    x=[0, x, x, 0, 0, x, x, 0],
-                    y=[0, 0, y, y, 0, 0, y, y],
-                    z=[start, start, start, start, end, end, end, end],
-                    i=[7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-                    j=[3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-                    k=[0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-                    color=color,
-                    name=f"{component}",
-                    showlegend=True,
-                    flatshading=True,
-                )
-            )
-            start = end
-
-        # Add the tabs for current collectors (protrusions at the edges)
-        tab_positions = [
-            (0, 0),  # Tab 1 position (Negative side)
-            (0, width),  # Tab 2 position (Positive side)
-        ]
-        tab_colors = ["#B0BEC5", "#B0BEC5"]  # Same color as current collectors (grey)
-
-        for i, tab_position in enumerate(tab_positions):
-            tab_x, tab_y = (
-                tab_position  # Unpack the tuple (this should be fine if the structure is correct)
-            )
-
-            # Define the 3D coordinates for the tab (sticking out at the end of the current collector)
-            fig.add_trace(
-                go.Mesh3d(
-                    x=[
-                        tab_x,
-                        tab_x + tab_length,
-                        tab_x + tab_length,
-                        tab_x,
-                        tab_x,
-                        tab_x + tab_length,
-                        tab_x + tab_length,
-                        tab_x,
-                    ],
-                    y=[
-                        tab_y,
-                        tab_y,
-                        tab_y + tab_thickness,
-                        tab_y + tab_thickness,
-                        tab_y,
-                        tab_y,
-                        tab_y + tab_thickness,
-                        tab_y + tab_thickness,
-                    ],
-                    z=[
-                        start,
-                        start,
-                        start,
-                        start,
-                        start + tab_thickness,
-                        start + tab_thickness,
-                        start + tab_thickness,
-                        start + tab_thickness,
-                    ],
-                    i=[7, 0, 0, 0, 4, 4, 6, 6],
-                    j=[3, 4, 1, 2, 5, 6, 5, 2],
-                    k=[0, 7, 2, 3, 6, 7, 1, 1],
-                    color=tab_colors[i],
-                    name=f"Tab {i + 1}",
-                    showlegend=True,
-                    flatshading=True,
+                    x=x,
+                    y=y,
+                    z=z,
+                    i=[f[0] for f in faces],
+                    j=[f[1] for f in faces],
+                    k=[f[2] for f in faces],
+                    color=color,  # Color the faces
+                    opacity=1.0,  # Adjust transparency
+                    name=label,  # Label for the layer
+                    showscale=False,  # Don't show color scale
                 )
             )
 
-        # Determine the maximum dimension for scaling the view
-        max_dim = max(total_thickness, length, width)
-        camera_distance = max_dim * 0.5  # Adjust camera distance to scale the view
+            # Update z_start for the next layer (stack them along z-axis)
+            z_start += thickness
 
-        # Automatically scale the camera for better visibility of the entire cell
-        fig.update_layout(
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=-0.2,
-                xanchor="center",
-                x=0.5,
+        # Define the current collector tabs (represented as thin rectangular prisms)
+        # Set the tab thicknesses to the respective current collector thicknesses
+        tab_thickness_negative = thickness_ne_cc  # Same thickness as negative current collector
+        tab_thickness_positive = thickness_pe_cc  # Same thickness as positive current collector
+        length_tab = 0.005 * factor  # Length of the tab in micrometers
+        width_tab = 0.01 * factor  # Width of the tab in micrometers
+
+        # Tab on the negative current collector (extending in the positive x direction)
+        tab_vertices_1 = [
+            [length, width, 0],  # Vertex 0 (tab bottom-left)
+            [
+                length,
+                width - width_tab,
+                0,
+            ],  # Vertex 1 (tab bottom-right)
+            [
+                length,
+                width - width_tab,
+                tab_thickness_negative,
+            ],  # Vertex 2 (tab top-right)
+            [
+                length,
+                width,
+                tab_thickness_negative,
+            ],  # Vertex 3 (tab top-left)
+            [length + length_tab, width, 0],  # Vertex 4 (tab bottom-left top)
+            [length + length_tab, width - width_tab, 0],  # Vertex 5 (tab bottom-right top)
+            [
+                length + length_tab,
+                width - width_tab,
+                tab_thickness_negative,
+            ],  # Vertex 6 (tab top-right top)
+            [length + length_tab, width, tab_thickness_negative],  # Vertex 7 (tab top-left top)
+        ]
+
+        # Tab on the postive current collector (extending in the negative x direction)
+        tab_vertices_2 = [
+            [0, width_tab, total_thickness - tab_thickness_positive],  # Vertex 0 (tab bottom-left)
+            [0, 0, total_thickness - tab_thickness_positive],  # Vertex 1 (tab bottom-right)
+            [-length_tab, 0, total_thickness - tab_thickness_positive],  # Vertex 2 (tab top-right)
+            [
+                -length_tab,
+                width_tab,
+                total_thickness - tab_thickness_positive,
+            ],  # Vertex 3 (tab top-left)
+            [0, width_tab, total_thickness],  # Vertex 4 (tab bottom-left top)
+            [0, 0, total_thickness],  # Vertex 5 (tab bottom-right top)
+            [-length_tab, 0, total_thickness],  # Vertex 6 (tab top-right top)
+            [-length_tab, width_tab, total_thickness],  # Vertex 7 (tab top-left top)
+        ]
+
+        # Define the faces for the tabs
+        def get_tab_faces():
+            return [
+                # Bottom face (split into two triangles)
+                [0, 1, 2],
+                [0, 2, 3],
+                # Top face (split into two triangles)
+                [4, 5, 6],
+                [4, 6, 7],
+                # Front face (split into two triangles)
+                [0, 1, 5],
+                [0, 5, 4],
+                # Back face (split into two triangles)
+                [2, 3, 7],
+                [2, 7, 6],
+                # Left face (split into two triangles)
+                [0, 3, 7],
+                [0, 7, 4],
+                # Right face (split into two triangles)
+                [1, 2, 6],
+                [1, 6, 5],
+            ]
+
+        # Create Mesh3d for both tabs (positive and negative)
+        tab_faces_1 = get_tab_faces()
+        tab_faces_2 = get_tab_faces()
+
+        tab_rectangles = [
+            go.Mesh3d(
+                x=[v[0] for v in tab_vertices_1],
+                y=[v[1] for v in tab_vertices_1],
+                z=[v[2] for v in tab_vertices_1],
+                i=[f[0] for f in tab_faces_1],
+                j=[f[1] for f in tab_faces_1],
+                k=[f[2] for f in tab_faces_1],
+                color="#B0BEC5",  # Color of the tabs (gray)
+                opacity=0.8,
+                name="Positive Tab",
+                showscale=False,
             ),
-            paper_bgcolor='#F0F0F0',
-            scene_aspectmode="data",
+            go.Mesh3d(
+                x=[v[0] for v in tab_vertices_2],
+                y=[v[1] for v in tab_vertices_2],
+                z=[v[2] for v in tab_vertices_2],
+                i=[f[0] for f in tab_faces_2],
+                j=[f[1] for f in tab_faces_2],
+                k=[f[2] for f in tab_faces_2],
+                color="#B0BEC5",  # Color of the tabs (gray)
+                opacity=1.0,
+                name="Negative Tab",
+                showscale=False,
+            ),
+        ]
+
+        # Create the figure with all components stacked
+        fig = go.Figure(data=layer_rectangles + tab_rectangles)
+
+        # Update layout for better visualization
+        if scale == 'data':
+            unit1 = 'µm'
+            unit2 = 'µm'
+            convert = 10**4
+            camera = [5, 8, 5]
+        elif scale == 'cube':
+            unit1 = 'cm'
+            unit2 = 'µm'
+            convert = 1
+            camera = [1.5, 1.5, 1.5]
+
+        num_ticks = 10  # Adjust this for more or fewer ticks
+        x_ticks = np.linspace(0, length, num_ticks)  # µm scale
+        y_ticks = np.linspace(0, width, num_ticks)
+
+        fig.update_layout(
             scene=dict(
-                xaxis_title="Scaled length  /  μm",
-                yaxis_title="Scaled width  /  μm",
-                zaxis_title="Thickness  /  μm",
-                camera=dict(
-                    eye=dict(
-                        x=camera_distance, y=camera_distance, z=camera_distance
-                    )  # Adjusted zoom level
+                aspectmode=scale,
+                xaxis=dict(
+                    title='Length ({})'.format(unit1),
+                    tickvals=np.round(x_ticks, 2).tolist(),  # Plot is in µm, but we label it in mm
+                    ticktext=np.round((x_ticks / convert), 2).tolist(),  # Convert µm to mm
+                ),
+                yaxis=dict(
+                    title='Width ({})'.format(unit1),
+                    tickvals=np.round(y_ticks, 2).tolist(),  # Plot is in µm, but we label it in mm
+                    ticktext=np.round(y_ticks / convert, 2).tolist(),  # Convert µm to mm
+                ),
+                zaxis=dict(
+                    title='Thickness ({})'.format(unit2),
+                    range=[
+                        0,
+                        total_thickness,
+                    ],  # z-axis should span the total height of the stacked components
                 ),
             ),
-            width=700,
-            margin=dict(r=20, b=10, l=10, t=10),
+            showlegend=True,  # Show legend
+            margin=dict(l=0, r=0, b=0, t=40),  # Remove extra margins for better view
+            scene_camera=dict(
+                eye=dict(
+                    x=camera[0], y=camera[1], z=camera[2]
+                )  # Adjust camera perspective for better visualization
+            ),
         )
 
-        # Display the plot with Streamlit
-        st.plotly_chart(fig, theme=None, use_container_width=True)
+        # Display the plot in Streamlit
+        st.plotly_chart(fig, use_container_width=True)
 
 
 class SetHDF5Download:
@@ -8939,6 +9768,10 @@ class SetMaterialDescription:
 
     def __init__(self):
 
+        self.sql_material = db_handler.MaterialHandler()
+        self.sql_parameter = db_handler.ParameterHandler()
+        self.sql_template_parameter = db_handler.TemplateParameterHandler()
+
         self.set_material_description()
 
     @st.cache_data
@@ -9000,42 +9833,13 @@ class SetMaterialDescription:
 
     def set_material_description(_self):
 
-        ##############################
-        # # Remember user changed values
-        # for k, v in st.session_state.items():
-        #     st.session_state[k] = v
-        ##############################
-
-        materials = db_helper.get_all_default_material()
+        materials = _self.sql_material.get_all_default_materials()
 
         st.subheader("The available materials")
 
         display_names = []
-        for material_values in materials:
-
-            material = material_values
-            (
-                id,
-                name,
-                _,
-                _,
-                _,
-                reference_name,
-                reference,
-                reference_link,
-                _,
-                display_name,
-                number_of_components,
-                component_name_1,
-                component_name_2,
-                _,
-                context_type,
-                _,
-                _,
-                context_type_iri,
-                _,
-            ) = material
-            display_names.append(display_name)
+        for material in materials:
+            display_names.append(material["display_name"])
 
         select = st.multiselect(
             label="Materials",
@@ -9043,30 +9847,14 @@ class SetMaterialDescription:
             label_visibility="collapsed",
         )
 
-        for material_values in materials:
+        for material in materials:
 
-            material = material_values
-            (
-                id,
-                name,
-                _,
-                _,
-                _,
-                reference_name,
-                reference,
-                reference_link,
-                _,
-                display_name,
-                number_of_components,
-                component_name_1,
-                component_name_2,
-                _,
-                context_type,
-                _,
-                _,
-                context_type_iri,
-                _,
-            ) = material
+            parameter_set_id = material["parameter_set_id"]
+            display_name = material["display_name"]
+            context_type = material["context_type"]
+            context_type_iri = material["context_type_iri"]
+            reference = material.get("reference", None)
+            reference_link = material.get("reference_url", None)
 
             for choice in select:
                 if choice == display_name:
@@ -9080,43 +9868,24 @@ class SetMaterialDescription:
                             st.write("[{}]({})".format(reference, reference_link))
                         st.markdown("**Parameter values**:")
 
-                        parameter_set_id = db_helper.get_parameter_set_id_by_name(name)
-
-                        parameter_values = tuple(
-                            db_helper.extract_parameters_by_parameter_set_id(parameter_set_id)
+                        parameters = _self.sql_parameter.get_all_from_parameter_set_id(
+                            parameter_set_id
                         )
 
-                        for parameter in parameter_values:
+                        for parameter in parameters:
+                            parameter_id = parameter["id"]
+                            template_parameter_id = parameter["template_parameter_id"]
+                            value = parameter["value"]
 
-                            (
-                                id,
-                                parameter_name,
-                                _,
-                                template_parameter_id,
-                                value,
-                            ) = parameter
+                            template_parameter = _self.sql_template_parameter.get_all_from_id(
+                                template_parameter_id
+                            )
 
-                            template_parameter = db_helper.get_template_from_name(parameter_name)
-
-                            (
-                                template_parameter_id,
-                                template_parameter_name,
-                                _,
-                                _,
-                                _,
-                                _,
-                                template_context_type,
-                                template_context_type_iri,
-                                _,
-                                unit,
-                                unit_name,
-                                unit_iri,
-                                _,
-                                _,
-                                _,
-                                _,
-                                parameter_display_name,
-                            ) = template_parameter
+                            template_parameter_name = template_parameter["name"]
+                            parameter_display_name = template_parameter["display_name"]
+                            parameter_context_type_iri = template_parameter["context_type_iri"]
+                            unit = template_parameter["unit"]
+                            unit_iri = template_parameter["unit_iri"]
 
                             if (
                                 template_parameter_name == "open_circuit_potential"
@@ -9129,7 +9898,7 @@ class SetMaterialDescription:
                                 st.write(
                                     "[{}]({}) = ".format(
                                         parameter_display_name,
-                                        template_context_type_iri,
+                                        parameter_context_type_iri,
                                     )
                                 )
 
@@ -9145,7 +9914,7 @@ class SetMaterialDescription:
 
                                     fun = st.toggle(
                                         label="Visualize function",
-                                        key="toggle_{}_{}".format(parameter_name, name),
+                                        key="toggle_{}_{}".format(parameter_set_id, parameter_id),
                                     )
                                     if fun:
                                         if len(string_py) == 0:
@@ -9182,7 +9951,7 @@ class SetMaterialDescription:
                                     st.write(
                                         "[{}]({}) = ".format(
                                             parameter_display_name,
-                                            template_context_type_iri,
+                                            parameter_context_type_iri,
                                         )
                                         + value
                                     )
@@ -9190,7 +9959,7 @@ class SetMaterialDescription:
                                     st.write(
                                         "[{}]({}) = ".format(
                                             parameter_display_name,
-                                            template_context_type_iri,
+                                            parameter_context_type_iri,
                                         )
                                         + value
                                         + " / "

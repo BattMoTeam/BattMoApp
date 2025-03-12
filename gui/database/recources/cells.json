@@ -1,8 +1,8 @@
 {
-    "cell_designs": {
-        "LGM50":{
+    "cells": {
+        "lgm50_nmc_chen2020":{
             "cell_type": "cylindrical",
-            "category": "cell_design",
+            "category": "cell",
             "is_shown_to_user": true,
             "default_parameter_set": true,
             "reference_name": "Chen, C, et al. 2020",
@@ -10,7 +10,7 @@
             "reference_url": "https://iopscience.iop.org/article/10.1149/1945-7111/ab9050/meta",
             "context_type": ["LGM50","battery:BatteryCell"],
             "context_type_iri": "https://w3id.org/emmo/domain/battery#battery_68ed592a_7924_45d0_a108_94d6275d57f0",
-            "display_name": "LGM50",
+            "display_name": "LGM50 NMC Chen2020",
             "description": ""
         
 

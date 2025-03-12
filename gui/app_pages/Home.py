@@ -39,7 +39,7 @@ def show_home():
     app.set_heading()
 
     # Set footer
-    app.set_footer("Home")
+    app.set_footer("toggle")
 
     # Set external links to websites and documentation
     # app.set_page_design().st_space(space_width=1)

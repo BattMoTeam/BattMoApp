@@ -191,9 +191,9 @@ def get_path_to_categories():
 
 
 @st.cache_data
-def get_path_to_cell_designs():
+def get_path_to_cells():
     recources_path = get_path_to_database_recources_dir()
-    components_path = os.path.join(recources_path, "cell_designs.json")
+    components_path = os.path.join(recources_path, "cells.json")
     return components_path
 
 

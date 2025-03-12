@@ -21,8 +21,8 @@ class AppController:
         self.images = images
         self.context = context
 
-    def set_footer(self, page):
-        return view.SetFooter(page)
+    def set_footer(self, case, parameter_dict=None):
+        return view.SetFooter(case, parameter_dict)
 
     def set_heading(self):
         return view.SetHeading(get_logo())
@@ -30,11 +30,8 @@ class AppController:
     def set_page_design(self):
         return view.PageDesign()
 
-    def set_model_choice(self):
-        return view.SetModelChoice()
-
-    def set_cell_design_choice(self):
-        return view.SetCellDesignChoice()
+    def set_choice(self):
+        return view.SetChoice()
 
     def set_cell_design(self):
         return view.SetCellDesign()
@@ -63,7 +60,7 @@ class AppController:
         return view.DownloadParameters(gui_parameters)
 
     def json_LD_to_BattMo(self, gui_dict):
-        return view.match_json_LD.get_batt_mo_dict_from_gui_dict(gui_dict)
+        return view.app_json_formatter.get_batt_mo_dict_from_gui_dict(gui_dict)
 
     def set_indicators(self, page_name, results_simulation=None, file_names=None):
         return view.SetIndicators(page_name, results_simulation, file_names)

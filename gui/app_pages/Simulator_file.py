@@ -42,7 +42,7 @@ st.session_state.update(st.session_state)
 
 
 def show_simulator_file():
-    page_name = "Simulation"
+    page_name = "Simulator_file"
 
     log_memory_usage()
 
@@ -51,40 +51,44 @@ def show_simulator_file():
     # Set header color
     app.set_page_design().color_headers()
 
-    app.set_footer(page=None)
+    app.set_footer(case="toggle_eu_upload_check_clear")
 
-    model_id = app.set_model_choice().selected_model
+    uploaded_input_dict = app.set_upload_input_file().uploaded_input_dict
+
+    # model_id = app.set_model_choice().selected_model
 
     # if st.session_state.simulation_successful and st.session_state.transfer_results:
     #     st.session_state["toast"](":green-background[Gathering the results!]", icon="💤")
 
-    gui_parameters = app.set_tabs(model_id).user_input
+    # gui_parameters = app.set_tabs(model_id).user_input
 
-    app.set_indicators(page_name)
-    # st.divider()
+    # app.set_indicators(page_name)
+    # # st.divider()
 
     # app.set_geometry_visualization(gui_parameters)
 
-    app.download_parameters(gui_parameters)
+    if uploaded_input_dict:
 
-    simulation_successful = app.run_simulation(gui_parameters).simulation_successful
+        app.download_parameters(uploaded_input_dict)
 
-    if st.session_state.simulation_completed == True:
+        simulation_successful = app.run_simulation(uploaded_input_dict).simulation_successful
 
-        # with h5py.File(app_access.get_path_to_battmo_results(), "r") as f:
-        #     data = f
+        if st.session_state.simulation_completed == True:
 
-        save_run = st.container()
-        app.divergence_check(save_run, True)
+            # with h5py.File(app_access.get_path_to_battmo_results(), "r") as f:
+            #     data = f
 
-    if st.session_state.simulation_successful and st.session_state.transfer_results:
-        # st.session_state["toast"](
-        #     ":green-background[Find your results on the results page!]", icon="✅"
-        # )
-        st.session_state.simulation_successful = None
-        st.session_state.simulation_completed = None
+            save_run = st.container()
+            app.divergence_check(save_run, True)
 
-    st.session_state.response = None
+        if st.session_state.simulation_successful and st.session_state.transfer_results:
+            # st.session_state["toast"](
+            #     ":green-background[Find your results on the results page!]", icon="✅"
+            # )
+            st.session_state.simulation_successful = None
+            st.session_state.simulation_completed = None
+
+        st.session_state.response = None
 
     ############################################
     # Can be used to check the structure of gui_parameters in the terminal

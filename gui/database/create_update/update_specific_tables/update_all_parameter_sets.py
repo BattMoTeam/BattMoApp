@@ -96,7 +96,7 @@ class UpdateParameterSets:
         for parameter_name in parameters:
 
             template_parameter_id = self.sql_template_parameter.get_id_from_name(parameter_name)
-            print(template_parameter_id)
+
             if template_parameter_id is None:
                 assert "Warning !! parameter {} has no corresponding template parameter".format(
                     parameter_name
@@ -143,6 +143,7 @@ class UpdateParameterSets:
     def add_parameters(self, parameters):
         added_parameters = []
         for parameter in parameters:
+            print(parameter.display_name)
             self.sql_parameter.insert_value(
                 name=parameter.name,
                 display_name=parameter.display_name,

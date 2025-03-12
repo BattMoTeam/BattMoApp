@@ -34,7 +34,7 @@ if __name__ == "__main__":
     cur.execute("DROP TABLE category")
     cur.execute("DROP TABLE material")
     cur.execute("DROP TABLE cell_type")
-    cur.execute("DROP TABLE cell_design")
+    cur.execute("DROP TABLE cell")
 
     ########################################################
     #       parameter
@@ -103,6 +103,8 @@ if __name__ == "__main__":
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             name VARCHAR(40) NOT NULL,
             display_name VARCHAR(40) NOT NULL DEFAULT " ",
+            category_id INT DEFAULT NULL,
+            default_parameter_set BOOLEAN DEFAULT NULL,
             context_type VARCHAR(40) DEFAULT NULL,
             context_type_iri VARCHAR(40) DEFAULT NULL,
             is_shown_to_user BOOLEAN DEFAULT NULL,
@@ -173,11 +175,11 @@ if __name__ == "__main__":
     )
 
     ########################################################
-    #       cell_design
+    #       cell
     ########################################################
     cur.execute(
         """
-        CREATE TABLE IF NOT EXISTS cell_design(
+        CREATE TABLE IF NOT EXISTS cell(
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             name VARCHAR(40) NOT NULL,
             display_name VARCHAR(40) NOT NULL,
@@ -185,6 +187,7 @@ if __name__ == "__main__":
             category_id INT DEFAULT NULL,
             parameter_set_id INT DEFAULT NULL,
             default_parameter_set BOOLEAN DEFAULT NULL,
+            user_uuid VARCHAR(40) DEFAULT NULL,
             is_shown_to_user BOOLEAN NOT NULL DEFAULT 1,
             reference_name VARCHAR(40) DEFAULT NULL,
             reference VARCHAR(40) DEFAULT NULL,
@@ -196,5 +199,5 @@ if __name__ == "__main__":
     """
     )
 
-    data = cur.execute("""SELECT * FROM cell_design""")
+    data = cur.execute("""SELECT * FROM cell""")
     print(data.description)

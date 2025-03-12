@@ -1,0 +1,37 @@
+{
+  "name": "lgm50_nmc_chen2020",
+  "category": "cell",
+  "parameters": {
+      "length": 0.79,
+      "width": 0.065,
+      "inner_radius":0.002, 
+      "double_coated_electrode": true,
+      "negative_electrode_coating_thickness": 85.2,
+      "negative_electrode_current_collector_thickness": 12,
+      "negative_electrode_number_of_discrete_cells_electrode": 20,
+      "positive_electrode_coating_thickness": 75.6,
+      "positive_electrode_current_collector_thickness": 16,
+      "positive_electrode_number_of_discrete_cells_electrode": 20,
+      "separator_thickness": 12,
+      "number_of_discrete_cells_separator": 10,
+      "separator_porosity": 0.47,
+      "negative_electrode_coating_porosity": 0.25,
+      "positive_electrode_coating_porosity": 0.335,
+      "upper_voltage_limit": 4.2,
+      "lower_voltage_limit": 2.5,
+      "negative_electrode_active_material_mass_fraction": 1,
+      "negative_electrode_additive_mass_fraction": 0,
+      "negative_electrode_binder_mass_fraction": 0,
+      "positive_electrode_active_material_mass_fraction": 1,
+      "positive_electrode_additive_mass_fraction": 0,
+      "positive_electrode_binder_mass_fraction": 0,
+      "negative_electrode_active_material": "Graphite_SiOx_Chen2020",
+      "positive_electrode_active_material": "NMC811_Chen2020",
+      "separator": "ceramic_coated_polyolefin_Chen2020",
+      "electrolyte": "LiPF6_Chen2020"
+
+
+      
+  }
+
+ }

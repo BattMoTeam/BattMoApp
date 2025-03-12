@@ -17,6 +17,7 @@ class UpdateModels:
 
     def __init__(self):
         self.sql_model = db_handler.ModelHandler()
+        self.sql_category = db_handler.CategoryHandler()
 
     def get_resource_as_json(self):
         return app_access.get_json_from_path(app_access.get_path_to_models())
@@ -41,7 +42,9 @@ class UpdateModels:
             context_type_iri = details.get("context_type_iri")
             is_shown_to_user = int(details.get("is_shown_to_user"))
             description = details.get("description")
+            category = details.get("category")
 
+            category_id = self.sql_category.get_id_from_name(category)
             model_id = self.sql_model.get_id_from_name(model_name)
 
             if model_id:  # existing type
@@ -49,6 +52,7 @@ class UpdateModels:
                     id=model_id,
                     columns_and_values={
                         "display_name": display_name,
+                        "category_id": category_id,
                         "context_type": context_type,
                         "context_type_iri": context_type_iri,
                         "is_shown_to_user": is_shown_to_user,
@@ -63,6 +67,7 @@ class UpdateModels:
                 model_id = self.sql_model.insert_value(
                     name=model_name,
                     display_name=display_name,
+                    category_id=category_id,
                     context_type=context_type,
                     context_type_iri=context_type_iri,
                     is_shown_to_user=is_shown_to_user,
