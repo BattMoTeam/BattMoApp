@@ -2232,10 +2232,10 @@ class SetTabs:
                             value_list = ast.literal_eval(
                                 parameter.options.get(selected_parameter_id).value
                             )
-                            st.write("try: ", value_list)
+
                         except:
                             value_list = [parameter.options.get(selected_parameter_id).value]
-                            st.write("except: ", value_list)
+
 
                         name_col.write(parameter.display_name)
                         user_input = input_col.selectbox(
