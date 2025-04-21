@@ -2159,7 +2159,7 @@ class SetTabs:
                     if key_user_input not in st.session_state:
                         value_ses = parameter.options.get(selected_parameter_id).value
                         if isinstance(value_ses, str):
-                            value_ses = "charging"
+                            value_ses = "discharging"
                         st.session_state[key_user_input] = value_ses
 
                     ######################################################################################
@@ -2193,7 +2193,7 @@ class SetTabs:
                     elif st.session_state.upload == False and st.session_state.clear_upload == True:
                         value_ses = parameter.options.get(selected_parameter_id).value
                         if isinstance(value_ses, str):
-                            value_ses = "charging"
+                            value_ses = "discharging"
                         st.session_state[key_user_input] = value_ses
 
                     name_col, input_col = tab.columns([1, 2])
@@ -2232,8 +2232,10 @@ class SetTabs:
                             value_list = ast.literal_eval(
                                 parameter.options.get(selected_parameter_id).value
                             )
+                            st.write("try: ", value_list)
                         except:
                             value_list = [parameter.options.get(selected_parameter_id).value]
+                            st.write("except: ", value_list)
 
                         name_col.write(parameter.display_name)
                         user_input = input_col.selectbox(
@@ -5514,12 +5516,13 @@ class DownloadParameters:
             ]
 
         else:
+
             schema["@graph"]["@reverse"] = {}
             schema["@graph"]["@reverse"]["hasParticipant"] = {}
             schema["@graph"]["@reverse"]["hasParticipant"]["@type"] = "Cycling"
-            schema["@graph"]["@reverse"]["hasParticipant"]["@type"]["hasProperty"] = parameters[
-                "@graph"
-            ]["hasCyclingProcess"]["hasProperty"]
+            schema["@graph"]["@reverse"]["hasParticipant"]["hasProperty"] = parameters["@graph"][
+                "hasCyclingProcess"
+            ]["hasProperty"]
 
         # save formatted parameters in json file
         # with open(path_to_battmo_input, "w") as new_file:
@@ -6666,9 +6669,9 @@ class SetGeometryVisualization:
             scene_aspectmode="data",
             scene=dict(
                 xaxis=dict(autorange="reversed", nticks=10),
-                xaxis_title="Thickness  /  \u03BCm",
-                yaxis_title="Scaled length  /  \u03BCm",
-                zaxis_title="Scaled width  /  \u03BCm",
+                xaxis_title="Thickness  /  \u03bcm",
+                yaxis_title="Scaled length  /  \u03bcm",
+                zaxis_title="Scaled width  /  \u03bcm",
             ),
             xaxis=dict(range=[0, total_thickness]),
             width=700,
@@ -6824,9 +6827,9 @@ class SetGeometryVisualization:
             scene_aspectmode="data",
             scene=dict(
                 xaxis=dict(autorange="reversed"),
-                xaxis_title="Thickness  /  \u03BCm",
-                yaxis_title="Length  /  \u03BCm",
-                zaxis_title="Width  /  \u03BCm",
+                xaxis_title="Thickness  /  \u03bcm",
+                yaxis_title="Length  /  \u03bcm",
+                zaxis_title="Width  /  \u03bcm",
             ),
             xaxis=dict(range=[0, total_thickness]),
             width=700,
@@ -6995,9 +6998,9 @@ class SetGeometryVisualization:
             scene_aspectmode="data",
             scene=dict(
                 xaxis=dict(autorange="reversed"),
-                xaxis_title="Thickness  /  \u03BCm",
-                yaxis_title="Length  /  \u03BCm",
-                zaxis_title="Width  /  \u03BCm",
+                xaxis_title="Thickness  /  \u03bcm",
+                yaxis_title="Length  /  \u03bcm",
+                zaxis_title="Width  /  \u03bcm",
             ),
             xaxis=dict(range=[0, total_thickness]),
             width=700,
@@ -7241,9 +7244,9 @@ class SetGeometryVisualization:
             scene_aspectmode="data",
             scene=dict(
                 xaxis=dict(autorange="reversed"),
-                xaxis_title="Thickness  /  \u03BCm",
-                yaxis_title="Length  /  \u03BCm",
-                zaxis_title="Width  /  \u03BCm",
+                xaxis_title="Thickness  /  \u03bcm",
+                yaxis_title="Length  /  \u03bcm",
+                zaxis_title="Width  /  \u03bcm",
             ),
             xaxis=dict(range=[0, total_thickness]),
             width=700,
@@ -7354,8 +7357,8 @@ class SetGeometryVisualization:
 
         # Update layout
         fig.update_layout(
-            xaxis_title="Thickness  /  \u03BCm",
-            yaxis_title="Width  /  \u03BCm",
+            xaxis_title="Thickness  /  \u03bcm",
+            yaxis_title="Width  /  \u03bcm",
             width=plot_width,
             height=plot_width,
             margin=dict(r=20, b=10, l=10, t=10),
@@ -8077,7 +8080,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=_self.electrolyte_potential,
             title="Electrolyte - Potential",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Time  /  h",
             cbar_label="Potential  /  V",
             horizontal_line=_self.time_values[state],
@@ -8090,7 +8093,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=_self.electrolyte_concentration,
             title="Electrolyte - Liquid phase lithium concentration",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Time  /  h",
             cbar_label="Concentration  /  mol . L-1",
             horizontal_line=_self.time_values[state],
@@ -8103,7 +8106,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=_self.positive_electrode_potential,
             title="Positive Electrode - Potential",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Time  /  h",
             cbar_label="Potential  /  V",
             horizontal_line=_self.time_values[state],
@@ -8116,7 +8119,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=np.array(_self.positive_electrode_concentration),
             title="Positive Electrode - Solid phase lithium concentration",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Time  /  h",
             cbar_label="Concentration  /  mol . L-1",
             horizontal_line=_self.time_values[state],
@@ -8129,7 +8132,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=_self.negative_electrode_concentration,
             title="Negative Electrode - Solid phase lithium concentration",
-            x_label="Position  / \u00B5m",
+            x_label="Position  / \u00b5m",
             y_label="Time  /  h",
             cbar_label="Concentration  /  mol . L-1",
             horizontal_line=_self.time_values[state],
@@ -8142,7 +8145,7 @@ class SetGraphs:
             y_data=_self.time_values,
             z_data=_self.negative_electrode_potential,
             title="Negative Electrode - Potential",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Time  /  h",
             cbar_label="Potential  /  V",
             horizontal_line=_self.time_values[state],
@@ -8416,7 +8419,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=negative_electrode_concentration_ext_list,
             title="Negative Electrode - Solid phase lithium concentration  /  mol . L-1",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Concentration  /  mol . L-1",
             x_min=xmin,
             x_max=xmax,
@@ -8452,7 +8455,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=elyte_concentration_ext_list,
             title="Electrolyte - Liquid phase lithium concentration  /  mol . L-1",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Concentration  /  mol . L-1",
             x_min=xmin,
             x_max=xmax,
@@ -8498,7 +8501,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=positive_electrode_concentration_ext_list,
             title="Positive Electrode - Solid phase lithium concentration  /  mol . L-1",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Concentration  /  mol . L-1",
             x_min=xmin,
             x_max=xmax,
@@ -8574,7 +8577,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=negative_electrode_potential_ext_list,
             title="Negative Electrode - Potential  /  V",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Potential  /  V",
             x_min=xmin,
             x_max=xmax,
@@ -8609,7 +8612,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=elyte_potential_ext_list,
             title="Electrolyte - Potential  /  V",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Potential  /  V",
             x_min=xmin,
             x_max=xmax,
@@ -8653,7 +8656,7 @@ class SetGraphs:
             x_data=electrolyte_grid,
             y_data=positive_electrode_potential_ext_list,
             title="Positive Electrode - Potential  /  V",
-            x_label="Position  /  \u00B5m",
+            x_label="Position  /  \u00b5m",
             y_label="Potential  /  V",
             x_min=xmin,
             x_max=xmax,

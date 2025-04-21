@@ -1508,7 +1508,7 @@
                "@type": "Parameter",
                "hasStringPart": {
                   "@type": "String",
-                  "hasStringValue": "charging"
+                  "hasStringValue": "discharging"
                }
             },
             {
@@ -1516,7 +1516,7 @@
                "@type": "StateOfCharge",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 0.01
+                  "hasNumericalValue": 0.99
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "1",
@@ -1528,7 +1528,7 @@
                "@type": "NumberOfEntities",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 1
+                  "hasNumericalValue": null
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "1",
@@ -1552,7 +1552,7 @@
                "@type": "CRate",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": 1.0
+                  "hasNumericalValue": null
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "1",
@@ -1588,7 +1588,7 @@
                "@type": "Cycling",
                "hasStringPart": {
                   "@type": "String",
-                  "hasStringValue": "CCCV"
+                  "hasStringValue": "CCDischarge"
                }
             },
             {
