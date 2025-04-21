@@ -14,7 +14,21 @@
             "number_of_discrete_cells_separator": 10,
             "negative_electrode_coating_porosity": 0.4,
             "positive_electrode_coating_porosity": 0.3,
-            "separator_porosity": 0.45
+            "separator_porosity": 0.45,
+            "negative_electrode_active_material_mass_fraction": 0.9,
+            "negative_electrode_additive_mass_fraction": 0.05,
+            "negative_electrode_binder_mass_fraction": 0.05,
+            "positive_electrode_active_material_mass_fraction": 0.9,
+            "positive_electrode_additive_mass_fraction": 0.05,
+            "positive_electrode_binder_mass_fraction": 0.05,
+            "negative_electrode_active_material": "Graphite_SiOx_Chen2020",
+            "negative_electrode_binder": "PVDF",
+            "negative_electrode_additive": "carbon_black",
+            "positive_electrode_active_material": "NMC811_Chen2020",
+            "positive_electrode_binder": "CMC",
+            "positive_electrode_additive": "carbon_black",
+            "separator": "ceramic_coated_polyolefin_Chen2020",
+            "electrolyte": "LiPF6_Chen2020"
 
 
 

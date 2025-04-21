@@ -34,4 +34,6 @@ def show_build_cell():
 
     cell_dict = app.set_build_cell().cell_dict
 
+    
+
     app.set_footer(case="toggle_eu_save_cell", parameter_dict=cell_dict)

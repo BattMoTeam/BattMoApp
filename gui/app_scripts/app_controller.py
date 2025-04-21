@@ -42,6 +42,9 @@ class AppController:
     def set_upload_input_file(self):
         return view.SetUploadInputFile()
 
+    def set_indicators(self):
+        return view.SetIndicators()
+
     def set_tabs(self, model_id):
         return view.SetTabs(self.images, model_id, self.context)
 

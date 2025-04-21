@@ -349,6 +349,8 @@ class SetFooter:
 
                 SessionStates().set_key_and_session_state(label="json_cell", id=id, value={})
 
+                st.text("")
+                st.text("")
                 save = st.button(
                     "SAVE CELL",
                     on_click=self.save_cell_parameter_set,
@@ -736,7 +738,7 @@ class SetBuildCell:
 
         cell_dict = self.render_separator(cell_dict, parameter_object, parameter_set_id)
 
-        cell_dict = self.render_electrolyte(cell_dict)
+        cell_dict = self.render_electrolyte(cell_dict, parameter_object, parameter_set_id)
 
         self.render_visualization(graph_container, cell_dict)
 
@@ -767,12 +769,7 @@ class SetBuildCell:
         col1, col2 = st.columns((1, 4))
 
         with col1:
-            st.text("")
-            st.text("")
             st.write(cell_length.display_name)
-            st.text("")
-            st.text("")
-            st.write(cell_width.display_name)
 
         with col2:
             user_input = st.number_input(
@@ -788,7 +785,7 @@ class SetBuildCell:
                 format=self.formatter.set_format(
                     cell_length.options.get(cell_length_parameter_id).value
                 ),
-                label_visibility="hidden",
+                label_visibility="collapsed",
                 step=self.formatter.set_increment(
                     cell_length.options.get(cell_length_parameter_id).value
                 ),
@@ -797,6 +794,13 @@ class SetBuildCell:
             cell_length.set_selected_value(user_input)
             cell_dict["parameters"][cell_length.name] = user_input
 
+        col1, col2 = st.columns((1, 4))
+
+        with col1:
+
+            st.write(cell_width.display_name)
+
+        with col2:
             user_input = st.number_input(
                 label=cell_width.name,
                 value=cell_width.options.get(cell_width_parameter_id).value,
@@ -810,7 +814,7 @@ class SetBuildCell:
                 format=self.formatter.set_format(
                     cell_width.options.get(cell_width_parameter_id).value
                 ),
-                label_visibility="hidden",
+                label_visibility="collapsed",
                 step=self.formatter.set_increment(
                     cell_width.options.get(cell_width_parameter_id).value
                 ),
@@ -887,17 +891,25 @@ class SetBuildCell:
 
         return cell_dict, parameter_set_id, parameter_object
 
-    def render_select_box(self, cell_dict, category_name, coating=None, electrode=None):
+    def render_select_box(
+        self,
+        cell_dict,
+        parameter_object,
+        parameter_set_id,
+        category_name,
+        coating=None,
+        electrode=None,
+    ):
 
         if coating:
-            name, select, mass_fraction = st.columns(3)
+            name, select, mass_fraction_col = st.columns(3)
         elif electrode:
             name = None
             select = st
-            mass_fraction = None
+            mass_fraction_col = None
         else:
             name, select = st.columns((1, 3))
-            mass_fraction = None
+            mass_fraction_col = None
 
         category = self.sql_category.get_all_from_name(category_name)
         category_id = category["id"]
@@ -925,13 +937,45 @@ class SetBuildCell:
         index = display_names.index(selected_material)
         cell_dict["parameters"][category_name] = material_names[index]
 
+        if mass_fraction_col:
+            with mass_fraction_col:
+                parameter = category_name + "_mass_fraction"
+                # Retrieve the parameter objects
+                mass_fraction = parameter_object.get(parameter)
+
+                mass_fraction_parameter_id = (
+                    self.sql_parameter.get_id_from_template_parameter_id_and_parameter_set_id(
+                        mass_fraction.id, parameter_set_id
+                    )
+                )
+
+                user_mass_fraction = st.number_input(
+                    label=mass_fraction.name,
+                    value=mass_fraction.options.get(mass_fraction_parameter_id).value,
+                    key=self.ss.set_key_and_session_state(
+                        "user_input",
+                        mass_fraction_parameter_id,
+                        mass_fraction.options.get(mass_fraction_parameter_id).value,
+                    ),
+                    min_value=mass_fraction.min_value,
+                    max_value=mass_fraction.max_value,
+                    format=self.formatter.set_format(
+                        mass_fraction.options.get(mass_fraction_parameter_id).value
+                    ),
+                    label_visibility="collapsed",
+                    step=self.formatter.set_increment(
+                        mass_fraction.options.get(mass_fraction_parameter_id).value
+                    ),
+                )
+
+                mass_fraction.set_selected_value(user_mass_fraction)
+                cell_dict["parameters"][mass_fraction.name] = user_mass_fraction
+
         return cell_dict
 
     def render_separator(self, cell_dict, parameter_object, parameter_set_id):
 
         st.subheader("Separator", divider="orange")
-
-        col1, col2 = st.columns((1, 3))
 
         selected_parameter_set_id = parameter_set_id
 
@@ -950,16 +994,29 @@ class SetBuildCell:
                 porosity.id, parameter_set_id
             )
         )
+        col1, col2 = st.columns((1, 3))
 
         with col1:
 
-            st.write("thickness")
+            st.write("Material")
 
-            st.text("")
-            st.text("")
-            st.text("")
-            st.text("")
-            st.write("porosity")
+        with col2:
+
+            category = "separator"
+
+            cell_dict = self.render_select_box(
+                cell_dict,
+                parameter_object,
+                parameter_set_id,
+                category,
+                coating=None,
+                electrode=True,
+            )
+
+        col1, col2 = st.columns((1, 3))
+
+        with col1:
+            st.write("Thickness")
 
         with col2:
 
@@ -976,13 +1033,20 @@ class SetBuildCell:
                 format=self.formatter.set_format(
                     thickness.options.get(thickness_parameter_id).value
                 ),
-                label_visibility="hidden",
+                label_visibility="collapsed",
                 step=self.formatter.set_increment(
                     thickness.options.get(thickness_parameter_id).value
                 ),
             )
 
             thickness.set_selected_value(user_thickness)
+
+        col1, col2 = st.columns((1, 3))
+
+        with col1:
+            st.write("Porosity")
+
+        with col2:
 
             user_porosity = st.number_input(
                 label=porosity.name,
@@ -995,7 +1059,7 @@ class SetBuildCell:
                 min_value=porosity.min_value,
                 max_value=porosity.max_value,
                 format=self.formatter.set_format(porosity.options.get(porosity_parameter_id).value),
-                label_visibility="hidden",
+                label_visibility="collapsed",
                 step=self.formatter.set_increment(
                     porosity.options.get(porosity_parameter_id).value
                 ),
@@ -1006,19 +1070,28 @@ class SetBuildCell:
         cell_dict["parameters"][thickness.name] = user_thickness
         cell_dict["parameters"][porosity.name] = user_porosity
 
-        category = "separator"
-
-        cell_dict = self.render_select_box(cell_dict, category, None)
-
         return cell_dict
 
-    def render_electrolyte(self, cell_dict):
+    def render_electrolyte(
+        self,
+        cell_dict,
+        parameter_object,
+        parameter_set_id,
+    ):
 
         st.subheader("Electrolyte", divider="orange")
 
         category = "electrolyte"
+        col1, col2 = st.columns((1, 3))
 
-        cell_dict = self.render_select_box(cell_dict, category, None)
+        with col1:
+            st.write("Material")
+
+        with col2:
+
+            cell_dict = self.render_select_box(
+                cell_dict, parameter_object, parameter_set_id, category, None, True
+            )
 
         return cell_dict
 
@@ -1058,21 +1131,27 @@ class SetBuildCell:
             "negative_electrode_current_collector",
         ]
 
-        cell_dict = self.render_electrode(
-            coating_thickness,
-            coating_porosity,
-            cc_thickness,
-            ne_thickness_parameter_id,
-            ne_porosity_parameter_id,
-            ne_cc_thickness_parameter_id,
-            categories,
-            cell_dict,
-        )
+        with st.expander("Graphite electrode"):
+
+            cell_dict = self.render_electrode(
+                parameter_object,
+                parameter_set_id,
+                coating_thickness,
+                coating_porosity,
+                cc_thickness,
+                ne_thickness_parameter_id,
+                ne_porosity_parameter_id,
+                ne_cc_thickness_parameter_id,
+                categories,
+                cell_dict,
+            )
 
         return cell_dict
 
     def render_electrode(
         self,
+        parameter_object,
+        parameter_set_id,
         coating_thickness,
         coating_porosity,
         cc_thickness,
@@ -1082,27 +1161,42 @@ class SetBuildCell:
         categories,
         cell_dict,
     ):
+
         st.text("")
-        par, cola_1, cola_2 = st.columns((1, 2, 1))
+        par, col_coating, col_cc = st.columns((1, 2, 1))
+
+        par.write("")
+        col_coating.write("Coating")
+        col_cc.write("Current Collector")
+
+        par, col_coating, col_cc = st.columns((1, 2, 1))
 
         with par:
-            st.text("")
-            st.text("")
-            st.text("")
-            st.text("")
-            st.write("Thickness")
-            st.text("")
-            st.text("")
 
             st.write("Material")
-            st.text("")
-            st.text("")
-            st.text("")
-            st.write("Porosity")
 
-        with cola_1:
+        with col_coating:
 
-            st.write("Coating")
+            with st.popover("Electrode coating", use_container_width=True):
+
+                for category in categories[0:3]:
+                    coating = True
+                    cell_dict = self.render_select_box(
+                        cell_dict, parameter_object, parameter_set_id, category, coating
+                    )
+        with col_cc:
+
+            cell_dict = self.render_select_box(
+                cell_dict, parameter_object, parameter_set_id, categories[3], None, electrode=True
+            )
+
+        par, col_coating, col_cc = st.columns((1, 2, 1))
+
+        with par:
+            st.write("Thickness")
+
+        with col_coating:
+
             user_coating_thickness = st.number_input(
                 label=coating_thickness.name,
                 value=coating_thickness.options.get(coating_thickness_par_id).value,
@@ -1116,19 +1210,42 @@ class SetBuildCell:
                 format=self.formatter.set_format(
                     coating_thickness.options.get(coating_thickness_par_id).value
                 ),
-                label_visibility="hidden",
+                label_visibility="collapsed",
                 step=self.formatter.set_increment(
                     coating_thickness.options.get(coating_thickness_par_id).value
                 ),
             )
-
             coating_thickness.set_selected_value(user_coating_thickness)
 
-            with st.popover("Electrode coating", use_container_width=True):
+        with col_cc:
 
-                for category in categories[0:3]:
-                    coating = True
-                    cell_dict = self.render_select_box(cell_dict, category, coating)
+            user_cc_thickness = st.number_input(
+                label=cc_thickness.name,
+                value=cc_thickness.options.get(cc_thickness_par_id).value,
+                key=self.ss.set_key_and_session_state(
+                    "user_input",
+                    cc_thickness_par_id,
+                    cc_thickness.options.get(cc_thickness_par_id).value,
+                ),
+                min_value=cc_thickness.min_value,
+                max_value=cc_thickness.max_value,
+                format=self.formatter.set_format(
+                    cc_thickness.options.get(cc_thickness_par_id).value
+                ),
+                label_visibility="collapsed",
+                step=self.formatter.set_increment(
+                    cc_thickness.options.get(cc_thickness_par_id).value
+                ),
+            )
+
+            cc_thickness.set_selected_value(user_cc_thickness)
+
+        par, col_coating, col_cc = st.columns((1, 2, 1))
+
+        with par:
+            st.write("Porosity")
+
+        with col_coating:
 
             user_coating_porosity = st.number_input(
                 label=coating_porosity.name,
@@ -1143,7 +1260,7 @@ class SetBuildCell:
                 format=self.formatter.set_format(
                     coating_porosity.options.get(coating_porosity_par_id).value
                 ),
-                label_visibility="hidden",
+                label_visibility="collapsed",
                 step=self.formatter.set_increment(
                     coating_porosity.options.get(coating_porosity_par_id).value
                 ),
@@ -1151,35 +1268,9 @@ class SetBuildCell:
 
             coating_porosity.set_selected_value(user_coating_porosity)
 
-        with cola_2:
-
-            st.write("Current Collector")
-            user_cc_thickness = st.number_input(
-                label=cc_thickness.name,
-                value=cc_thickness.options.get(cc_thickness_par_id).value,
-                key=self.ss.set_key_and_session_state(
-                    "user_input",
-                    cc_thickness_par_id,
-                    cc_thickness.options.get(cc_thickness_par_id).value,
-                ),
-                min_value=cc_thickness.min_value,
-                max_value=cc_thickness.max_value,
-                format=self.formatter.set_format(
-                    cc_thickness.options.get(cc_thickness_par_id).value
-                ),
-                label_visibility="hidden",
-                step=self.formatter.set_increment(
-                    cc_thickness.options.get(cc_thickness_par_id).value
-                ),
-            )
-
-            cc_thickness.set_selected_value(user_cc_thickness)
-
-            cell_dict["parameters"][coating_thickness.name] = user_coating_thickness
-            cell_dict["parameters"][coating_porosity.name] = user_coating_porosity
-            cell_dict["parameters"][cc_thickness.name] = user_cc_thickness
-
-            cell_dict = self.render_select_box(cell_dict, categories[3], None, electrode=True)
+        cell_dict["parameters"][coating_thickness.name] = user_coating_thickness
+        cell_dict["parameters"][coating_porosity.name] = user_coating_porosity
+        cell_dict["parameters"][cc_thickness.name] = user_cc_thickness
 
         return cell_dict
 
@@ -1219,16 +1310,19 @@ class SetBuildCell:
             "positive_electrode_current_collector",
         ]
 
-        cell_dict = self.render_electrode(
-            coating_thickness,
-            coating_porosity,
-            cc_thickness,
-            ne_thickness_parameter_id,
-            ne_porosity_parameter_id,
-            ne_cc_thickness_parameter_id,
-            categories,
-            cell_dict,
-        )
+        with st.expander("NMC electrode"):
+            cell_dict = self.render_electrode(
+                parameter_object,
+                parameter_set_id,
+                coating_thickness,
+                coating_porosity,
+                cc_thickness,
+                ne_thickness_parameter_id,
+                ne_porosity_parameter_id,
+                ne_cc_thickness_parameter_id,
+                categories,
+                cell_dict,
+            )
 
         return cell_dict
 
@@ -7283,16 +7377,16 @@ class SetIndicators:
     used to render the indicator parameters on the results page.
     """
 
-    def __init__(self, page_name, results_simulation=None, file_names=None):
-
-        self.page_name = page_name
+    def __init__(self, results_simulation=None, file_names=None):
         self.indicators = results_simulation
         self.file_names = file_names
         self.calc_round_trip_efficiency = calc.calc_round_trip_efficiency
-        # self.style = get_theme_style()
-        self.set_indicators()
 
-    def set_indicators(self):
+    def set_cell_indicators(self, cell_dict):
+
+        pass
+
+    def set_simulation_indicators(self):
 
         if self.page_name == "Simulation":
 

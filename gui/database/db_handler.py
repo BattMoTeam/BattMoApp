@@ -218,9 +218,9 @@ class TemplateParameterHandler(db.BaseHandler):
         res = self.select(values="id", where="template_id=%d" % template_id)
         return [a[0] for a in res]
 
-    def get_all_by_name(self, name):
-        res = self.select(values="*", where="name='%s'" % name)
-        return res[0]
+    def get_all_from_name(self, name):
+        res = self.select_dict(values="*", where="name='%s'" % name)
+        return res[0] if res else None
 
     def get_all_from_ids(self, ids):
         ids_str = ",".join(map(str, ids))
