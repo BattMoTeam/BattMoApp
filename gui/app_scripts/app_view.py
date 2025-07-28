@@ -408,7 +408,7 @@ class SetHeading:
                     Welcome to BattMoApp, a user-friendly and accessible platform for cell-level battery modelling.
                     Our web application leverages the powerful BattMo.jl software to model battery cells with precision and speed.
                     It offers a suite of features designed to make battery simulations easy and intuitive. 
-                    See the following blocks find out what BattMoApp has to offer. Have fun simulating!
+                    See the following blocks find out what BattMoApp has to offer. Have fun simulating!!
             
         """
         self.info = "Hover over the following buttons to see what you can find on each page."
