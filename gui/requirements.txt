@@ -16,4 +16,5 @@ scipy
 streamlit-navigation-bar
 websocket-client
 websocat
-bs4 
+bs4
+nicegui

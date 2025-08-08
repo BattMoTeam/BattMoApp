@@ -1,7 +1,6 @@
 version: "3.3"
 
 services:
-
   api:
     image: ghcr.io/battmoteam/battmo_api:latest
     container_name: api
@@ -12,7 +11,6 @@ services:
     networks:
       - app-network
     command: julia --project=. -e 'include("api.jl")' --color=yes --depwarn=no --project=@. --sysimage="pre-compilation/sysimage.so" -q -i -- $$(dirname $$0)/../bootstrap.jl -s=true "$$@"
-
 
   gui:
     build: ./gui
@@ -25,8 +23,7 @@ services:
     volumes:
       - ./gui:/app
 
-    command: streamlit run app.py --global.disableWidgetStateDuplicationWarning true --server.port=8501
-
+    command: python main.py
 
 networks:
   app-network:
