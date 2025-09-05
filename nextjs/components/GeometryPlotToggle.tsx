@@ -1,25 +1,44 @@
-import SwitchLabel from "./SwitchLabel";
+"use client";
+
+import { useState } from "react";
+import ToggleLabel from "./ToggleLabel";
 import GeometryPlot from "./GeometryPlot";
 
-interface GeometryPlotSwitchProps {
-    onSwitch?: (scaled: boolean) => void;
+interface GeometryPlotToggleProps {
+  className?: string;
 }
 
+export function GeometryPlotToggle({ className }: GeometryPlotToggleProps) {
+  const geometryData = {
+    thickness_ne: 50,
+    thickness_pe: 60,
+    thickness_sep: 25,
+    length: 0.1,
+    width: 0.05,
+    porosity_ne: 0.35,
+    porosity_pe: 0.3,
+    porosity_sep: 0.4,
+  };
 
-export function GeometryPlotToggle({onSwitch}: GeometryPlotSwitchProps) {
-    const geometryData = {
-        thickness_ne: 50,   
-        thickness_pe: 60,   
-        thickness_sep: 25,  
-        length: 0.1,        
-        width: 0.05,        
-        porosity_ne: 0.35,  
-        porosity_pe: 0.3,   
-        porosity_sep: 0.4,  
-      };
+  const [checked, setChecked] = useState(true);
+
   return (
-    <div>
-      <SwitchLabel children = {<GeometryPlot geometryData={geometryData} scaled = {onSwitch}/>} />
+    <div className={className}>
+      <ToggleLabel
+        className=""
+        toggle="descriptive"
+        leftLabel="Realistic"
+        rightLabel="Scaled"
+        checked={checked}
+        onCheckedChange={setChecked} // lift state up
+      >
+        <div className="mt-10">
+          <GeometryPlot
+            geometryData={geometryData}
+            scaled={checked} // dynamically scale
+          />
+        </div>
+      </ToggleLabel>
     </div>
-  )
+  );
 }

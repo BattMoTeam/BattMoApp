@@ -1,7 +1,6 @@
 import { useId } from "react"
 import { HouseIcon, InboxIcon, SearchIcon, ZapIcon } from "lucide-react"
-
-import { LogoLink } from "@/components/logo"
+import Logo, { LogoLink } from "./logo"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -15,6 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -94,9 +94,7 @@ export default function NavigationBar() {
           </Popover>
           {/* Logo */}
           <div className="flex items-center">
-            <a href="#" className="text-primary hover:text-primary/90">
               <LogoLink />
-            </a>
           </div>
         </div>
         {/* Middle area */}
