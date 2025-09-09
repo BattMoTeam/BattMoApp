@@ -26,6 +26,7 @@ export function GeometryPlotToggle({ className }: GeometryPlotToggleProps) {
     <div className={className}>
       <ToggleLabel
         className=""
+        label = "Porosity"
         toggle="descriptive"
         leftLabel="Realistic"
         rightLabel="Scaled"

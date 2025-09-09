@@ -34,7 +34,7 @@ export default function ToggleLabel({
     toggle === "descriptive"
       ? checked
         ? "border-0"
-        : "border"
+        : "border-0"
       : checked
       ? "border-2"
       : "border";

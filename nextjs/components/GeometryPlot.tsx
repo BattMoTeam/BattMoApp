@@ -73,7 +73,7 @@ export default function GeometryPlot({
 
   const colorscales = ["reds", "blues", "greens"];
   const colorbarxs = [-0.3, -0.26, -0.22];
-  const showscales = [true, true, true];
+  const showscales = [false, true, false];
   const colorbar_titles = ["Negative Electrode", "Separator", "Positive Electrode"];
   const thickmodes = ["array", "array", "auto"];
   const components = ["Negative electrode", "Separator", "Positive electrode"];
@@ -82,7 +82,7 @@ export default function GeometryPlot({
   const traces: Mesh3DTrace[] = [];
   let start = 0;
 
-  let maxX = 0;
+  let maxX = totalThickness;
   let maxY = scaled ? totalThickness : length_um;
   let maxZ = scaled ? totalThickness : width_um;
 
@@ -129,40 +129,53 @@ export default function GeometryPlot({
     maxZ = Math.max(maxZ, z);
   }
 
-  const layout: Partial<Layout> = {
-    legend: { yanchor: "top", y: 0.99, xanchor: "right", x: 1 },
-    annotations: [
-      {
-        text: "Porosity",
-        font: { size: 20, family: "arial", color: "black" },
-        showarrow: false,
-        xref: "paper" as const,
-        yref: "paper" as const,
-        x: -0.28,
-        y: 1,
-      },
-    ],
-    scene: {
-      xaxis: {
-        autorange: false,
-        range: [0, maxX],
-        title: { text: "Thickness  /  μm"} ,
-      },
-      yaxis: {
-        autorange: false,
-        range: [0, maxY],
-        title: scaled ? { text: "Scaled length  /  μm"} : { text: "Length  /  μm"},
-      },
-      zaxis: {
-        autorange: false,
-        range: [0, maxZ],
-        title: scaled ? { text: "Scaled width  /  μm"} : { text: "Width  /  μm"},
-      },
-      aspectmode: "data",
+
+
+// const maxRange = Math.max(maxX, maxY, maxZ);
+// const minRange = Math.min(maxX, maxY, maxZ);
+// const rangeFactor = minRange/minRange * 2
+
+const layout: Partial<Layout> = {
+  // legend: { yanchor: "top", y: 0.99, xanchor: "right", x: 1 },
+  // annotations: [
+  //   {
+  //     text: "Porosity",
+  //     font: { size: 20, family: "arial", color: "black" },
+  //     showarrow: false,
+  //     xref: "paper",
+  //     yref: "paper",
+  //     x: -0.28,
+  //     y: 1,
+  //   },
+  // ],
+  scene: {
+    xaxis: {
+      autorange: true,
+      range: [0, maxX],
+      title: { text: "Thickness / μm" },
     },
-    margin: { r: 10, l: 10, b: 10, t: 10 },
-    autosize: true,
-  };
+    yaxis: {
+      autorange: true,
+      range: [0, maxY],
+      title: scaled ? { text: "Scaled length / μm" } : { text: "Length / μm" },
+    },
+    zaxis: {
+      autorange: true,
+      range: [0, maxZ],
+      title: scaled ? { text: "Scaled width / μm" } : { text: "Width / μm" },
+    },
+    aspectmode: "data",
+//     camera: {
+//   eye: {
+//     x: rangeFactor,
+//     y: rangeFactor,
+//     z: rangeFactor,
+//   },
+// },
+  },
+  margin: { r: 10, l: 10, b: 10, t: 10 },
+  autosize: false,
+};
 
   const config = {
     responsive: true,
