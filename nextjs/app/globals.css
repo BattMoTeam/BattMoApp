@@ -35,6 +35,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-incrementer: var(--incrementer);
+  --color-incrementer-foreground: var(--incrementer-foreground);
 }
 
 /* 🌞 Light theme */
@@ -84,6 +86,11 @@
   --sidebar-accent-foreground: #2E2E2E;
   --sidebar-border: #E1E1E6;
   --sidebar-ring: #901F63;
+
+  /* 🌟 Incrementer buttons */
+  --incrementer: #f8e0f5;               
+  --incrementer-foreground: #901F63;    
+
 }
 
 .dark {
@@ -123,6 +130,9 @@
   --sidebar-accent-foreground: #F6F7FB;
   --sidebar-border: #3A3A3A;
   --sidebar-ring: #901F63;
+    
+  --incrementer: #483646;               
+  --incrementer-foreground: #f8e0f5;
 }
 
 

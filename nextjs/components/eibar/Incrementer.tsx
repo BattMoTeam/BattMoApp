@@ -46,7 +46,7 @@ export default function Incrementer(props: Props) {
     <div className='inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse'>
       <Button
         onClick={handleUp}
-        className='rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10'
+        className='bg-incrementer text-incrementer-foreground rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10'
         variant='outline'
         size='icon'
         aria-label='Upvote'
@@ -60,7 +60,7 @@ export default function Incrementer(props: Props) {
 
       <Button
         onClick={handleDown}
-        className='rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10'
+        className='bg-incrementer text-incrementer-foreground rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10'
         variant='outline'
         size='icon'
         aria-label='Downvote'
