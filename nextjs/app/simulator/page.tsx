@@ -3,7 +3,8 @@
 import { useState } from "react";
 import SimulatorStepper from "@/components/SimulatorStepper";
 import TypeSelector from "@/components/TypeSelector";
-import { GeometryPlotSwitch } from "@/components/GeometryPlotToggle";
+import { GeometryPlotToggle } from "@/components/GeometryPlotToggle";
+import WebSocketClient from "@/components/WebSocketClient";
 
 
 export default function SimulatorPage() {
@@ -28,7 +29,11 @@ export default function SimulatorPage() {
         </div>
         {/* Geometry Plot */}
         <div className="flex-1 p-6">
-          <GeometryPlotSwitch />
+          <GeometryPlotToggle />
+        </div>
+        {/* Geometry Plot */}
+        <div className="flex-1 p-6">
+          <WebSocketClient />
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import React from "react";
+import type { Layout, PlotData } from "plotly.js";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
@@ -22,7 +23,26 @@ interface GeometryPlotProps {
   scaled?: boolean;
 }
 
-export default function GeometryPlot({className, geometryData, scaled = false }: GeometryPlotProps) {
+// ✅ Extend PlotData for mesh3d so TS knows about intensity
+interface Mesh3DTrace extends Partial<PlotData> {
+  type: "mesh3d";
+  x: Float32Array;
+  y: Float32Array;
+  z: Float32Array;
+  i: Float32Array;
+  j: Float32Array;
+  k: Float32Array;
+  intensity?: number[] | Float32Array;
+  cmin?: number ;
+  cmax?: number ;
+  flatshading?: Boolean ;
+}
+
+export default function GeometryPlot({
+  className,
+  geometryData,
+  scaled = false,
+}: GeometryPlotProps) {
   const {
     thickness_ne,
     thickness_pe,
@@ -53,16 +73,16 @@ export default function GeometryPlot({className, geometryData, scaled = false }:
 
   const colorscales = ["reds", "blues", "greens"];
   const colorbarxs = [-0.3, -0.26, -0.22];
-  const showscales = [true, true, true];
+  const showscales = [false, true, false];
   const colorbar_titles = ["Negative Electrode", "Separator", "Positive Electrode"];
   const thickmodes = ["array", "array", "auto"];
   const components = ["Negative electrode", "Separator", "Positive electrode"];
   const porosities = [porosity_ne, porosity_sep, porosity_pe];
 
-  const traces: any[] = [];
+  const traces: Mesh3DTrace[] = [];
   let start = 0;
 
-  let maxX = 0;
+  let maxX = totalThickness;
   let maxY = scaled ? totalThickness : length_um;
   let maxZ = scaled ? totalThickness : width_um;
 
@@ -73,27 +93,29 @@ export default function GeometryPlot({className, geometryData, scaled = false }:
     const intensity = Array(10).fill(porosity);
 
     const hoverText = Array(8).fill(
-      `${components[i]}<br>Thickness: ${x.toFixed(2)} μm<br>Porosity: ${(porosity * 100).toFixed(1)}%`
+      `${components[i]}<br>Thickness: ${x.toFixed(
+        2
+      )} μm<br>Porosity: ${(porosity * 100).toFixed(1)}%`
     );
 
     traces.push({
       type: "mesh3d",
-      x: [start, end, end, start, start, end, end, start],
-      y: [0, 0, y, y, 0, 0, y, y],
-      z: [0, 0, 0, 0, z, z, z, z],
-      i: [7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2],
-      j: [3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3],
-      k: [0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6],
-      intensity: intensity,
+      x: Float32Array.from([start, end, end, start, start, end, end, start]),
+      y: Float32Array.from([0, 0, y, y, 0, 0, y, y]),
+      z: Float32Array.from([0, 0, 0, 0, z, z, z, z]),
+      i: Float32Array.from([7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2]),
+      j: Float32Array.from([3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3]),
+      k: Float32Array.from([0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6]),
+      intensity, 
       colorscale: colorscales[i],
       cmin: 0,
       cmax: 0.6,
       showscale: showscales[i],
       colorbar: {
-        title: colorbar_titles[i],
+        // title: { text: colorbar_titles[i] },
         x: colorbarxs[i],
-        tickmode: thickmodes[i],
-        tickvals: [],
+        tickmode: thickmodes[i] as any,
+        tickvals: [] as number[],
       },
       name: components[i],
       flatshading: true,
@@ -107,41 +129,53 @@ export default function GeometryPlot({className, geometryData, scaled = false }:
     maxZ = Math.max(maxZ, z);
   }
 
-  const layout = {
-    legend: { yanchor: "top", y: 0.99, xanchor: "right", x: 1 },
-    annotations: [
-      {
-        text: "Porosity",
-        font: { size: 20, family: "arial", color: "black" },
-        showarrow: false,
-        xref: "paper",
-        yref: "paper",
-        x: -0.28,
-        y: 1,
-      },
-    ],
-    scene: {
-      xaxis: {
-        autorange: false,
-        range: [0, maxX],
-        title: "Thickness  /  μm",
-      },
-      yaxis: {
-        autorange: false,
-        range: [0, maxY],
-        title: scaled ? "Scaled length  /  μm" : "Length  /  μm",
-      },
-      zaxis: {
-        autorange: false,
-        range: [0, maxZ],
-        title: scaled ? "Scaled width  /  μm" : "Width  /  μm",
-      },
-      aspectmode: "data",
+
+
+// const maxRange = Math.max(maxX, maxY, maxZ);
+// const minRange = Math.min(maxX, maxY, maxZ);
+// const rangeFactor = minRange/minRange * 2
+
+const layout: Partial<Layout> = {
+  // legend: { yanchor: "top", y: 0.99, xanchor: "right", x: 1 },
+  // annotations: [
+  //   {
+  //     text: "Porosity",
+  //     font: { size: 20, family: "arial", color: "black" },
+  //     showarrow: false,
+  //     xref: "paper",
+  //     yref: "paper",
+  //     x: -0.28,
+  //     y: 1,
+  //   },
+  // ],
+  scene: {
+    xaxis: {
+      autorange: true,
+      range: [0, maxX],
+      title: { text: "Thickness / μm" },
     },
-    margin: { r: 10, l: 10, b: 10, t: 10 },
-    autosize: true,
-    responsive: true,
-  };
+    yaxis: {
+      autorange: true,
+      range: [0, maxY],
+      title: scaled ? { text: "Scaled length / μm" } : { text: "Length / μm" },
+    },
+    zaxis: {
+      autorange: true,
+      range: [0, maxZ],
+      title: scaled ? { text: "Scaled width / μm" } : { text: "Width / μm" },
+    },
+    aspectmode: "data",
+//     camera: {
+//   eye: {
+//     x: rangeFactor,
+//     y: rangeFactor,
+//     z: rangeFactor,
+//   },
+// },
+  },
+  margin: { r: 10, l: 10, b: 10, t: 10 },
+  autosize: false,
+};
 
   const config = {
     responsive: true,
@@ -149,8 +183,14 @@ export default function GeometryPlot({className, geometryData, scaled = false }:
   };
 
   return (
-    <div className = {className} style={{ width: "70%", height: "70%" }}>
-      <Plot data={traces} layout={layout} config={config} style={{ width: "100%", height: "100%" }} />
+    <div className={className} style={{ width: "80%" }}>
+      <Plot
+        data={traces}
+        layout={{ ...layout, autosize: true }}
+        config={config}
+        style={{ width: "100%", height: "500px" }}
+        useResizeHandler={true}
+      />
     </div>
   );
 }

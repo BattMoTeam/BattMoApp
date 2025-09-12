@@ -22,7 +22,7 @@ export default function CardButton({
       variant="ghost"
       className={cn(
         "flex flex-col items-center justify-center w-1/2 md:w-full h-60 rounded-lg border-2 transition-colors text-center px-4",
-        "bg-secondary text-primary hover:border-primary hover:bg-secondary gap-1",
+        "bg-secondary text-primary hover:border-primary hover:border-4 hover:bg-secondary gap-1",
         selected
           ? "border-primary ring-2 ring-primary"
           : "border-muted",
