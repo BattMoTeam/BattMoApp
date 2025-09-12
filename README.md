@@ -1,142 +1,128 @@
 # BattMoApp
 
-[![](./python/resources/images/battmo_logo.png)](https://github.com/BattMoTeam/BattMo.git)
+[![](./python/resources/images/battmo_logo.png)](https://github.com/BattMoTeam/BattMo.git)  
 [![](https://zenodo.org/badge/410005581.svg)](https://zenodo.org/badge/latestdoi/410005581)
 
-The Battery Modelling Toolbox (**BattMo**) is a resource for continuum modelling of electrochemical devices in MATLAB and Julia.
-It offers users a flexible framework for building fully coupled electrochemical-thermal simulations of electrochemical
-devices using 1D, 2D, or 3D geometries. The original **BattMo** is implemented in MATLAB and builds on the open-source MATLAB
-Reservoir Simulation Toolbox (MRST) developed at SINTEF. BattMo being rewritten in Julia and builds on the open source Julia framework for multiphysics simulators, Jutul.jl. This repository builds further upon BattMo.jl.
+The **Battery Modelling Toolbox (BattMo)** is a resource for continuum modelling of electrochemical devices in MATLAB and Julia.  
+It offers users a flexible framework for building fully coupled electrochemical-thermal simulations of batteries and other electrochemical devices in 1D, 2D, or 3D.
 
-Additional information about BattMo on the [BattMo repository](https://github.com/BattMoTeam/BattMo.git)
+The original **BattMo** was implemented in MATLAB (building on MRST developed at SINTEF). A new implementation is being developed in **Julia**, building on the open-source multiphysics framework **Jutul.jl**.  
+This repository builds further upon **BattMo.jl** and provides a **graphical application** for setting up, running, and visualizing BattMo simulations.
 
-**BattMoApp** is a web-based application which offers a user-friendly interface to
-conduct an end to end simulation experience. Each physical quantity needed to define an experimental protocol can be
-modified to suit the user's needs. The parameter set thus defined is then used to run the BattMo P2D model.
+Additional information about BattMo can be found in the [main BattMo repository](https://github.com/BattMoTeam/BattMo.git).
 
-The application consists of a Web socket API build with **HTTP.jl** and configered to run BattMo simulations, and a graphical user interface build with **Streamlit**.
+## Two Versions
 
-> The source code of the web socket API has been moved from this repository to a new repository dedicated to the API on itself: [BattMoAPI](https://github.com/BattMoTeam/BattMoAPI/)
+BattMoApp provides a user-friendly interface to run BattMo simulations. It is available in two forms:
 
-## Using the application
+1. **Demo Version (Web Application)**
 
-The BattMo application can very easily be used on [app.batterymodel.com](http://app.batterymodel.com/). If you'd rather use the application offline, it can be installed using Docker. If you'd like to install for development, see the section called 'Developer installation'.
+   - Deployable on a server via **Docker**
+   - Includes a Next.js GUI and a Julia WebSocket backend
+   - Accessible through the browser
 
-### Install with Docker
+2. **Advanced Version (Desktop Application)**
+   - Built with **Electron**
+   - Bundles the Next.js GUI and a compiled Julia backend into a single cross-platform desktop app
+   - Runs fully offline, no Julia installation required
 
-The BattMoApp is available as a set of Docker images in the Github container registry and can be found among BattMoTeam's packages. In order to use it you have to install Docker and Docker Compose. See the [Docker website](https://www.docker.com/) for more information about Docker and how to install it. Assuming you have both Docker and Docker Compose installed on your machine:
+## Running the application
 
-Open a bash terminal and pull the latest Docker images from the registry. For the Docker image that represents the GUI:
+### Demo web application
 
-```<bash>
-docker pull ghcr.io/battmoteam/battmoapp_gui:latest
+The demo web application is available at [app.batterymodel.com](https://app.batterymodel.com/)
+
+### Advanced desktop application
+
+The desktop application can be downloaded from ...
+
+## Development
+
+### Application structure
+
+BattMoApp consists of three main parts:
+
+- Frontend (Next.js): Provides a multipage React-based GUI for defining simulation parameters, running models, and visualizing results.
+- Backend (Julia WebSocket API): Uses HTTP.jl to expose BattMo simulation capabilities as a WebSocket service.
+  - Shared backend code lives in core/julia-backend/
+  - The web demo runs the backend as a Docker service
+  - The desktop version bundles it as a compiled executable
+- Packaging Layer
+  - Docker for the web demo
+  - Electron for the desktop app
+
+### Repository Structure
+
+```
+battmo/
+├─ core/ # Shared code for frontend + backend
+│ ├─ nextjs/ # Core React components and pages
+│ └─ julia/ # Core Julia backend modules
+│
+├─ web/ # Web demo version
+│ ├─ battmo-api/ # Web-specific backend code
+│ ├─ nextjs-gui/ # Web-specific frontend code
+│ ├─ nginx/ # Proxy management
+│ ├─ streamlit-gui/ # Old Streamlit-based GUI
+│ └─ ...
+│
+├─ desktop/ # Advanced desktop version
+│ ├─ nextjs-gui/ # Desktop-specific frontend extensions
+│ ├─ electron/ # Electron config
+│ └─ battmo_api/ # Compiled Julia executables for packaging
+│
+└─ README.md
 ```
 
-For the Docker image that serves as a Web socket API and runs the BattMo.jl package:
-
-```<bash>
-docker pull ghcr.io/battmoteam/battmo_api:latest
-```
-
-Run the images in containers by using a docker compose file. Create a docker-compose.yml file with the following content:
-
-```<docker>
-version: "3.3"
-
-services:
-
-  api:
-    image: ghcr.io/battmoteam/battmo_api:latest
-    container_name: api
-    restart: always
-    ports:
-      - "8081:8081"
-      - "8080:8080"
-    command: julia --project=. -e 'include("api.jl")' --color=yes --depwarn=no --project=@. --sysimage="pre-compilation/sysimage.so" -q -i -- $$(dirname $$0)/../bootstrap.jl -s=true "$$@"
-
-  gui:
-    image: ghcr.io/battmoteam/battmoapp_gui:latest
-    container_name: gui
-    restart: always
-    ports:
-      - "8501:8501"
-    command: streamlit run app.py --global.disableWidgetStateDuplicationWarning true --server.port=8501
-```
-
-Now run the following command to start the containers:
-
-```<bash>
-docker-compose up -d
-```
-
-Now you can open your browser and go to 'localhost:8501' where **BattMoApp** should be visible and ready to use.
-
-## Developer installation
-
-If you'd like to install the BattMo application for development you need to have both Docker and Docker Compose installed on your computer. See the [Docker website](https://www.docker.com/) for more information about Docker and how to install it. Assuming you have both Docker and Docker Compose installed on your machine:
+### Installation and workflow
 
 Clone the repository:
 
-```<git>
+```
 git clone https://github.com/BattMoTeam/BattMoApp.git
 ```
 
-Now the only thing you have to do in order to run the application is to build the images and run the docker containers using Docker Compose. The building setup for the development environment can be found in the file 'docker-compose.yml'. To build the images, go into the BattMo-GUI directory in your terminal and run:
+#### Web application
 
-```<bash>
+For development on the web application, make sure you have _Docker_ and _docker-compose_ installed. For more information on docker, visit [docker.com](https://www.docker.com/).
+
+Go into the _web_ folder.
+
+```
+cd web
+```
+
+The file "docker-compose.yml" consists the docker compose setup for development. First build the images:
+
+```
 docker-compose build
 ```
 
-The first build can take up to 20 minutes to finish. After that, it takes a couple of seconds depending on the changes you make during development. To run the containers/application:
+Then run the container:
 
-```<bash>
+```
 docker-compose up -d
 ```
 
-Now you can go to 'Localhost:8501' in your browser in order to visualize and use the web-application.
+Now the application should be available at `http://localhost:3000`. The docker-compose file has been set up in such a way that changes within the NextJS code are immediately shown within the application after refreshing the browser and changes in the Julia-based code after restarting the container.
 
-After changing anything in the streamlit folder, in order to see the changes in the application you can rerun the webpage or run in your terminal:
+#### Desktop application
 
-```<bash>
-docker restart gui
+For development on the NextJS frontend for the desktop version, go into the desktop folder
+
+```
+cd desktop
 ```
 
-After changing anything in the genie folder, in order to see the changes in the application you can run:
+and run the development GUI.
 
-```<bash>
-docker restart api
 ```
-
-When changing anything in the recources and database, or in the Julia system image building setup, make sure to rebuild the images again instead of only restarting certain containers.
-
-## Development structure
-
-**BattMoApp** consists or three main components:
-
-- The _gui_ directory contains the Python-based code for the streamlit GUI and a
-  database that stores the parameters used to define an experimental protocol (default values, metadata).
-- The _api_ directory contains the Julia-based code that uses the HTTP.jl to create a Web socket API. This API enables data transfer between the **BattMo** package and the streamlit GUI and starts a simulation upon receiving input data from the GUI.
-
-This streamlit app is a multipage app
-(cf [streamlit doc](https://docs.streamlit.io/library/get-started/multipage-apps/create-a-multipage-app)).
-All the pages are stored in the _app_pages_ directory and are specified in the _app.py_ file which includes the general settings of the applications and needs to be executed in order to start the application. Here below is a brief description
-of each page.
-
-- **Home** : The starting page, gives an introduction to the app. It provides a description on BattMo, a navigation to the other pages, and links to more information and documentation.
-
-- **Simulation** : Allows user to define all physical quantities needed to define the desired
-  experimental protocol. The parameters and metadata (units, IRIs, values from literature) are stored in a SQLite file
-  called _BattMo_gui.db_ within the _database_ directory. The parameter values in the page are saved in a json file called _linked_data_input_ (stored in the BattMoJulia directory).
-  The _linked_data_input_ file contains all the parameters' metadata; a second file called _battmo_formatted_input_ is also
-  created, it's the version used as input by BattMo.jl. After changing the parameters, the user can click on the **RUN** button to launch the simulation, based on the parameters saved in the _battmo_formatted_input_ file.
-
-- **Results** : Plots the results of previous simulations using Plotly.
-
-- **Materials and models**: Provides more information on the models and materials that can be selected.
+npm run dev
+```
 
 ## Acknowledgements
 
-Contributors, in alphabetical order
+Contributors, in alphabetical order:
 
 - Oscar Bolzinger, SINTEF Industry
 - Simon Clark, SINTEF Industry
