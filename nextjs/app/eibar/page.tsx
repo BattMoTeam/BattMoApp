@@ -4,6 +4,8 @@ import IncrementerLabeled from '@/components/eibar/IncrementerLabeled'
 import LabelWithTooltip from '@/components/eibar/LabelWithTooltip'
 import IncrementerGroup from '@/components/eibar/IncrementerGroup'
 import IncrementerGroupLabeled from '@/components/eibar/IncrementerGroupLabeled'
+import Selector from '@/components/eibar/Selector'
+import SelectorWithTooltip from '@/components/eibar/SelectorWithTooltip'
 
 export default function LibraryPage() {
   return (
@@ -34,6 +36,20 @@ export default function LibraryPage() {
       <IncrementerGroupLabeled
         label={'Electrode Composition'}
         tooltipText='AM: Active Material, CA: Conductive Additive, BD: Binder'
+      />
+
+      <p className='mt-4'>Selector</p>
+      <Selector
+        label={'Model'}
+        helper_text='Choose the physical model for your simulation'
+        options={['P2D', 'P4D', 'P4D + thermal', 'P2D + SEI']}
+      />
+
+      <p className='mt-4'>Selector with tooltip</p>
+      <SelectorWithTooltip
+        label={'Cell'}
+        tooltip_text='Select the type of cell.'
+        options={['Pouch', 'Coin', 'Cylindrical', 'Prismatic']}
       />
     </div>
   )
