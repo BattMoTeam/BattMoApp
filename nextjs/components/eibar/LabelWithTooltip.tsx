@@ -18,7 +18,9 @@ export default function LabelWithTooltip(props: Props) {
   return (
     <TooltipProvider delayDuration={0}>
       <div className='flex items-center space-x-2'>
-        <span className='px-3 text-sm font-medium'>{label}</span>
+        <span className='text-accent-foreground px-3 text-sm font-medium'>
+          {label}
+        </span>
 
         <Tooltip>
           <TooltipTrigger asChild>

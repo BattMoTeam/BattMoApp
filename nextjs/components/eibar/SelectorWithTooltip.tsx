@@ -11,7 +11,7 @@ type Props = {
   options: string[]
 }
 
-export default function Component(props: Props) {
+export default function SelectorWithTooltip(props: Props) {
   const label = props.label
   const helper_text = props.helper_text === undefined ? '' : props.helper_text
   const tooltip_text = props.tooltip_text
