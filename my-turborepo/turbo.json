@@ -5,7 +5,11 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "out/**", "electron/dist/**"]
+    },
+    "electron": {
+      "dependsOn": ["build"],
+      "outputs": ["out/**", "electron/dist/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]
