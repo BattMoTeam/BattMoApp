@@ -1,9 +1,9 @@
-import Incrementer from '@/components/eibar/Incrementer'
-import IncrementerUnits from '@/components/eibar/IncrementerUnits'
-import IncrementerLabeled from '@/components/eibar/IncrementerLabeled'
-import LabelWithTooltip from '@/components/eibar/LabelWithTooltip'
-import IncrementerGroup from '@/components/eibar/IncrementerGroup'
-import IncrementerGroupLabeled from '@/components/eibar/IncrementerGroupLabeled'
+import Incrementer from '@/core/components/eibar/Incrementer'
+import IncrementerUnits from '@/core/components/eibar/IncrementerUnits'
+import IncrementerLabeled from '@/core/components/eibar/IncrementerLabeled'
+import LabelWithTooltip from '@/core/components/eibar/LabelWithTooltip'
+import IncrementerGroup from '@/core/components/eibar/IncrementerGroup'
+import IncrementerGroupLabeled from '@/core/components/eibar/IncrementerGroupLabeled'
 
 export default function LibraryPage() {
   return (

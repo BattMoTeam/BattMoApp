@@ -1,5 +1,5 @@
 import "./globals.css";
-import NavigationBar from "../components/NavigationBar";
+import NavigationBar from "@/core/components/NavigationBar";
 import { ReactNode } from "react";
 
 export const metadata = {

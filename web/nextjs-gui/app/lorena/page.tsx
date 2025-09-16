@@ -1,10 +1,10 @@
 "use client";
 
-import GeometryPlot from "@/components/GeometryPlot";
-import ToggleLabel from "@/components/ToggleLabel";
-import { Toggle } from "@/components/Toggle";
-import { Switch } from "@/components/ui/switch";
-import { GeometryPlotToggle } from "@/components/GeometryPlotToggle";
+import GeometryPlot from "@/core/components/GeometryPlot";
+import ToggleLabel from "@/core/components/ToggleLabel";
+import { Toggle } from "@/core/components/Toggle";
+import { Switch } from "@/core/components/ui/switch";
+import { GeometryPlotToggle } from "@/core/components/GeometryPlotToggle";
 
 const geometryData = {
   thickness_ne: 50,

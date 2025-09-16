@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import SimulatorStepper from "@/components/SimulatorStepper";
-import TypeSelector from "@/components/TypeSelector";
-import { GeometryPlotToggle } from "@/components/GeometryPlotToggle";
-import WebSocketClient from "@/components/WebSocketClient";
+import SimulatorStepper from "@/core/components/SimulatorStepper";
+import TypeSelector from "@/core/components/TypeSelector";
+import { GeometryPlotToggle } from "@/core/components/GeometryPlotToggle";
+import WebSocketClient from "@/core/components/WebSocketClient";
 
 
 export default function SimulatorPage() {
