@@ -4,6 +4,10 @@ import IncrementerLabeled from '@/components/eibar/IncrementerLabeled'
 import LabelWithTooltip from '@/components/eibar/LabelWithTooltip'
 import IncrementerGroup from '@/components/eibar/IncrementerGroup'
 import IncrementerGroupLabeled from '@/components/eibar/IncrementerGroupLabeled'
+import Selector from '@/components/eibar/Selector'
+import SelectorWithTooltip from '@/components/eibar/SelectorWithTooltip'
+import TextInputWithTooltip from '@/components/eibar/TextInputWithTooltip'
+import FileUploader from '@/components/eibar/FileUploader'
 
 export default function LibraryPage() {
   return (
@@ -35,6 +39,31 @@ export default function LibraryPage() {
         label={'Electrode Composition'}
         tooltipText='AM: Active Material, CA: Conductive Additive, BD: Binder'
       />
+
+      <p className='mt-4'>Selector</p>
+      <Selector
+        label={'Model'}
+        helper_text='Choose the physical model for your simulation'
+        options={['P2D', 'P4D', 'P4D + thermal', 'P2D + SEI']}
+      />
+
+      <p className='mt-4'>Selector with tooltip</p>
+      <SelectorWithTooltip
+        label={'Cell'}
+        tooltip_text='Select the type of cell.'
+        options={['Pouch', 'Coin', 'Cylindrical', 'Prismatic']}
+      />
+
+      <p className='mt-4'>Text input with tooltip</p>
+      <TextInputWithTooltip
+        label={'Give the simulation a name'}
+        tooltip_text='An informative name helps to find it later on.'
+        placeholder_text='cell_4_test_25'
+        helper_text='We suggest using snake case'
+      />
+
+      <p className='mt-4'>Text upload</p>
+      <FileUploader />
     </div>
   )
 }

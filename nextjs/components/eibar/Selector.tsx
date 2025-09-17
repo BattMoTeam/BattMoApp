@@ -9,7 +9,7 @@ type Props = {
   options: string[]
 }
 
-export default function Component(props: Props) {
+export default function Selector(props: Props) {
   const label = props.label
   const helper_text = props.helper_text === undefined ? '' : props.helper_text
   const options = props.options
