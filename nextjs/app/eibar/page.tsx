@@ -6,6 +6,8 @@ import IncrementerGroup from '@/components/eibar/IncrementerGroup'
 import IncrementerGroupLabeled from '@/components/eibar/IncrementerGroupLabeled'
 import Selector from '@/components/eibar/Selector'
 import SelectorWithTooltip from '@/components/eibar/SelectorWithTooltip'
+import TextInputWithTooltip from '@/components/eibar/TextInputWithTooltip'
+import FileUploader from '@/components/eibar/FileUploader'
 
 export default function LibraryPage() {
   return (
@@ -51,6 +53,17 @@ export default function LibraryPage() {
         tooltip_text='Select the type of cell.'
         options={['Pouch', 'Coin', 'Cylindrical', 'Prismatic']}
       />
+
+      <p className='mt-4'>Text input with tooltip</p>
+      <TextInputWithTooltip
+        label={'Give the simulation a name'}
+        tooltip_text='An informative name helps to find it later on.'
+        placeholder_text='cell_4_test_25'
+        helper_text='We suggest using snake case'
+      />
+
+      <p className='mt-4'>Text upload</p>
+      <FileUploader />
     </div>
   )
 }
