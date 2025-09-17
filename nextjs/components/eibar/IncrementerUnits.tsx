@@ -23,7 +23,7 @@ export default function IncrementerUnits(props: Props) {
           step={props.step}
         />
       </div>
-      <span className='mb-1 px-3 text-sm font-medium italic'>{props.unit}</span>
+      <span className='mb-1 px-3 text-sm font-medium italic'>{unit}</span>
     </div>
   )
 }
