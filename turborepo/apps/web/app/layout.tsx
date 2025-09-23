@@ -1,4 +1,5 @@
-import "@ui/styles/globals.css";
+import "./globals.css"
+import "@ui/styles.css";
 import NavigationBar from "@ui/components/NavigationBar";
 import { ReactNode } from "react";
 

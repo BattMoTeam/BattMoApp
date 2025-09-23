@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "build": "tailwindcss -i ./src/styles.css -o ./dist/styles.css",
+    "dev": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
+    "type-check": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0"
   },
   "devDependencies": {
@@ -14,6 +17,7 @@
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@tailwindcss/postcss": "^4.1.13",
+    "@tailwindcss/cli": "^4.1.13",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.36.0",
     "postcss": "^8.5.6",

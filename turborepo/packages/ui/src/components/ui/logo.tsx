@@ -4,7 +4,7 @@ import Link from "next/link"
 export default function Logo() {
   return (
     <Image
-      src="@ui/public/battmo_logo_text.png"
+      src="battmo_logo_text.png"
       alt="My Logo"
       width={150}
       height={60}
