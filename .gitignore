@@ -130,3 +130,7 @@ dmypy.json
 
 # Matlab temp files
 ~.asv
+
+.next
+.turbo
+node_modules
