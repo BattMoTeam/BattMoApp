@@ -148,8 +148,8 @@ node_modules
 /coverage
 
 # next.js
-.next
-/out/
+.next/
+out
 
 # production
 /build
@@ -173,3 +173,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# turbo
+.turbo/
