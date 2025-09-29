@@ -98,7 +98,11 @@ export default function FileUploader() {
               size='icon'
               variant='ghost'
               className='text-muted-foreground/80 hover:text-foreground -me-2 size-8 hover:bg-transparent'
-              onClick={() => removeFile(files[0]?.id)}
+              onClick={() => {
+                if (files[0]?.id) {
+                  removeFile(files[0].id)
+                }
+              }}
               aria-label='Remove file'
             >
               <XIcon className='size-4' aria-hidden='true' />

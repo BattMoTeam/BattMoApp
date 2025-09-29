@@ -1,15 +1,16 @@
 {
-  "name": "web",
+  "name": "desktop",
   "version": "0.0.1",
-  "type": "module",
+  "main": "main.js",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack --port 3000",
+    "dev": "next dev --turbopack --port 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "electron": "pnpm run build && electron ."
   },
   "dependencies": {
     "@workspace/ui": "workspace:*",
@@ -17,7 +18,9 @@
     "next": "^15.4.5",
     "next-themes": "^0.4.6",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "electron": "^38.1.0",
+    "electron-builder": "^26.0.12"
   },
   "devDependencies": {
     "@types/node": "^20.19.9",

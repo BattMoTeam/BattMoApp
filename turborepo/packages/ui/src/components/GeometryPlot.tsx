@@ -23,7 +23,7 @@ interface GeometryPlotProps {
   scaled?: boolean;
 }
 
-// ✅ Extend PlotData for mesh3d so TS knows about intensity
+// Extend PlotData for mesh3d so TS knows about intensity
 interface Mesh3DTrace extends Partial<PlotData> {
   type: "mesh3d";
   x: Float32Array;
@@ -33,9 +33,9 @@ interface Mesh3DTrace extends Partial<PlotData> {
   j: Float32Array;
   k: Float32Array;
   intensity?: number[] | Float32Array;
-  cmin?: number ;
-  cmax?: number ;
-  flatshading?: Boolean ;
+  cmin?: number;
+  cmax?: number;
+  flatshading?: boolean;
 }
 
 export default function GeometryPlot({
@@ -58,8 +58,8 @@ export default function GeometryPlot({
   const length_um = length * 1e6;
   const width_um = width * 1e6;
 
-  // Choose dimensions depending on scaled or not
-  const dimensions = scaled
+  // Strongly type dimensions as tuple array
+  const dimensions: [number, number, number][] = scaled
     ? [
         [thickness_ne, totalThickness, totalThickness],
         [thickness_sep, totalThickness, totalThickness],
@@ -74,10 +74,9 @@ export default function GeometryPlot({
   const colorscales = ["reds", "blues", "greens"];
   const colorbarxs = [-0.3, -0.26, -0.22];
   const showscales = [false, true, false];
-  const colorbar_titles = ["Negative Electrode", "Separator", "Positive Electrode"];
-  const thickmodes = ["array", "array", "auto"];
   const components = ["Negative electrode", "Separator", "Positive electrode"];
   const porosities = [porosity_ne, porosity_sep, porosity_pe];
+  const thickmodes = ["array", "array", "auto"];
 
   const traces: Mesh3DTrace[] = [];
   let start = 0;
@@ -87,8 +86,18 @@ export default function GeometryPlot({
   let maxZ = scaled ? totalThickness : width_um;
 
   for (let i = 0; i < dimensions.length; i++) {
-    const [x, y, z] = dimensions[i];
+    const dim = dimensions[i];
+
+    // Runtime guard for safety
+    if (!dim) continue;
+
+    const [x, y, z] = dim;
     const porosity = porosities[i];
+    if (porosity == null) continue;
+
+    // Extra safety in case values are missing
+    if (x == null || y == null || z == null) continue;
+
     const end = start + x;
     const intensity = Array(10).fill(porosity);
 
@@ -106,13 +115,12 @@ export default function GeometryPlot({
       i: Float32Array.from([7, 0, 0, 0, 4, 4, 6, 6, 4, 0, 3, 2]),
       j: Float32Array.from([3, 4, 1, 2, 5, 6, 5, 2, 0, 1, 6, 3]),
       k: Float32Array.from([0, 7, 2, 3, 6, 7, 1, 1, 5, 5, 7, 6]),
-      intensity, 
+      intensity,
       colorscale: colorscales[i],
       cmin: 0,
       cmax: 0.6,
       showscale: showscales[i],
       colorbar: {
-        // title: { text: colorbar_titles[i] },
         x: colorbarxs[i],
         tickmode: thickmodes[i] as any,
         tickvals: [] as number[],
@@ -129,53 +137,28 @@ export default function GeometryPlot({
     maxZ = Math.max(maxZ, z);
   }
 
-
-
-// const maxRange = Math.max(maxX, maxY, maxZ);
-// const minRange = Math.min(maxX, maxY, maxZ);
-// const rangeFactor = minRange/minRange * 2
-
-const layout: Partial<Layout> = {
-  // legend: { yanchor: "top", y: 0.99, xanchor: "right", x: 1 },
-  // annotations: [
-  //   {
-  //     text: "Porosity",
-  //     font: { size: 20, family: "arial", color: "black" },
-  //     showarrow: false,
-  //     xref: "paper",
-  //     yref: "paper",
-  //     x: -0.28,
-  //     y: 1,
-  //   },
-  // ],
-  scene: {
-    xaxis: {
-      autorange: true,
-      range: [0, maxX],
-      title: { text: "Thickness / μm" },
+  const layout: Partial<Layout> = {
+    scene: {
+      xaxis: {
+        autorange: true,
+        range: [0, maxX],
+        title: { text: "Thickness / μm" },
+      },
+      yaxis: {
+        autorange: true,
+        range: [0, maxY],
+        title: scaled ? { text: "Scaled length / μm" } : { text: "Length / μm" },
+      },
+      zaxis: {
+        autorange: true,
+        range: [0, maxZ],
+        title: scaled ? { text: "Scaled width / μm" } : { text: "Width / μm" },
+      },
+      aspectmode: "data",
     },
-    yaxis: {
-      autorange: true,
-      range: [0, maxY],
-      title: scaled ? { text: "Scaled length / μm" } : { text: "Length / μm" },
-    },
-    zaxis: {
-      autorange: true,
-      range: [0, maxZ],
-      title: scaled ? { text: "Scaled width / μm" } : { text: "Width / μm" },
-    },
-    aspectmode: "data",
-//     camera: {
-//   eye: {
-//     x: rangeFactor,
-//     y: rangeFactor,
-//     z: rangeFactor,
-//   },
-// },
-  },
-  margin: { r: 10, l: 10, b: 10, t: 10 },
-  autosize: false,
-};
+    margin: { r: 10, l: 10, b: 10, t: 10 },
+    autosize: false,
+  };
 
   const config = {
     responsive: true,

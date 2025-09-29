@@ -342,11 +342,13 @@ export const useFileUpload = (
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
         // In single file mode, only use the first file
         if (!multiple) {
-          const file = e.dataTransfer.files[0]
-          addFiles([file])
-        } else {
-          addFiles(e.dataTransfer.files)
-        }
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    addFiles([file]);
+  }
+  } else {
+    addFiles(e.dataTransfer.files);
+  }
       }
     },
     [addFiles, multiple]
@@ -401,13 +403,14 @@ export const useFileUpload = (
 
 // Helper function to format bytes to human-readable format
 export const formatBytes = (bytes: number, decimals = 2): string => {
-  if (bytes === 0) return "0 Bytes"
+  if (bytes === 0) return "0 Bytes";
 
-  const k = 1024
-  const dm = decimals < 0 ? 0 : decimals
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const index = Math.min(i, sizes.length - 1); // ✅ clamp to avoid undefined
 
-  return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + sizes[i]
-}
+  return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[index];
+};
