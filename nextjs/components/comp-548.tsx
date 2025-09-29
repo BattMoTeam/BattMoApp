@@ -6,7 +6,7 @@ import {
   formatBytes,
   useFileUpload,
 } from "@/hooks/use-file-upload"
-import { Button } from "@/components/ui/button"
+import { Button } from "@workspace/ui/components/button"
 
 // Create some dummy initial files
 const initialFiles = [

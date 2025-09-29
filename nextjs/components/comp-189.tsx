@@ -1,7 +1,7 @@
 import { useId } from "react"
 
-import { Label } from "@/components/ui/label"
-import { SelectNative } from "@/components/ui/select-native"
+import { Label } from "@workspace/ui/components/label"
+import { SelectNative } from "@workspace/ui/components/select-native"
 
 export default function Component() {
   const id = useId()

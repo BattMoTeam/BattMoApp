@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@workspace/ui/components/button"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@workspace/ui/components/tooltip"
 
 export default function Component() {
   return (

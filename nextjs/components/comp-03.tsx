@@ -1,7 +1,7 @@
 import { useId } from "react"
 
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Input } from "@workspace/ui/components/input"
+import { Label } from "@workspace/ui/components/label"
 
 export default function Component() {
   const id = useId()
