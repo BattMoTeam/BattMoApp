@@ -162,6 +162,12 @@ importers:
 
   packages/ui:
     dependencies:
+      '@headless-tree/core':
+        specifier: ^1.5.0
+        version: 1.5.0
+      '@headless-tree/react':
+        specifier: ^1.5.0
+        version: 1.5.0(@headless-tree/core@1.5.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -202,6 +208,9 @@ importers:
         specifier: ^3.25.76
         version: 3.25.76
     devDependencies:
+      '@remixicon/react':
+        specifier: ^4.6.0
+        version: 4.6.0(react@19.1.1)
       '@tailwindcss/postcss':
         specifier: ^4.1.11
         version: 4.1.11
@@ -376,6 +385,16 @@ packages:
 
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
+
+  '@headless-tree/core@1.5.0':
+    resolution: {integrity: sha512-5B3u/PNjGmj2zxGeK7m/CJXQSyN3qLcooeK4VCDyS/BRKhEmqa+XKFX+dXMAlS5wYTwAi7QoQYmkdGwOOGwJ8g==}
+
+  '@headless-tree/react@1.5.0':
+    resolution: {integrity: sha512-J5zC1IlaW7oFGc0wVBM5dEe2Bxk5a9jtLs3vLZr3tyThaDL9LUlw2+GZSI0CsMK/lquZE3UpcXWcH8MIKkHvdQ==}
+    peerDependencies:
+      '@headless-tree/core': '*'
+      react: '*'
+      react-dom: '*'
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1439,6 +1458,11 @@ packages:
 
   '@radix-ui/rect@1.1.1':
     resolution: {integrity: sha512-HPwpGIzkl28mWyZqG52jiqDJ12waP11Pa1lGoiyUkIEuMLBP0oeK/C89esbXrxsky5we7dfd8U58nm0SgAWpVw==}
+
+  '@remixicon/react@4.6.0':
+    resolution: {integrity: sha512-bY56maEgT5IYUSRotqy9h03IAKJC85vlKtWFg2FKzfs8JPrkdBAYSa9dxoUSKFwGzup8Ux6vjShs9Aec3jvr2w==}
+    peerDependencies:
+      react: '>=18.2.0'
 
   '@sindresorhus/is@4.6.0':
     resolution: {integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==}
@@ -5118,6 +5142,14 @@ snapshots:
 
   '@gar/promisify@1.1.3': {}
 
+  '@headless-tree/core@1.5.0': {}
+
+  '@headless-tree/react@1.5.0(@headless-tree/core@1.5.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      '@headless-tree/core': 1.5.0
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.6':
@@ -6191,6 +6223,10 @@ snapshots:
       '@types/react-dom': 19.1.7(@types/react@19.1.9)
 
   '@radix-ui/rect@1.1.1': {}
+
+  '@remixicon/react@4.6.0(react@19.1.1)':
+    dependencies:
+      react: 19.1.1
 
   '@sindresorhus/is@4.6.0': {}
 
