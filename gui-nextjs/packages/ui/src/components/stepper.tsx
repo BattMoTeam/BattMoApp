@@ -54,7 +54,7 @@ interface StepperProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 function Stepper({
-  defaultValue = 0,
+  defaultValue = 1,
   value,
   onValueChange,
   orientation = "horizontal",
@@ -113,14 +113,14 @@ function StepperItem({
   children,
   ...props
 }: StepperItemProps) {
-  const { activeStep } = useStepper()
+  const { activeStep, orientation } = useStepper()
 
   const state: StepState =
     completed || step < activeStep
       ? "completed"
       : activeStep === step
-        ? "active"
-        : "inactive"
+      ? "active"
+      : "inactive"
 
   const isLoading = loading && step === activeStep
 
@@ -131,7 +131,8 @@ function StepperItem({
       <div
         data-slot="stepper-item"
         className={cn(
-          "group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col",
+          "flex items-center gap-3",
+          orientation === "vertical" ? "flex-col" : "flex-row",
           className
         )}
         data-state={state}
@@ -143,7 +144,6 @@ function StepperItem({
     </StepItemContext.Provider>
   )
 }
-
 // StepperTrigger
 interface StepperTriggerProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -194,43 +194,34 @@ function StepperIndicator({
   className,
   children,
   ...props
-}: StepperIndicatorProps) {
+}: React.HTMLAttributes<HTMLDivElement> & { asChild?: boolean }) {
   const { state, step, isLoading } = useStepItem()
 
+  const hasCustomIcon = children != null // ✅ stricter check
+
   return (
-    <span
+    <div
       data-slot="stepper-indicator"
       className={cn(
-        "bg-muted text-muted-foreground data-[state=active]:bg-primary data-[state=completed]:bg-primary data-[state=active]:text-primary-foreground data-[state=completed]:text-primary-foreground relative flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-medium",
+        "flex size-10 items-center justify-center rounded-full border-2 transition-colors",
+        state === "active" && "bg-primary text-white border-primary",
+        state === "completed" && "bg-primary text-white border-primary",
+        state === "inactive" && "bg-white text-muted-foreground border-muted",
         className
       )}
       data-state={state}
       {...props}
     >
-      {asChild ? (
+      {hasCustomIcon ? (
         children
+      ) : isLoading ? (
+        <LoaderCircleIcon className="animate-spin" size={16} />
+      ) : state === "completed" ? (
+        <CheckIcon size={16} />
       ) : (
-        <>
-          <span className="transition-all group-data-loading/step:scale-0 group-data-loading/step:opacity-0 group-data-loading/step:transition-none group-data-[state=completed]/step:scale-0 group-data-[state=completed]/step:opacity-0">
-            {step}
-          </span>
-          <CheckIcon
-            className="absolute scale-0 opacity-0 transition-all group-data-[state=completed]/step:scale-100 group-data-[state=completed]/step:opacity-100"
-            size={16}
-            aria-hidden="true"
-          />
-          {isLoading && (
-            <span className="absolute transition-all">
-              <LoaderCircleIcon
-                className="animate-spin"
-                size={14}
-                aria-hidden="true"
-              />
-            </span>
-          )}
-        </>
+        <span className="text-xs font-medium">{step}</span>
       )}
-    </span>
+    </div>
   )
 }
 
@@ -238,11 +229,17 @@ function StepperIndicator({
 function StepperTitle({
   className,
   ...props
-}: React.HTMLAttributes<HTMLHeadingElement>) {
+}: React.HTMLAttributes<HTMLParagraphElement>) {
+  const { state } = useStepItem()
+
   return (
-    <h3
+    <p
       data-slot="stepper-title"
-      className={cn("text-sm font-medium", className)}
+      className={cn(
+        "text-sm font-medium",
+        state === "active" ? "text-primary" : "text-muted-foreground",
+        className
+      )}
       {...props}
     />
   )
