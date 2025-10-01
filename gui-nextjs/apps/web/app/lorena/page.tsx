@@ -9,6 +9,9 @@ import Metric from "@workspace/ui/components/Metric"
 
 import MetricCardButton from "@workspace/ui/components/MetricCardButton";
 import { MetricCard } from "@workspace/ui/components/MetricCard";
+import SimulatorStepper from "@workspace/ui/components/SimulatorStepper";
+import { SidebarProvider } from "@workspace/ui/components/sidebar";
+import { ResultsSideBar } from "@workspace/ui/components/ResultsSideBar";
 
 const geometryData = {
   thickness_ne: 50,
@@ -90,6 +93,26 @@ export default function LorenaPage() {
           ]}
         />
       </div>
+
+      <h1 className="mt-10 text-2xl font-bold">SimulationStepper</h1>
+      <h1 className="text-1xl">- A stepper for the simulator page.</h1>
+      <div className="flex-1 p-6">
+        <SimulatorStepper />
+      </div>
+
+      <h1 className="mt-10 text-2xl font-bold">ResultsSideBar</h1>
+      <h1 className="text-1xl">- A side bar to show the results. See on the right.</h1>
+      <div className="flex-1 p-6">
+
+        <SidebarProvider defaultOpen={false}>
+          <ResultsSideBar />
+        </SidebarProvider>
+      </div>
+
+
+
+
     </div>
+    
   );
 }

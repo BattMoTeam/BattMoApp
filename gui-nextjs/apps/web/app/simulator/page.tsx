@@ -7,10 +7,12 @@ import { GeometryPlotToggle } from "@workspace/ui/components/GeometryPlotToggle"
 import WebSocketClient from "@workspace/ui/components/WebSocketClient";
 
 
-export default function SimulatorPage() {
+
+export default function SimulatorPage({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen gap-6 p-5 box-border">
+
       {/* Left column: Fixed Stepper */}
       <div className="w-[300px] fixed top-1/4 left-20">
         <SimulatorStepper />
