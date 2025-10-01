@@ -5,6 +5,10 @@ import ToggleLabel from "@workspace/ui/components/ToggleLabel";
 import { Toggle } from "@workspace/ui/components/Toggle";
 import { Switch } from "@workspace/ui/components/switch";
 import { GeometryPlotToggle } from "@workspace/ui/components/GeometryPlotToggle";
+import Metric from "@workspace/ui/components/Metric"
+
+import MetricCardButton from "@workspace/ui/components/MetricCardButton";
+import { MetricCard } from "@workspace/ui/components/MetricCard";
 
 const geometryData = {
   thickness_ne: 50,
@@ -53,6 +57,38 @@ export default function LorenaPage() {
       <h1 className="text-1xl">- ToggleLabel with descriptive toggle and GeometryPlots as content.</h1>
       <div className="flex-1 p-6">
         <GeometryPlotToggle />
+      </div>
+
+      <h1 className="mt-10 text-2xl font-bold">Metric</h1>
+      <h1 className="text-1xl">- A Metric component.</h1>
+      <div className="flex-1 p-6">
+        <Metric
+          value = "1.1" label= "N/P ratio" 
+        />
+      </div>
+
+      <h1 className="mt-10 text-2xl font-bold">MetricCard</h1>
+      <h1 className="text-1xl">- A card with metrics.</h1>
+      <div className="flex-1 p-6">
+        <MetricCard
+          metrics={[
+            { value: "1.1", label: "N/P ratio" },
+            { value: "37", label: "Cell Mass" },
+            { value: "2018", label: "Cell Capacity" }
+          ]}
+        />
+      </div>
+
+      <h1 className="mt-10 text-2xl font-bold">MetricCardButton</h1>
+      <h1 className="text-1xl">- A card with metrics and run and download buttons.</h1>
+      <div className="flex-1 p-6">
+        <MetricCardButton
+          metrics={[
+            { value: "1.1", label: "N/P ratio" },
+            { value: "37", label: "Cell Mass" },
+            { value: "2018", label: "Cell Capacity" }
+          ]}
+        />
       </div>
     </div>
   );
