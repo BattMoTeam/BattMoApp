@@ -5,14 +5,18 @@ import {
   SidebarGroup,
   SidebarHeader,
   CustomTrigger,
-  SidebarTrigger
   
 } from "@workspace/ui/components/sidebar"
 import { Collapsible } from "radix-ui"
 
 export function ResultsSideBar() {
   return (
-    <Sidebar side="right" variant="floating" collapsible="icon">
+    <Sidebar 
+      side="right"
+      variant="floating"
+      collapsible="icon"
+      className="absolute right-0 top-24 h-[calc(100vh-4rem)]"
+      >
       <SidebarHeader className="items-left"/>
       <CustomTrigger children="Results"/>
       
