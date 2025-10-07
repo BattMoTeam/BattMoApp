@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Stepper,
   StepperIndicator,
@@ -5,15 +7,14 @@ import {
   StepperSeparator,
   StepperTitle,
   StepperTrigger,
-} from "@workspace/ui/components/stepper"
+} from "@workspace/ui/components/stepper";
 
 import {
   TargetIcon,
   SettingsIcon,
   Blocks,
-  ChartSpline,
-  Bike
-} from "lucide-react"
+  Bike,
+} from "lucide-react";
 
 const steps = [
   {
@@ -36,20 +37,38 @@ const steps = [
     title: "Cycling protocol",
     icon: <Bike size={16} />,
   },
-]
+];
 
-export default function SimulatorStepper() {
+// ✅ Modified component
+export default function SimulatorStepper({
+  value,
+  onValueChange,
+}: {
+  value?: number;
+  onValueChange?: (step: number) => void;
+}) {
   return (
     <div className="space-y-8 text-left">
-      <Stepper defaultValue={1} orientation="vertical">
+      <Stepper
+        orientation="vertical"
+        value={value}
+        onValueChange={onValueChange}
+        defaultValue={1}
+      >
         {steps.map(({ step, title, icon }) => (
           <StepperItem
             key={step}
             step={step}
             className="relative items-start not-last:flex-1"
           >
-            <StepperTrigger className="items-start rounded pb-12 last:pb-0">
-              <StepperIndicator className="flex size-10 items-center justify-center rounded-full border-2 data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:border-primary data-[state=completed]:bg-primary data-[state=completed]:text-white data-[state=completed]:border-primary data-[state=inactive]:bg-white data-[state=inactive]:text-muted-foreground data-[state=inactive]:border-muted">
+            <StepperTrigger
+              className="items-start rounded pb-12 last:pb-0"
+            >
+              <StepperIndicator className="flex size-10 items-center justify-center rounded-full border-2
+                data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:border-primary
+                data-[state=completed]:bg-primary data-[state=completed]:text-white data-[state=completed]:border-primary
+                data-[state=inactive]:bg-white data-[state=inactive]:text-muted-foreground data-[state=inactive]:border-muted
+              ">
                 {icon}
               </StepperIndicator>
               <div className="mt-0.5 px-2 text-left">
@@ -66,7 +85,6 @@ export default function SimulatorStepper() {
           </StepperItem>
         ))}
       </Stepper>
-
     </div>
-  )
+  );
 }
