@@ -14,21 +14,7 @@ const Footer = () => (
           <p className="text-sm text-footer-foreground/70">
             ... about accelerating battery innovation through digital tools.
           </p>
-        </div>
-
-        {/* Funding */}
-        <div className="flex flex-col gap-4">
-          <div>
-            <h3 className="text-2xl font-semibold mb-2">Funding</h3>
-            <p className="text-sm text-footer-foreground/80">
-              This project has received funding from the European Union.
-            </p>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Social Badges */}
+          {/* Social Badges */}
       <div className="flex flex-wrap gap-2 mt-6 items-center">
         <Button variant="ghost" size="sm" asChild>
           <a href="https://github.com/BattMoTeam/BattMoApp" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
@@ -51,8 +37,26 @@ const Footer = () => (
           </a>
         </Button>
       </div>
+        </div>
 
-      {/* Optional bottom divider */}
+        {/* Funding */}
+        <div className="flex flex-col gap-4">
+          <div>
+            <h3 className="text-2xl font-semibold mb-2">Funding</h3>
+            <p className="text-sm text-footer-foreground/80">
+              This project has received funding from the European Union.
+            </p>
+            <img
+            src="https://raw.githubusercontent.com/BattMoTeam/visual-identity/1bc87b07605d77fb3faa788c82f06ec2735ed31f/img/flag_of_europe.png"
+            alt="EU Funding Logo"
+            className="h-16 object-contain mt-2"
+          />
+          </div>
+        </div>
+
+      </div>
+
+      {/* Bottom divider */}
       <div className="border-t border-footer-foreground/20 mt-12 pt-6 text-center text-sm text-footer-foreground/60">
         Built with ❤️ by the BattMo team.
         <p className="text-xs text-footer-foreground/50 mt-2">
