@@ -34,7 +34,7 @@ st.logo(
     image=os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "images", "battmo_logo_text.png"
     ),
-    link="https://batterymodel.com/",
+    link="https://battmo.org/",
     icon_image=os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "images", "battmo_logo.png"
     ),
