@@ -6,24 +6,24 @@ import { MetricCard } from "@workspace/ui/components/MetricCard"
 
 
 interface MetricCardButtonProps {
-  metrics: MetricType[]
+  metrics: MetricType[];
+  onRun?: () => void;
 }
 
-export default function MetricCardButton({ metrics }: MetricCardButtonProps) {
+export default function MetricCardButton({ metrics, onRun }: MetricCardButtonProps) {
   return (
     <div className="flex flex-col items-center space-y-4">
       <MetricCard metrics={metrics} />
-      
-      {/* Footer with simulation button */}
       <div className="flex items-center space-x-2">
-        <Button variant="outline" size="icon" className="">
+        <Button variant="outline" size="icon">
           <Download className="h-4 w-4" />
         </Button>
-        <Button className="bg-primary">
+        <Button className="bg-primary" onClick={onRun}>
           Run simulation
         </Button>
       </div>
     </div>
-  )
+  );
 }
+
 

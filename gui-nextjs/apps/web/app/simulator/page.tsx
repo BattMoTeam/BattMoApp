@@ -4,11 +4,40 @@ import { useRef, useState, useEffect } from "react";
 import SimulatorStepper from "@workspace/ui/components/SimulatorStepper";
 import { ResultsSideBar } from "@workspace/ui/components/ResultsSideBar";
 import { SidebarProvider, useSidebar } from "@workspace/ui/components/sidebar";
+import MetricCardButton from "@workspace/ui/components/MetricCardButton";
+
+import { useWebSocket } from "@workspace/ui/hooks/useWebSocket";
 
 function SimulatorContent() {
   const { state } = useSidebar();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = useState(1);
+
+  const [logs, setLogs] = useState<string[]>([]);
+  const [data, setData] = useState<SimulationData>({});
+
+  const { send } = useWebSocket({
+    url: "ws://localhost:8080",
+    onData: setData,
+    onLog: (msg) => setLogs((prev) => [...prev, msg]),
+  });
+
+  const handleRunSimulation = async () => {
+  try {
+    const res = await fetch("/input_example.json"); // path relative to public/
+    if (!res.ok) throw new Error(`Failed to load JSON: ${res.status}`);
+    const jsonData = await res.json();
+
+    const inputData = {
+      task: "run_simulation",
+      data: jsonData, // use loaded JSON
+    };
+
+    send(inputData); // send over WebSocket
+  } catch (err) {
+    console.error("❌ Error loading JSON:", err);
+  }
+};
 
   const sections = [
     { id: "block-1", step: 1 },
@@ -104,6 +133,17 @@ function SimulatorContent() {
 
       {/* Right column: floating sidebar */}
       <ResultsSideBar />
+      {/* MetricCardButton fixed at top-right corner */}
+      <div className="fixed bottom-30 right-50 z-50">
+        <MetricCardButton
+          metrics={[
+            { value: "1.1", label: "N/P ratio" },
+            { value: "37", label: "Cell Mass" },
+            { value: "2018", label: "Cell Capacity" }
+          ]}
+          onRun={handleRunSimulation} // <-- pass handler
+        />
+      </div>
     </div>
   );
 }
