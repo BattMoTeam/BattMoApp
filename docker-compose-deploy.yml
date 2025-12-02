@@ -15,30 +15,30 @@ services:
     command: julia --project=. -e 'include("api.jl")' --color=yes --depwarn=no --project=@. --sysimage="pre-compilation/sysimage.so" -q -i -- $$(dirname $$0)/../bootstrap.jl -s=true "$$@"
 
 
-  # nginx:
-  #   image: ghcr.io/battmoteam/battmoapp_nginx:latest
-  #   build: ./nginx
-  #   container_name: nginx
-  #   restart: always
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   networks:
-  #     - app-network
-  #   volumes:
-  #     - /etc/letsencrypt:/etc/letsencrypt
-  #     - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
-  #   command: nginx -g 'daemon off;'
+  nginx:
+    image: ghcr.io/battmoteam/battmoapp_nginx:latest
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - app-network
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
+    command: nginx -g 'daemon off;'
 
-  # certbot:
-  #   image: certbot/certbot
-  #   container_name: certbot
-  #   networks:
-  #     - app-network
-  #   volumes:
-  #     - /etc/letsencrypt:/etc/letsencrypt
-  #     - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
-  #   entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew --webroot -w /usr/share/nginx/html --quiet; sleep 12h; done"
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    networks:
+      - app-network
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /usr/share/nginx/html/.well-known:/usr/share/nginx/html/.well-known
+    entrypoint: /bin/sh -c "trap exit TERM; while :; do certbot renew --webroot -w /usr/share/nginx/html --quiet; sleep 12h; done"
 
   gui:
     image: ghcr.io/battmoteam/battmoapp_gui:latest
