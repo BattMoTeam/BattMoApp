@@ -64,7 +64,7 @@ def inject_ga():
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
-            gtag('js, new Date());
+            gtag('js', new Date());
             gtag('config', 'adcac53d-bc65-4ca3-9f98-be5c7c4ee75d');
         <script>
         """
