@@ -66,7 +66,7 @@ def inject_ga():
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'adcac53d-bc65-4ca3-9f98-be5c7c4ee75d');
-        <script>
+        </script>
         """
 
     # Insert script into the index.html file
