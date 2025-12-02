@@ -55,8 +55,29 @@ export function useWebSocket({ url, maxRetries = 2, reconnectDelay = 2000, onDat
 
     ws.onmessage = async (event) => {
       try {
+        
         if (typeof event.data === "string") {
           const parsed = JSON.parse(event.data);
+
+          if (Array.isArray(parsed)) {
+            // Handle numeric array as binary
+            const bytes = new Uint8Array(parsed);
+            if (!expectHDF5) {
+              log("⚠️ Unexpected binary data (JSON array)");
+              return;
+            }
+            if (bytes.length !== expectedLength) {
+              log(`⚠️ HDF5 size mismatch: expected ${expectedLength}, got ${bytes.length}`);
+            }
+            const parsedData = await parseHDF5Server(bytes);
+            onData?.(parsedData);
+            log("✅ HDF5 parsed via server");
+            setExpectHDF5(false);
+            setExpectedLength(0);
+            return;
+          }
+
+          // Normal JSON handling
           switch (parsed.type) {
             case "progress":
               log(`⏳ Progress: ${parsed.step} / ${parsed.total}`);
@@ -75,25 +96,29 @@ export function useWebSocket({ url, maxRetries = 2, reconnectDelay = 2000, onDat
               setExpectHDF5(true);
               setExpectedLength(parsed.length);
               break;
+            case "client_id":
+              log(`ℹ️ UUID: ${parsed.UUID}`);
+              break;
             default:
               log(`📩 JSON: ${JSON.stringify(parsed)}`);
           }
         } else if (event.data instanceof ArrayBuffer) {
+          // Handle raw binary
+          const bytes = new Uint8Array(event.data);
           if (!expectHDF5) {
             log("⚠️ Unexpected binary data");
             return;
           }
-          const bytes = new Uint8Array(event.data);
           if (bytes.length !== expectedLength) {
             log(`⚠️ HDF5 size mismatch: expected ${expectedLength}, got ${bytes.length}`);
           }
-
           const parsedData = await parseHDF5Server(bytes);
           onData?.(parsedData);
           log("✅ HDF5 parsed via server");
           setExpectHDF5(false);
           setExpectedLength(0);
         }
+
       } catch (e) {
         log(`❌ Error processing message: ${e}`);
       }
