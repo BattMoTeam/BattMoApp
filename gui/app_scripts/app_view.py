@@ -4615,11 +4615,11 @@ class RunSimulation:
         )
         self.bar = st.empty()
 
-        with self.bar:
+        # with self.bar:
 
-            with st.spinner():
-                self.run_simulation()
-                time.sleep(1)
+        with st.spinner():
+            self.run_simulation()
+            time.sleep(1)
 
         if st.session_state.simulation_successful == True:
             self.set_results_button()
