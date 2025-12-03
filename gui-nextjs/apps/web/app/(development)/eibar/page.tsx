@@ -1,13 +1,13 @@
-import Incrementer from '@workspace/ui/components/Incrementer'
-import IncrementerUnits from '@workspace/ui/components/IncrementerUnits'
-import IncrementerLabeled from '@workspace/ui/components/IncrementerLabeled'
-import LabelWithTooltip from '@workspace/ui/components/LabelWithTooltip'
-import IncrementerGroup from '@workspace/ui/components/IncrementerGroup'
-import IncrementerGroupLabeled from '@workspace/ui/components/IncrementerGroupLabeled'
-import Selector from '@workspace/ui/components/Selector'
-import SelectorWithTooltip from '@workspace/ui/components/SelectorWithTooltip'
-import TextInputWithTooltip from '@workspace/ui/components/TextInputWithTooltip'
-import FileUploader from '@workspace/ui/components/FileUploader'
+import Incrementer from '@workspace/ui/components/incrementer'
+import IncrementerUnits from '@workspace/ui/components/incrementer-units'
+import IncrementerLabeled from '@workspace/ui/components/incrementer-labeled'
+import LabelWithTooltip from '@workspace/ui/components/label-with-tooltip'
+import IncrementerGroup from '@workspace/ui/components/incrementer-group'
+import IncrementerGroupLabeled from '@workspace/ui/components/incrementer-group-labeled'
+import Selector from '@workspace/ui/components/selector'
+import SelectorWithTooltip from '@workspace/ui/components/selector-with-tooltip'
+import TextInputWithTooltip from '@workspace/ui/components/text-input-with-tooltip'
+import FileUploader from '@workspace/ui/components/file-uploader'
 
 export default function LibraryPage() {
   return (

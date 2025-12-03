@@ -1,17 +1,17 @@
 "use client";
 
-import GeometryPlot from "@workspace/ui/components/GeometryPlot";
-import ToggleLabel from "@workspace/ui/components/ToggleLabel";
-import { Toggle } from "@workspace/ui/components/Toggle";
-import { Switch } from "@workspace/ui/components/switch";
-import { GeometryPlotToggle } from "@workspace/ui/components/GeometryPlotToggle";
-import Metric from "@workspace/ui/components/Metric"
+import GeometryPlot from "@workspace/ui/components/geometry-plot";
+import ToggleLabel from "@workspace/ui/components/label-with-toggle";
+import { Toggle } from "@workspace/ui/components/toggle";
+import { Switch } from "@workspace/ui/components/ui/switch";
+import { GeometryPlotToggle } from "@workspace/ui/components/geometry-plot-toggle";
+import Metric from "@workspace/ui/components/metric"
 
-import MetricCardButton from "@workspace/ui/components/MetricCardButton";
-import { MetricCard } from "@workspace/ui/components/MetricCard";
-import SimulatorStepper from "@workspace/ui/components/SimulatorStepper";
-import { SidebarProvider } from "@workspace/ui/components/sidebar";
-import { ResultsSideBar } from "@workspace/ui/components/ResultsSideBar";
+import MetricCardButton from "@workspace/ui/components/metric-card-with-run-button";
+import { MetricCard } from "@workspace/ui/components/metric-card";
+import SimulatorStepper from "@workspace/ui/components/stepper-simulator";
+import { SidebarProvider } from "@workspace/ui/components/ui/sidebar";
+import { ResultsSideBar } from "@workspace/ui/components/sidebar-results";
 
 const geometryData = {
   thickness_ne: 50,

@@ -1,7 +1,7 @@
 import { useId } from 'react'
 
-import { Label } from '@workspace/ui/components/label'
-import { SelectNative } from '@workspace/ui/components/select-native'
+import { Label } from '@workspace/ui/components/ui/label'
+import { SelectNative } from '@workspace/ui/components/ui/select-native'
 
 type Props = {
   label: string

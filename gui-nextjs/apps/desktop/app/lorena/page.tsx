@@ -3,7 +3,7 @@
 import GeometryPlot from "@workspace/ui/components/GeometryPlot";
 import ToggleLabel from "@workspace/ui/components/ToggleLabel";
 import { Toggle } from "@workspace/ui/components/Toggle";
-import { Switch } from "@workspace/ui/components/switch";
+import { Switch } from "@workspace/ui/components/ui/switch";
 import { GeometryPlotToggle } from "@workspace/ui/components/GeometryPlotToggle";
 
 const geometryData = {

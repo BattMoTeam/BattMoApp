@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 
-import { Button } from '@workspace/ui/components/button'
+import { Button } from '@workspace/ui/components/ui/button'
 
 type Props = {
   start?: number

@@ -7,7 +7,7 @@ import {
   StepperSeparator,
   StepperTitle,
   StepperTrigger,
-} from "@workspace/ui/components/stepper";
+} from "@workspace/ui/components/ui/stepper";
 
 import {
   TargetIcon,

@@ -40,6 +40,20 @@ export function useWebSocket({ url, maxRetries = 2, reconnectDelay = 2000, onDat
     return res.json();
   }
 
+  
+const parseMessage = (data) => {
+  try {
+    let obj = JSON.parse(data);
+    if (typeof obj === "string") {
+      obj = JSON.parse(obj);
+    }
+    return obj;
+  } catch {
+    return null;
+  }
+};
+
+
   function connect() {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return;
 
@@ -57,8 +71,12 @@ export function useWebSocket({ url, maxRetries = 2, reconnectDelay = 2000, onDat
       try {
         
         if (typeof event.data === "string") {
-          const parsed = JSON.parse(event.data);
-
+          const parsed = parseMessage(event.data);
+          
+          if (!parsed) {
+                  log("⚠️ Failed to parse JSON");
+                  return;
+                }
           if (Array.isArray(parsed)) {
             // Handle numeric array as binary
             const bytes = new Uint8Array(parsed);

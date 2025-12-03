@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Switch } from "@workspace/ui/components/switch";
-import { Label } from "@workspace/ui/components/label";
+import { Switch } from "@workspace/ui/components/ui/switch";
+import { Label } from "@workspace/ui/components/ui/label";
 
 interface ToggleProps {
   className?: string;

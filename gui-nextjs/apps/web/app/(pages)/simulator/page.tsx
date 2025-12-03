@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import SimulatorStepper from "@workspace/ui/components/SimulatorStepper";
-import { ResultsSideBar } from "@workspace/ui/components/ResultsSideBar";
-import { SidebarProvider, useSidebar } from "@workspace/ui/components/sidebar";
-import MetricCardButton from "@workspace/ui/components/MetricCardButton";
+import SimulatorStepper from "@workspace/ui/components/stepper-simulator";
+import { ResultsSideBar } from "@workspace/ui/components/sidebar-results";
+import { SidebarProvider, useSidebar } from "@workspace/ui/components/ui/sidebar";
+import MetricCardButton from "@workspace/ui/components/metric-card-with-run-button";
 
 import { useWebSocket } from "@workspace/ui/hooks/useWebSocket";
 

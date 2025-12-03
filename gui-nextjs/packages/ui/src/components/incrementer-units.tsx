@@ -1,6 +1,6 @@
 'use client'
 
-import Incrementer from '@workspace/ui/components/Incrementer'
+import Incrementer from '@workspace/ui/components/incrementer.js'
 
 type Props = {
   start: number

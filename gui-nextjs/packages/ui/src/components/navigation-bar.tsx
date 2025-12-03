@@ -1,19 +1,19 @@
 import { useId } from "react"
 import { HouseIcon, InboxIcon, SearchIcon, ZapIcon } from "lucide-react"
 import Logo, { LogoLink } from "@workspace/ui/components/logo"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
+import { Button } from "@workspace/ui/components/ui/button"
+import { Input } from "@workspace/ui/components/ui/input"
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from "@workspace/ui/components/navigation-menu"
+} from "@workspace/ui/components/ui/navigation-menu"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@workspace/ui/components/popover"
+} from "@workspace/ui/components/ui/popover"
 
 
 // Navigation links array to be used in both desktop and mobile menus

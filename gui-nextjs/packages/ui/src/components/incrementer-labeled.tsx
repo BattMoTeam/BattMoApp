@@ -1,7 +1,7 @@
 'use client'
 
-import IncrementerUnits from '@workspace/ui/components/IncrementerUnits'
-import LabelWithTooltip from '@workspace/ui/components/LabelWithTooltip'
+import IncrementerUnits from '@workspace/ui/components/incrementer-units.js'
+import LabelWithTooltip from '@workspace/ui/components/label-with-tooltip.js'
 
 type Props = {
   label: string

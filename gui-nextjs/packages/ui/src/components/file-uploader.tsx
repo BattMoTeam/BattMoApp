@@ -3,7 +3,7 @@
 import { AlertCircleIcon, PaperclipIcon, UploadIcon, XIcon } from 'lucide-react'
 
 import { formatBytes, useFileUpload } from '@workspace/ui/hooks/use-file-upload'
-import { Button } from '@workspace/ui/components/button'
+import { Button } from '@workspace/ui/components/ui/button'
 import type { FileMetadata } from '@workspace/ui/hooks/use-file-upload'
 
 // Create some dummy initial files

@@ -6,7 +6,7 @@ import {
   SidebarHeader,
   CustomTrigger,
   
-} from "@workspace/ui/components/sidebar"
+} from "@workspace/ui/components/ui/sidebar"
 import { Collapsible } from "radix-ui"
 
 export function ResultsSideBar() {

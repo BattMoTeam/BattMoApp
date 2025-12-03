@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@workspace/ui/components/button";
+import { Button } from "@workspace/ui/components/ui/button";
 import { SiGithub, SiYoutube, SiLinkedin } from "react-icons/si";
 import { BookOpen } from "lucide-react";
 

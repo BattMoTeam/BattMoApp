@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import ToggleLabel from "@workspace/ui/components/ToggleLabel";
-import GeometryPlot from "@workspace/ui/components/GeometryPlot";
+import ToggleLabel from "@workspace/ui/components/label-with-toggle";
+import GeometryPlot from "@workspace/ui/components/geometry-plot";
 
 interface GeometryPlotToggleProps {
   className?: string;

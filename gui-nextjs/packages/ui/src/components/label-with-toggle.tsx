@@ -1,7 +1,7 @@
 "use client";
 import { useId } from "react";
-import { Toggle } from "@workspace/ui/components/Toggle";
-import { Label } from "@workspace/ui/components/label";
+import { Toggle } from "@workspace/ui/components/toggle";
+import { Label } from "@workspace/ui/components/ui/label";
 
 interface ToggleLabelProps {
   label?: string;

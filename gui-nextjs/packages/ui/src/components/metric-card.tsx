@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@workspace/ui/components/card"
-import Metric, { MetricType } from "@workspace/ui/components/Metric"
+import { Card, CardContent } from "@workspace/ui/components/ui/card"
+import Metric, { MetricType } from "@workspace/ui/components/metric"
 
 interface MetricCardProps {
   metrics: MetricType[]

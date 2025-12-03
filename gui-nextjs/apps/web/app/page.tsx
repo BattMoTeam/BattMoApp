@@ -1,5 +1,5 @@
-import GetStarted from "@workspace/ui/components/GetStarted";
-import Hero from "@workspace/ui/components/Hero";
+import GetStarted from "@workspace/ui/components/get-started";
+import Hero from "@workspace/ui/components/hero";
 
 export default function HomePage() {
   return (

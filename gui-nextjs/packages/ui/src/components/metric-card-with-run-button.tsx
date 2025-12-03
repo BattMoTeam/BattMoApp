@@ -1,7 +1,7 @@
 import { Download } from "lucide-react"
-import { Button } from "@workspace/ui/components/button"
-import { MetricType } from "@workspace/ui/components/Metric"
-import { MetricCard } from "@workspace/ui/components/MetricCard"
+import { Button } from "@workspace/ui/components/ui/button"
+import { MetricType } from "@workspace/ui/components/metric"
+import { MetricCard } from "@workspace/ui/components/metric-card"
 
 
 

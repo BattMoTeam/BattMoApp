@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Incrementer from '@workspace/ui/components/Incrementer'
+import Incrementer from '@workspace/ui/components/incrementer.js'
 
 export default function IncrementerGroup() {
   // initial values

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CardButton from "@workspace/ui/components/CardButton";
+import CardButton from "@workspace/ui/components/card-button";
 import { ArrowRight, Undo2 } from "lucide-react";
 
 export default function TypeSelector() {

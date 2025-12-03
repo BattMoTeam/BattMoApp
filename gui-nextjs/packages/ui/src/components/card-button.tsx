@@ -1,4 +1,4 @@
-import { Button } from "@workspace/ui/components/button";
+import { Button } from "@workspace/ui/components/ui/button";
 import { cn } from "@workspace/ui/lib/utils"; // shadcn utility to merge classes
 
 type CardButtonProps = {
