@@ -1,4 +1,4 @@
-import "@workspace/ui/globals.css"
+import "@workspace/ui/styles/globals.css"
 import NavigationBar from "@workspace/ui/components/navigation-bar";
 import { ReactNode } from "react";
 import Footer from "@workspace/ui/components/footer"

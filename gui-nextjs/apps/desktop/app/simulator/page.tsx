@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import SimulatorStepper from "@workspace/ui/components/SimulatorStepper";
-import TypeSelector from "@workspace/ui/components/TypeSelector";
-import { GeometryPlotToggle } from "@workspace/ui/components/GeometryPlotToggle";
+import SimulatorStepper from "@workspace/ui/components/stepper-simulator";
+import TypeSelector from "@workspace/ui/components/type-selector";
+import { GeometryPlotToggle } from "@workspace/ui/components/geometry-plot-toggle";
 import WebSocketClient from "@workspace/ui/components/WebSocketClient";
 
 

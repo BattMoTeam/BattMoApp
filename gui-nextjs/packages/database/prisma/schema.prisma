@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Category {
+  id                 Int                 @id @default(autoincrement())
+  name               String              @unique
+  parameterMetaDatas ParameterMetaData[]
+}
+
+model Reference {
+  id         Int         @id @default(autoincrement())
+  name       String
+  url        String
+  parameters Parameter[]
+}
+
+model Parameter {
+  id                     Int               @id @default(autoincrement())
+  name                   String
+  value                  Float
+  reference              Reference         @relation(fields: [reference_id], references: [id])
+  reference_id           Int
+  parameter_meta_data    ParameterMetaData @relation(fields: [parameter_meta_data_id], references: [id])
+  parameter_meta_data_id Int
+}
+
+model ParameterMetaData {
+  id               Int         @id @default(autoincrement())
+  name             String
+  type             String
+  min_value        Float
+  max_value        Float
+  unit             String
+  unit_name        String
+  unit_iri         String
+  context_type     String
+  context_type_iri String
+  description      String
+  category         Category    @relation(fields: [category_id], references: [id])
+  category_id      Int
+  parameters       Parameter[]
+}

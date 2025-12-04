@@ -50,6 +50,8 @@
 /* 🌞 Light theme */
 :root {
   --radius: 0.75rem;
+  --app-nav-height: 80px;
+
 
   /* Base */
   --background: #F6F7FB;

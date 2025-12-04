@@ -48,7 +48,7 @@ export default function SimulatorStepper({
   onValueChange?: (step: number) => void;
 }) {
   return (
-    <div className="space-y-8 text-left">
+    <div className="ml-10 mt-[20vw]">
       <Stepper
         orientation="vertical"
         value={value}

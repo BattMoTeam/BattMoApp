@@ -2,9 +2,9 @@
 
 import { AlertCircleIcon, PaperclipIcon, UploadIcon, XIcon } from 'lucide-react'
 
-import { formatBytes, useFileUpload } from '@workspace/ui/hooks/use-file-upload'
+import { formatBytes, useFileUpload } from '@workspace/ui/hooks/useFileUpload'
 import { Button } from '@workspace/ui/components/ui/button'
-import type { FileMetadata } from '@workspace/ui/hooks/use-file-upload'
+import type { FileMetadata } from '@workspace/ui/hooks/useFileUpload'
 
 // Create some dummy initial files
 const initialFiles: FileMetadata[] = []
