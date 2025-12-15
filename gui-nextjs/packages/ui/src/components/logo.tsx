@@ -16,7 +16,7 @@ export default function Logo() {
 export function LogoLink() {
   return (
     <Link
-      href="/"
+      href="https://battmo.org"
       className="flex items-center gap-2 p-2 text-primary"
     >
       <img src="https://raw.githubusercontent.com/BattMoTeam/visual-identity/1bc87b07605d77fb3faa788c82f06ec2735ed31f/logos/battmo_logo_side.png" alt="Logo" className=" w-50" />
