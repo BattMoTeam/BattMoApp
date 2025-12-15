@@ -7,5 +7,6 @@ export default function HomePage() {
       <Hero/>
       <GetStarted/>
     </div>
+ 
   );
 }

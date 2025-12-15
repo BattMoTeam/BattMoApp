@@ -1,17 +1,16 @@
-"use client"
 import React from "react";
 import Image from "next/image";
 import { Button } from "@workspace/ui/components/ui/button";
-import { MoveRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import ExploreSimulatorButton from "@workspace/ui/components/explore-simulator-button";
 
 const Hero = () => {
-    const router = useRouter();
+    
   return (
-    <section className="relative w-full h-[calc(100vh-8rem)] bg-gray-50 overflow-hidden">
+    <section className="relative h-[calc(100vh-8rem)] bg-gray-50 overflow-hidden">
+      
       {/* Centered screenshots */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-full max-w-5xl mx-auto px-4 -mt-16"> 
+      <div className="absolute inset-0 flex items-center justify-center p-20">
+        <div className="relative w-full max-w-5xl mx-auto px-4"> 
           {/* Shifted upwards with -mt-16 */}
           
           {/* Left screenshot */}
@@ -60,15 +59,8 @@ const Hero = () => {
           </p>
         </div>
 
-        {/* CTA Button */}
-        <Button
-          size="lg"
-          className="bg-primary hover:bg-primary/90 text-white text-md p-4 shadow-lg"
-          onClick={() => router.push("/simulator")}
-        >
-          Explore the Simulator 
-          <MoveRight className="size-5"/>
-        </Button>
+        {/* Explore the simulator button */}
+        <ExploreSimulatorButton/>
       </div>
     </section>
   );

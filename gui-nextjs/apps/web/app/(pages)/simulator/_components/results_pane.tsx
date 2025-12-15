@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useSidebar } from '@workspace/ui/components/ui/sidebar';
 import { ResultsSideBar } from '@workspace/ui/components/sidebar-results';
+import { AppSidebar } from '@workspace/ui/components/app-sidebar';
 
 export default function ResultsPane() {
   const [mounted, setMounted] = useState(false);
@@ -27,7 +28,7 @@ export default function ResultsPane() {
       "
     >
       {/* The inner component doesn't set its own positioning */}
-      <ResultsSideBar />
+      <AppSidebar />
     </div>,
     document.body
   );
