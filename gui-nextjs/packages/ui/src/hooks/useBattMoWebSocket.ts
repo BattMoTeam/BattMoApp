@@ -13,7 +13,7 @@ export interface Hdf5Header {
 }
 
 export interface BattMoEvent {
-  type: 'client_id' | 'info' | 'error' | 'hdf5' | 'result';
+  type: 'client_id' | 'info' | 'error' | 'hdf5' | 'result' | 'kpis';
   // Raw message for non-hdf5 cases
   raw?: any;
   // Populated when type === 'client_id'
@@ -26,7 +26,7 @@ export interface BattMoEvent {
 
 /**
  * useBattMoWebSocket
- * - Connects to Julia WS server
+ * - Connects to the BattMo WS server
  * - Parses JSON events and captures the following binary frame for HDF5 output
  */
 export function useBattMoWebSocket(options: {
@@ -139,6 +139,8 @@ export function useBattMoWebSocket(options: {
             setEvents(prev => [...prev, { type: 'error', raw: msg }]);
           } else if (msg.type === 'result') {
             setEvents(prev => [...prev, { type: 'result', raw: msg }]);
+          } else if (msg.type === 'kpis') {
+            setEvents(prev => [...prev, { type: 'kpis', raw: msg }]);
           } else {
             // Unknown JSON shape—still surface it
             setEvents(prev => [...prev, { type: 'info', raw: msg }]);
@@ -208,6 +210,11 @@ export function useBattMoWebSocket(options: {
     return sendJson({ task: 'cancel_simulation' });
   }, [sendJson]);
 
+  const calculateKPIs = useCallback((data: Record<string, unknown>) => {
+    // Server expects: {"task":"calculate_equilibrium_kpis", "data": {...}}
+    return sendJson({ task: 'calculate_equilibrium_kpis', data });
+  }, [sendJson]);
+
   const clearEvents = useCallback(() => setEvents([]), []);
 
   const reconnect = useCallback(() => {
@@ -221,6 +228,7 @@ export function useBattMoWebSocket(options: {
     events,            // sequence of BattMoEvent (includes hdf5 header + bytes)
     runSimulation,
     cancelSimulation,
+    calculateKPIs,
     reconnect,
     clearEvents,
   };

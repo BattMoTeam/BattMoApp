@@ -1,4 +1,4 @@
-import TitleBar from "@/components/title-bar";
+import LogoBar from "@/components/logo-bar";
 import "@workspace/ui/styles/globals.css"
 import { ReactNode } from "react";
 
@@ -18,6 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     
           </head>
       <body>
+        {/* <LogoBar/> */}
         <main>{children}</main>
       </body>
     </html>
