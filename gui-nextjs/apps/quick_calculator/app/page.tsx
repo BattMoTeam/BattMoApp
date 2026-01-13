@@ -1,4 +1,4 @@
-import CalculateButton from "@/components/calculate-button";
+import CalculateKPIsButton from "@/components/calculate-kpis-button";
 import FileUploader from "@workspace/ui/components/file-uploader";
 
 
@@ -12,7 +12,7 @@ export default function HomePage() {
 
         </div>
         <div className="">
-          <CalculateButton/> 
+          <CalculateKPIsButton/> 
         </div>
 
         <div className="container">

@@ -200,17 +200,17 @@ export function useBattMoWebSocket(options: {
     }
   }, []);
 
-  const runSimulation = useCallback((data: Record<string, unknown>) => {
+  const runSimulationTask = useCallback((data: Record<string, unknown>) => {
     // Server expects: {"task":"run_simulation", "data": {...}}
     return sendJson({ task: 'run_simulation', data });
   }, [sendJson]);
 
-  const cancelSimulation = useCallback(() => {
+  const cancelSimulationTask = useCallback(() => {
     // Server expects: {"task":"cancel_simulation"}
     return sendJson({ task: 'cancel_simulation' });
   }, [sendJson]);
 
-  const calculateKPIs = useCallback((data: Record<string, unknown>) => {
+  const calculateKPIsTask = useCallback((data: Record<string, unknown>) => {
     // Server expects: {"task":"calculate_equilibrium_kpis", "data": {...}}
     return sendJson({ task: 'calculate_equilibrium_kpis', data });
   }, [sendJson]);
@@ -226,9 +226,9 @@ export function useBattMoWebSocket(options: {
     lastError,
     clientUUID,
     events,            // sequence of BattMoEvent (includes hdf5 header + bytes)
-    runSimulation,
-    cancelSimulation,
-    calculateKPIs,
+    runSimulationTask,
+    cancelSimulationTask,
+    calculateKPIsTask,
     reconnect,
     clearEvents,
   };

@@ -12,5 +12,8 @@
     "@prisma/adapter-better-sqlite3": "^7.1.0",
     "@prisma/client": "^7.1.0",
     "dotenv": "^17.2.3"
+  },
+  "prisma": {
+    "schema": "./prisma"
   }
 }

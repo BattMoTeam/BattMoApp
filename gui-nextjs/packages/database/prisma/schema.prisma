@@ -1,6 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Generator: pecifies what clients should be generated based on the data model (e.g. Prisma Client)
+// Data sources: Specify the details of the data sources Prisma ORM should connect to (e.g. a Sqlite database)
+// Data model definition: Specifies your application models (the shape of the data per data source) and their relations
+
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
