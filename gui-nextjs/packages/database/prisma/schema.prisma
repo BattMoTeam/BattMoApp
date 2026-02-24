@@ -30,26 +30,43 @@ model Reference {
 model Parameter {
   id                     Int               @id @default(autoincrement())
   name                   String
-  value                  Float
-  reference              Reference         @relation(fields: [reference_id], references: [id])
-  reference_id           Int
+  value                  Json
+  reference              Reference?        @relation(fields: [reference_id], references: [id])
+  reference_id           Int?
   parameter_meta_data    ParameterMetaData @relation(fields: [parameter_meta_data_id], references: [id])
   parameter_meta_data_id Int
+  created_at             DateTime          @default(now())
 }
 
 model ParameterMetaData {
   id               Int         @id @default(autoincrement())
   name             String
-  type             String
-  min_value        Float
-  max_value        Float
-  unit             String
-  unit_name        String
-  unit_iri         String
-  context_type     String
-  context_type_iri String
-  description      String
+  type             String?
+  min_value        Float?
+  max_value        Float?
+  unit             String?
+  unit_name        String?
+  unit_iri         String?
+  context_type     String?
+  context_type_json Json?
+  context_type_iri String?
+  description      String?
+  documentation    String?
   category         Category    @relation(fields: [category_id], references: [id])
   category_id      Int
   parameters       Parameter[]
+  options          ParameterMetaDataOption[]
+
+  @@unique([category_id, name])
+}
+
+model ParameterMetaDataOption {
+  id                     Int               @id @default(autoincrement())
+  parameter_meta_data    ParameterMetaData @relation(fields: [parameter_meta_data_id], references: [id], onDelete: Cascade)
+  parameter_meta_data_id Int
+  value                  String
+  order_index            Int               @default(0)
+
+  @@unique([parameter_meta_data_id, value])
+  @@index([parameter_meta_data_id, order_index])
 }

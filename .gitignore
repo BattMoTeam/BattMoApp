@@ -137,6 +137,8 @@ dmypy.json
 node_modules
 .pnp
 .pnp.js
+.pnpm-store
+gui-nextjs/pnpm-lock.yaml
 
 # Local env files
 .env

@@ -13,6 +13,10 @@
     "@prisma/client": "^7.1.0",
     "dotenv": "^17.2.3"
   },
+  "scripts": {
+    "metadata:fetch": "node --experimental-strip-types ./scripts/get_recources.ts",
+    "metadata:import": "node --experimental-strip-types ./scripts/update_db.ts"
+  },
   "prisma": {
     "schema": "./prisma"
   }

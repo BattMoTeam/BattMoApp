@@ -1,0 +1,90 @@
+version: "3.9"
+
+services:
+  api:
+    build: 
+      context: C:/Users/lorenah/Documents/Repositories/BattMoAPI
+      dockerfile: Dockerfile
+      target: dev
+    container_name: battmo_api
+    restart: always
+    ports:
+      - "8081:8081"
+      - "8080:8080"
+    volumes:
+      - C:/Users/lorenah/Documents/Repositories/BattMoAPI/scripts:/api/scripts
+      - C:/Users/lorenah/Documents/Repositories/BattMoAPI/api.jl:/api/api.jl
+      - C:/Users/lorenah/Documents/Repositories/BattMoAPI/logs:/api/logs
+      - C:/Users/lorenah/Documents/Repositories/BattMoAPI/input_files:/api/input_files
+      - C:/Users/lorenah/Documents/Repositories/BattMoAPI/results:/api/results
+    # command: julia --project=. -e 'include("api.jl")' --color=yes --depwarn=no --project=@. --sysimage="pre-compilation/sysimage.so" -q -i -- $$(dirname $$0)/../bootstrap.jl -s=true "$$@"
+    networks:
+      - app-network
+    command: julia --project=. -e 'include("api.jl")'
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "julia",
+          "-e",
+          "using Sockets; s1=connect(ip\"127.0.0.1\",8080); close(s1); s2=connect(ip\"127.0.0.1\",8081); close(s2)",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 20s
+
+  web:
+    build:
+      context: .  
+      dockerfile: apps/web/Dockerfile
+      target: base
+    container_name: web_app
+    working_dir: /app
+    command: sh -c "corepack enable && pnpm install && pnpm --filter web dev --hostname 0.0.0.0"
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+    networks:
+      - app-network
+    volumes:
+      - .:/app:cached
+      - web-node-modules:/app/node_modules
+      - turbo-cache:/app/.turbo
+    depends_on:
+      api:
+        condition: service_healthy
+
+    
+  quick_calculator:
+      build:
+        context: .  
+        dockerfile: apps/quick_calculator/Dockerfile
+        target: base
+      container_name: quick-calc
+      working_dir: /app
+      command: sh -c "corepack enable && pnpm install && pnpm --filter quick_calculator dev --port 3002 --hostname 0.0.0.0"
+      ports:
+        - "3002:3002"
+      environment:
+        NODE_ENV: development
+      networks:
+        - app-network
+      volumes:
+        - .:/app:cached
+        - quick_calculator-node-modules:/app/node_modules
+        - turbo-cache:/app/.turbo
+      depends_on:
+        api:
+          condition: service_healthy
+
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  web-node-modules:
+  quick_calculator-node-modules:
+  turbo-cache:

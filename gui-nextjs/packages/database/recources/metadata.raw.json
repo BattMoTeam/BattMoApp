@@ -1,0 +1,1252 @@
+{
+  "CyclingProtocol": {
+    "TotalNumberOfCycles": {
+      "max_value": 10000,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 0,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_6d981c04_3ace_4f1b_b0f8_770776cceb6f",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "NumberOfEntities",
+      "description": "Total count of charge-discharge cycles executed during the simulation under defined conditions.",
+      "type": "Int64"
+    },
+    "TotalTime": {
+      "max_value": 1000000000,
+      "unit_name": "emmo:Second",
+      "min_value": 1,
+      "unit": "s",
+      "unit_iri": "https://w3id.org/emmo#Second",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_0adabf6f_7404_44cb_9f65_32d83d8101a3",
+      "context_type": "Time",
+      "type": "Real",
+      "description": "Maximum duration of the simulation."
+    },
+    "CRate": {
+      "max_value": 50,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 0.001,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_a7dc73e2_d4aa_4dfc_8b4d_cb611f1501fb",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "CRate",
+      "description": "An indicator of the electric current at which a cell discharged relative to a defined capacity. 1C corresponds to charging the entire defined capacity in one hour.",
+      "type": "Real"
+    },
+    "FunctionName": {
+      "context_type_iri": "https://schema.org/name",
+      "context_type": "Name",
+      "type": "String",
+      "description": "String of the name of a Julia function."
+    },
+    "InitialStateOfCharge": {
+      "max_value": 1,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 0,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_8b2aaa50_bbe1_45da_8778_8898326246a2",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "StateOfCharge",
+      "description": "State of charge of the cell at the start of a simulation.",
+      "type": "Real"
+    },
+    "AmbientTemperature": {
+      "max_value": 373.15,
+      "unit_name": "emmo:Kelvin",
+      "min_value": 238.15,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_39a44af0_0e1a_4859_b550_bdabad64386e",
+      "unit": "K",
+      "unit_iri": "https://w3id.org/emmo#Kelvin",
+      "context_type": "AmbientThermodynamicTemperature",
+      "description": "The ambient temperature of the environment surrounding the electrochemical cell.",
+      "type": "Real"
+    },
+    "Protocol": {
+      "options": [
+        "CC",
+        "CCCV",
+        "Function"
+      ],
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_d3e2d213_d078_4b9a_8beb_62f063e57d69",
+      "context_type": "Protocol",
+      "type": "String",
+      "description": "Type of cycling procedure used to cycle a cell. For instance: Constant Current (\"CC\"), Constant Current - Constant Voltage (\"CCCV\")."
+    },
+    "UpperVoltageLimit": {
+      "max_value": 6,
+      "unit_name": "emmo:Volt",
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_6dcd5baf_58cd_43f5_a692_51508e036c88",
+      "unit": "V",
+      "unit_iri": "https://w3id.org/emmo#Volt",
+      "context_type": "UpperVoltageLimit",
+      "description": "Maximum voltage limit when the charge step stops.",
+      "type": "Real"
+    },
+    "InitialControl": {
+      "options": [
+        "charging",
+        "discharging"
+      ],
+      "context_type_iri": "https://w3id.org/emmo#EMMO_472a0ca2_58bf_4618_b561_6fe68bd9fd49",
+      "context_type": "Protocol",
+      "type": "String",
+      "description": "Whether a cycling protocol starts with \"charging\" or \"discharging\"."
+    },
+    "RestingTimeAfterDischarge": {
+      "max_value": 1000000,
+      "unit_name": "emmo:Second",
+      "min_value": 0,
+      "unit": "s",
+      "unit_iri": "https://w3id.org/emmo#Second",
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_2678a656_4a27_4706_8dde_b0a93e9b92fa",
+      "context_type": "RestingTimeAfterDischarge",
+      "type": "Real",
+      "description": "Time during which the cell is kept at open-circuit conditions after completing a discharging step."
+    },
+    "CurrentChangeLimit": {
+      "max_value": 0.1,
+      "min_value": 1e-8,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_71f10616_15eb_4dc4_bc8d_ffaac3838af2",
+      "unit": "A·s⁻¹",
+      "description": "A control limit placed on the rate of change of the electric current (dI/dt) in a constant-voltage step.",
+      "type": "Real"
+    },
+    "InitialTemperature": {
+      "max_value": 373.15,
+      "unit_name": "emmo:Kelvin",
+      "min_value": 238.15,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_9c9b80a4_a00b_4b91_8e17_3a7831f2bf2f",
+      "unit": "K",
+      "unit_iri": "https://w3id.org/emmo#Kelvin",
+      "context_type": "InititalThermodynamicTemperature",
+      "description": "The thermodynamic temperature at some point in time designated to be the initial state.",
+      "type": "Real"
+    },
+    "VoltageChangeLimit": {
+      "max_value": 0.1,
+      "unit_name": "emmo:VoltPerSecond",
+      "min_value": 0.0001,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_09e64707_a17d_4405_84cc_ee9d91ed32ef",
+      "unit": "V·s⁻¹",
+      "unit_iri": "https://w3id.org/emmo#VoltPerSecond",
+      "description": "A control limit placed on the rate of change of the cell voltage (dV/dt) in a constant-current step.",
+      "type": "Real"
+    },
+    "DRate": {
+      "max_value": 50,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 0.001,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_25e20915_c35d_4bee_ad31_736235a79780",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "DischargingCRate",
+      "description": "An indicator of the electric current at which a cell discharged relative to a defined capacity. 1C corresponds to discharging the entire defined capacity in one hour.",
+      "type": "Real"
+    },
+    "LowerVoltageLimit": {
+      "max_value": 6,
+      "unit_name": "emmo:Volt",
+      "min_value": 0,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_534dd59c_904c_45d9_8550_ae9d2eb6bbc9",
+      "unit": "V",
+      "unit_iri": "https://w3id.org/emmo#Volt",
+      "context_type": "LowerVoltageLimit",
+      "description": "Minimum voltage limit when the discharge step stops.",
+      "type": "Real"
+    },
+    "RestingTimeAfterCharge": {
+      "max_value": 1000000,
+      "unit_name": "emmo:Second",
+      "min_value": 0,
+      "unit": "s",
+      "unit_iri": "https://w3id.org/emmo#Second",
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_2678a656_4a27_4706_8dde_b0a93e9b92fa",
+      "context_type": "RestingTimeAfterCharge",
+      "type": "Real",
+      "description": "Time during which the cell is kept at open-circuit conditions after completing a charging step."
+    }
+  },
+  "SimulationSettings": {
+    "PositiveElectrodeCoatingGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": null,
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of grid points along the thickness dimension of the positive electrode."
+    },
+    "Grid": {
+      "context_type_iri": null,
+      "context_type": "Grid",
+      "type": "Vector",
+      "category": "SimulationSettings",
+      "description": "Vector storing the numerical representation of the computational grid discretizing the spatial representation of the cell."
+    },
+    "SeparatorGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_47608fd0_cc0d_457e_9141_051935029e3a",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of grid points along the thickness dimension of the separator."
+    },
+    "NegativeElectrodeCurrentCollectorTabLengthGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_47608fd0_cc0d_457e_9141_051935029e3a",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "In the current collector tab at the negative electrode, the number of grid points along the length dimension of the tab's face."
+    },
+    "PositiveElectrodeCurrentCollectorTabLengthGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_47608fd0_cc0d_457e_9141_051935029e3a",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "In the current collector tab at the positive electrode, the number of grid points along the length dimension of the tab's face."
+    },
+    "RampUpSteps": {
+      "max_value": 100,
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_rampup_steps",
+      "context_type": "RampUpSteps",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of ramp-up steps applied to initialize the cell simulation."
+    },
+    "RampUpTime": {
+      "max_value": 500,
+      "unit_name": "emmo:Second",
+      "min_value": 0,
+      "unit": "s",
+      "context_type_iri": null,
+      "context_type": "RampUpTime",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Ramp up time duration applied to initialize the cell simulation."
+    },
+    "HeightGridPoints": {
+      "max_value": 100,
+      "min_value": 1,
+      "context_type_iri": null,
+      "context_type": "Cell",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of grid points along the height of the cell (used in P4D cylindrical)"
+    },
+    "PositiveElectrodeCurrentCollectorGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": null,
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of grid points along the thickness dimension of the positive electrode current collector."
+    },
+    "PositiveElectrodeCurrentCollectorTabWidthGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": null,
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "In the current collector tab at the positive electrode, the number of grid points along the width dimension of the tab's face."
+    },
+    "TimeStepDuration": {
+      "max_value": 500,
+      "unit_name": "emmo:Second",
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_85e39686_9658_4c74_bb91_a935704c174a",
+      "unit": "s",
+      "unit_iri": "https://w3id.org/emmo/domain/emmo#Second",
+      "context_type": "StepDuration",
+      "category": "SimulationSettings",
+      "description": "Duration of each time step in simulations",
+      "type": "Real"
+    },
+    "NegativeElectrodeCurrentCollectorGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_47608fd0_cc0d_457e_9141_051935029e3a",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of grid points along the thickness dimension of the negative electrode current collector."
+    },
+    "AngularGridPoints": {
+      "max_value": 100,
+      "min_value": 1,
+      "context_type_iri": null,
+      "context_type": "Cell",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of discretisation angles for a cylindrical cell (used in P4D cylindrical)"
+    },
+    "NegativeElectrodeCurrentCollectorTabWidthGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_47608fd0_cc0d_457e_9141_051935029e3a",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "In the current collector tab at the negative electrode, the number of grid points along the width dimension of the tab's face."
+    },
+    "ElectrodeLengthGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": null,
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of grid points along the length dimension of the electrode."
+    },
+    "NegativeElectrodeCoatingGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": null,
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of grid points along the thickness dimension of the negative electrode."
+    },
+    "PositiveElectrodeParticleGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": null,
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of grid points along the radial pseudo dimension of the positive electrode active material particles."
+    },
+    "ElectrodeWidthGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": null,
+      "context_type": "GridPointsPositiveElectrode",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of grid points along the width dimension of the electrode."
+    },
+    "NegativeElectrodeParticleGridPoints": {
+      "max_value": 1000,
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_47608fd0_cc0d_457e_9141_051935029e3a",
+      "type": "Int64",
+      "category": "SimulationSettings",
+      "description": "Number of grid points along the radial pseudo dimension of the negative electrode active material particles."
+    }
+  },
+  "CellParameters": {
+    "Concentration": {
+      "max_value": 5000,
+      "unit_name": "emmo:MolePerCubicMetre",
+      "min_value": 0,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_8177eae6_1631_430d_99f2_942669bcb784",
+      "unit": "mol·m⁻³",
+      "unit_iri": "https://w3id.org/emmo#MolePerCubicMetre",
+      "context_type": "IonConcentration",
+      "description": "Moles of the charge carrier species per cubic meter of electrolyte.",
+      "type": "Real"
+    },
+    "HeatTransferCoefficient": {
+      "max_value": 1000000,
+      "unit_name": "emmo:WattPerSquareMetreKelvin",
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo#EMMO_43b349fc_c7ed_480d_b0ca_9db84b700813",
+      "unit": "W·m⁻²·K⁻¹",
+      "unit_iri": "https://w3id.org/emmo#WattPerSquareMetreKelvin",
+      "context_type": "CoefficientOfHeatTransfer",
+      "description": "At a point on the surface separating two media with different thermodynamic temperatures, magnitude of the density of heat flow rate divided by the absolute value of temperature difference.",
+      "type": "Real"
+    },
+    "OpenCircuitPotential": {
+      "unit_name": "emmo:Volt",
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_9c657fdc_b9d3_4964_907c_f9a6e8c5f52b",
+      "unit": "V",
+      "unit_iri": "https://w3id.org/emmo#Volt",
+      "context_type": [
+        "OpenCircuitPotential",
+        "Expression"
+      ],
+      "description": "The open-circuit potential of the active material under a given intercalant stoichimetry and temperature.",
+      "type": [
+        "String",
+        "Dict{String, Vector}",
+        "Real"
+      ],
+      "documentation": "https://battmo.org/BattMo.jl/dev/manuals/user_guide/simulation_dependent_input"
+    },
+    "IonicConductivity": {
+      "max_value": 1000,
+      "unit_name": "emmo:SiemensPerMetre",
+      "min_value": 1e-10,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_25dabdc2_68bf_4a38_8cbe_11be017358bc",
+      "unit": "S·m⁻¹",
+      "unit_iri": "https://w3id.org/emmo#SiemensPerMetre",
+      "context_type": [
+        "IonicConductivity",
+        "Expression"
+      ],
+      "description": "Measure of the ionic conduction of ions in the electrolyte under given concentration and temperature conditions",
+      "type": [
+        "String",
+        "Dict{String, Vector}",
+        "Real"
+      ],
+      "documentation": "https://battmo.org/BattMo.jl/dev/manuals/user_guide/simulation_dependent_input"
+    },
+    "ReactionRateConstant": {
+      "max_value": 0.01,
+      "unit_name": "emmo:MolePerSquareMetrePerSecond",
+      "min_value": 1e-14,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_0335e3f6_d1d8_4daa_8376_a9285f1bc9f1",
+      "unit": "mol·m⁻²·s⁻¹",
+      "unit_iri": "https://w3id.org/emmo#MolePerSquareMetrePerSecond",
+      "context_type": "ReactionRateConstant",
+      "description": "Proportionality constant quantifying the rate and direction of a chemical reaction by relating it with the concentration of reactants.",
+      "type": [
+        "String",
+        "Dict{String, Vector}",
+        "Real"
+      ]
+    },
+    "OuterRadius": {
+      "max_value": 0.2,
+      "unit_name": "emmo:Metre",
+      "min_value": 0.001,
+      "unit": "m",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type": "OuterRadius",
+      "type": "Real",
+      "description": "Radius of the rolled electrodes within a cylindrical cell, measured from the center of the cell to the outer side of the cell wall."
+    },
+    "TabWidth": {
+      "max_value": 0.5,
+      "unit_name": "emmo:Metre",
+      "min_value": 0.0005,
+      "unit": "m",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_e4de48b1_dabb_4490_ac2b_040f926c64f0",
+      "type": "Real",
+      "description": "Dimension of the shortest side of the face of the rectangular tab of a current collector."
+    },
+    "Porosity": {
+      "max_value": 0.95,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 0.05,
+      "context_type_iri": "https://w3id.org/emmo#EMMO_3a6578ac_aee0_43b9_9bc6_1eb208c8c9a9",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "Porosity",
+      "description": "Ratio of the pore volume to the total volume of a porous material.",
+      "type": "Real"
+    },
+    "ElectronicDiffusionCoefficient": {
+      "max_value": 1000,
+      "unit_name": "emmo:SquareMetrePerSecond",
+      "min_value": 1e-16,
+      "unit": "m²·s⁻¹",
+      "unit_iri": "https://w3id.org/emmo#SquareMetrePerSecond",
+      "context_type_iri": null,
+      "context_type": "ElectronicDiffusionCoefficient",
+      "type": "Real",
+      "description": "Diffusion coefficient of electrons in a solid."
+    },
+    "InterstitialConcentration": {
+      "max_value": 100000,
+      "unit_name": "emmo:MolePerCubicMetre",
+      "min_value": 0,
+      "unit": "mol·m⁻³",
+      "unit_iri": "https://w3id.org/emmo#MolePerCubicMetre",
+      "context_type_iri": null,
+      "context_type": "InterstitialConcentration",
+      "type": "Real",
+      "description": "Amount of neutral intersticial sites of the intercalant (Li+) per volume of solid. See https://doi.org/10.1002/cssc.201800077."
+    },
+    "Height": {
+      "max_value": 0.5,
+      "unit_name": "emmo:Metre",
+      "min_value": 0.01,
+      "unit": "m",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_cd2cd0de_e0cc_4ef1_b27e_2e88db027bac",
+      "context_type": "Length",
+      "type": "Real",
+      "description": "The heigh of a cylindrical cell."
+    },
+    "InitialPotentialDrop": {
+      "max_value": 1,
+      "unit_name": "emmo:Volt",
+      "min_value": 0,
+      "unit": "V",
+      "unit_iri": "https://w3id.org/emmo#Volt",
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_654321",
+      "context_type": "InitialPotentialDrop",
+      "type": "Real",
+      "description": "Electric potential difference across the SEI layer or electrode interface at the beginning of the simulation. Represents any initial voltage offset due to pre-formation or initial conditions of the cell."
+    },
+    "MaximumConcentration": {
+      "max_value": 1000000,
+      "unit_name": "emmo:MolePerCubicMetre",
+      "min_value": 0,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_47287d09_6108_45ca_ac65_8b9451b1065e",
+      "unit": "mol·m⁻³",
+      "unit_iri": "https://w3id.org/emmo#MolePerCubicMetre",
+      "context_type": "MaximumConcentration",
+      "description": "The saturation concentration of the guest molecule in the host material",
+      "type": "Real"
+    },
+    "VolumetricSurfaceArea": {
+      "max_value": 1000000000,
+      "unit_name": "emmo:Metre",
+      "min_value": 0.001,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_a5571263_f153_448f_84a3_cd18092cf8fa",
+      "unit": "m²m⁻³",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type": "VolumetricSurfaceArea",
+      "description": "Ratio of the electrochemically-active surface area of the electrode per volume of electrode",
+      "type": "Real"
+    },
+    "BruggemanCoefficient": {
+      "max_value": 5,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 0.5,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_5c34b3b5_c9c4_477d_809a_3f682f995aa9",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "BruggemanCoefficient",
+      "description": "Exponent relating the tortuosity and porosity of porous media.",
+      "type": "Real"
+    },
+    "SurfaceCoefficientOfHeatTransfer": {
+      "max_value": 5000,
+      "unit_name": "emmo:WattPerSquareMetreKelvin",
+      "min_value": 1,
+      "unit": "W·m⁻²·K⁻¹",
+      "unit_iri": "https://w3id.org/emmo#WattPerSquareMetreKelvin",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_0b3295fa_f4bf_4f83_a603_9d98c03da5bb",
+      "context_type": "SurfaceCoefficientOfHeatTransfer",
+      "type": "Real",
+      "description": "Rate at which heat is exchanged between a cell’s surface and its surrounding environment"
+    },
+    "MolarVolume": {
+      "max_value": 0.03,
+      "unit_name": "emmo:CubicMetrePerMole",
+      "min_value": 0.000001,
+      "unit": "m³·mol⁻¹",
+      "unit_iri": "https://w3id.org/emmo#CubicMetrePerMole",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_8b4af754_110a_4854_ac65_349ebafc1bed",
+      "context_type": "MolarVolume",
+      "type": "Real",
+      "description": "Volume per amount of substance."
+    },
+    "ChargeTransferCoefficient": {
+      "max_value": 0.9,
+      "unit_name": "dimensionless",
+      "min_value": 0.1,
+      "unit": "-",
+      "unit_iri": "https://w3id.org/emmo#Dimensionless",
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_a4dfa5c1_55a9_4285_b71d_90cf6613ca31",
+      "context_type": "ChargeTransferCoefficient",
+      "type": "Real",
+      "description": "Constant alpha in the Butler-Volmer equation. It represents the fraction of the electrostatic potential energy affecting the reduction rate in an electrode reaction, with the remaining fraction affecting the corresponding oxidation rate."
+    },
+    "diffusion_pre_exponential_factor": {
+      "max_value": 1,
+      "unit_name": "emmo:ReciprocalSecond",
+      "min_value": 1e-15,
+      "unit": "s⁻¹",
+      "unit_iri": "https://w3id.org/emmo#ReciprocalSecond",
+      "description": null,
+      "type": "Real"
+    },
+    "InnerRadius": {
+      "max_value": 0.1,
+      "unit_name": "emmo:Metre",
+      "min_value": 0.001,
+      "unit": "m",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_32dcd601_47c7_4028_b7fa_5e972ae57f12",
+      "context_type": "InnerRadius",
+      "type": "Real",
+      "description": "Radius of the rolled electrodes within a cylindrical cell, measured from the center of the cell to the inner side of the cell wall."
+    },
+    "ActivationEnergyOfDiffusion": {
+      "max_value": 1000000,
+      "unit_name": "emmo:JoulePerMole",
+      "min_value": 1000,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_d7f8cab9_b035_4ecd_be63_292672572526",
+      "unit": "J·mol⁻¹",
+      "unit_iri": "https://w3id.org/emmo#JoulePerMole",
+      "context_type": "ActivationEnergy",
+      "description": "Parameter of the empirical Arrhenius formulation, characterizing the exponential temperature dependence of the diffusion coefficient of the material.",
+      "type": "Real"
+    },
+    "FunctionName": {
+      "context_type_iri": "https://schema.org/name",
+      "context_type": "Name",
+      "type": "String",
+      "description": "String of the name of a Julia function."
+    },
+    "NumberOfElectronsTransfered": {
+      "max_value": 4,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_abfadc99_6e43_4d37_9b04_7fc5b0f327ae",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "ElectronsTransferred",
+      "description": "Number of electrons transferred between an electrode and an entity (ion, molecule) during an electrochemical reaction.",
+      "type": "Int64"
+    },
+    "StoichiometricCoefficientAtSOC0": {
+      "max_value": 1,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 0,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_f22bd1ec_faca_4335_92a5_a1687154c622",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "StoichiometricNumberOfSubstance",
+      "description": "Stoichiometry of the intercalant within the host material, at the lower cell voltage limit.",
+      "type": "Real"
+    },
+    "InitialThickness": {
+      "max_value": 0.01,
+      "unit_name": "emmo:Metre",
+      "min_value": 1e-9,
+      "unit": "m",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
+      "context_type": "InitialThickness",
+      "type": "Real",
+      "description": "Thickness of the SEI layer at the start of the simulation. See https://doi.org/10.1016/j.powera.2022.100083."
+    },
+    "DeviceSurfaceArea": {
+      "max_value": 1,
+      "unit_name": "emmo:SquareMetre",
+      "min_value": 0.0001,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_47ab1dad_cc09_4fd8_af23_acb36fb680dd",
+      "unit": "m²",
+      "unit_iri": "https://w3id.org/emmo#SquareMetre",
+      "description": "Total external surface area of an electrochemical device.",
+      "type": "Real"
+    },
+    "NominalVoltage": {
+      "max_value": 6,
+      "unit_name": "emmo:Volt",
+      "min_value": 0,
+      "unit": "V",
+      "unit_iri": "https://w3id.org/emmo#Volt",
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_639b844a_e801_436b_985d_28926129ead6",
+      "context_type": "NominalVoltage",
+      "type": "Real",
+      "description": "Reference voltage of the cell as reported by the manufacturer. Usually calculated from the cell's energy output and capacity under a standard cycling test."
+    },
+    "MassFraction": {
+      "max_value": 1,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 0,
+      "context_type_iri": "https://w3id.org/emmo#EMMO_7c055d65_2929_40e1_af4f_4bf10995ad50",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "MassFraction",
+      "description": "Mass of an electrode constituent divided by the total mass of all constituents in the solid mixture.",
+      "type": "Real"
+    },
+    "ElectrodeLength": {
+      "max_value": 0.5,
+      "unit_name": "emmo:Metre",
+      "min_value": 0.01,
+      "unit": "m",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_cd2cd0de_e0cc_4ef1_b27e_2e88db027bac",
+      "context_type": "Length",
+      "type": "Real",
+      "description": "Dimension of the longest side of the face of a rectangular electrode."
+    },
+    "StoichiometricCoefficientAtSOC100": {
+      "max_value": 1,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 0,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_38ab058e_3912_48c2_a7eb_76d25d000820",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "StoichiometricNumberOfSubstance",
+      "description": "Stoichiometry of the intercalant within the host material, at the upper cell voltage limit.",
+      "type": "Real"
+    },
+    "ElectrodeGeometricSurfaceArea": {
+      "max_value": 2,
+      "unit_name": "emmo:Metre",
+      "min_value": 0.0001,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_fa7790d6_07bb_4b0f_9965_55966828f5f3",
+      "unit": "m²",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type": "ElectrodeGeometricSurfaceArea",
+      "description": "Face (or plate) area of an electrode. Electrode cross-sectional area.",
+      "type": "Real"
+    },
+    "ActivationEnergyOfReaction": {
+      "max_value": 1000000,
+      "unit_name": "emmo:JoulePerMole",
+      "min_value": 1000,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_d7f8cab9_b035_4ecd_be63_292672572526",
+      "unit": "J·mol⁻¹",
+      "unit_iri": "https://w3id.org/emmo#JoulePerMole",
+      "context_type": "Energy",
+      "description": "Parameter of the empirical Arrhenius formulation, characterizing the exponential temperature dependence of the reaction rate of the material.",
+      "type": "Real"
+    },
+    "TransferenceNumber": {
+      "max_value": 0.99,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 0.01,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_e3e78df2_d568_4ab7_8c0d_d3a2ee3ae282",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "IonTransportNumber",
+      "description": "Fraction of the total ionic current in an electrolyte that is carried by lithium ions under the influence of an electric field.",
+      "type": "Real"
+    },
+    "Thickness": {
+      "max_value": 0.1,
+      "unit_name": "emmo:Metre",
+      "min_value": 0.000001,
+      "context_type_iri": "https://w3id.org/emmo#EMMO_43003c86_9d15_433b_9789_ee2940920656",
+      "unit": "m",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type": "Thickness",
+      "description": "The dimension of a battery component measured along the direction of ionic transport, perpendicular to the major surfaces.",
+      "type": "Real"
+    },
+    "ChargeNumber": {
+      "max_value": 4,
+      "unit_name": "emmo:UnitOne",
+      "min_value": 1,
+      "context_type_iri": "https://w3id.org/emmo#EMMO_dc467621_3b49_4f31_9b09_82290f29da52",
+      "unit": "1",
+      "unit_iri": "https://w3id.org/emmo#EMMO_5ebd5e01_0ed3_49a2_a30d_cd05cbe72978",
+      "context_type": "ChargeNumber",
+      "description": "Electric charge of an ion divided by the elementary charge.",
+      "type": "Int64"
+    },
+    "Case": {
+      "options": [
+        "Cylindrical",
+        "Pouch"
+      ],
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_3dcfe33d_6825_43c0_a798_68e871a68d39",
+      "context_type": "hasCase",
+      "type": "String",
+      "description": "Type of physical container encapsulating the electrochemical cell. Examples: Cylindrical, Pouch."
+    },
+    "TabLength": {
+      "max_value": 0.5,
+      "min_value": 0.0001,
+      "unit": "m",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_cd2cd0de_e0cc_4ef1_b27e_2e88db027bac",
+      "type": "Real",
+      "description": "Dimension of the longest side of the face of the rectangular tab of a current collector."
+    },
+    "SpecificHeatCapacity": {
+      "max_value": 20000,
+      "unit_name": "emmo:JoulePerKiloGramKelvin",
+      "min_value": 100,
+      "context_type_iri": "https://w3id.org/emmo#EMMO_b4f4ed28_d24c_4a00_9583_62ab839abeca",
+      "unit": "J·kg⁻¹·K⁻¹",
+      "unit_iri": "https://w3id.org/emmo#JoulePerKiloGramKelvin",
+      "context_type": "SpecificHeatCapacity",
+      "description": "Heat capacity of the material per unit of mass.",
+      "type": "Real"
+    },
+    "NominalCapacity": {
+      "max_value": 50,
+      "unit_name": "emmo:AmpereHour",
+      "min_value": 0.0001,
+      "is_shown_to_user": false,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_8abde9d0_84f6_4b4f_a87e_86028a397100",
+      "unit": "Ah",
+      "unit_iri": "https://w3id.org/emmo#AmpereHour",
+      "context_type": "NominalCapacity",
+      "description": "Expected charge capacity of a cell under standard conditions, as defined by the manufacturer.",
+      "type": "Real"
+    },
+    "ParticleRadius": {
+      "max_value": 0.001,
+      "unit_name": "emmo:Metre",
+      "min_value": 1e-8,
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_b92e382f_5109_4f60_ab5e_c89d340419a9",
+      "unit": "m",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type": "ParticleRadius",
+      "description": "Radius of an spherical particle.",
+      "type": "Real"
+    },
+    "DiffusionCoefficient": {
+      "unit_name": "emmo:AreaPerTimeUnit",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_931a725b_926d_4f60_8955_61fe17fce98b",
+      "unit": "m²·s⁻¹",
+      "unit_iri": "https://w3id.org/emmo#EMMO_10f703b5_8b2a_4c5a_a734_f0cfb29622ad",
+      "context_type": [
+        "DiffusionCoefficient",
+        "Expression"
+      ],
+      "description": "Proportionality constant between the molar flux of the charge carrier and its negative concentration gradient in a material.",
+      "type": [
+        "String",
+        "Dict{String, Vector}",
+        "Real"
+      ],
+      "documentation": "https://battmo.org/BattMo.jl/dev/manuals/user_guide/simulation_dependent_input"
+    },
+    "ElectrodeWidth": {
+      "max_value": 0.5,
+      "unit_name": "emmo:Metre",
+      "min_value": 0.01,
+      "unit": "m",
+      "unit_iri": "https://w3id.org/emmo#Metre",
+      "context_type_iri": "https://w3id.org/emmo#EMMO_e4de48b1_dabb_4490_ac2b_040f926c64f0",
+      "context_type": "Width",
+      "type": "Real",
+      "description": "Dimension of the shortest side of the face of a rectangular electrode."
+    },
+    "TabFractions": {
+      "unit_name": "dimensionless",
+      "unit": "-",
+      "unit_iri": "https://w3id.org/emmo#Dimensionless",
+      "context_type": "TabFractions",
+      "type": "Vector",
+      "description": "Location of the tabs. The location of each tab is given by a fraction which determines the fraction of the total spiral length where the tab is located."
+    },
+    "EffectiveDensity": {
+      "max_value": 23000,
+      "unit_name": "emmo:KilogramPerCubicMetre",
+      "min_value": 0,
+      "unit": "kg·m⁻³",
+      "unit_iri": "https://w3id.org/emmo#KilogramPerCubicMetre",
+      "context_type_iri": null,
+      "context_type": "EffectiveDensity",
+      "type": "Real",
+      "description": "Density of a porous electrode, calculated from its geometrical volume and mass. It includes the volume occupied by pores."
+    },
+    "StoichiometricCoefficient": {
+      "max_value": 10,
+      "unit_name": "dimensionless",
+      "min_value": 0,
+      "unit": "-",
+      "unit_iri": "https://w3id.org/emmo#Dimensionless",
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_f0667139_6428_4e3d_ac0d_08c1dd7f36ea",
+      "context_type": "StoichiometricCoefficient",
+      "type": "Real",
+      "description": "Ratio of the concentration of an intercalant (e.g. Li+) at a given moment, to its maximum possible concentration within a solid host material."
+    },
+    "Density": {
+      "max_value": 100000,
+      "unit_name": "emmo:GramPerCubicMetre",
+      "min_value": 0.01,
+      "context_type_iri": "https://w3id.org/emmo#EMMO_06448f64_8db6_4304_8b2c_e785dba82044",
+      "unit": "kg·m⁻³",
+      "unit_iri": "https://w3id.org/emmo#GramPerCubicMetre",
+      "context_type": "Density",
+      "description": "Density of the material.",
+      "type": "Real"
+    },
+    "ThermalConductivity": {
+      "max_value": 10000,
+      "unit_name": "emmo:WattPerMetreKelvin",
+      "min_value": 0.01,
+      "context_type_iri": "https://w3id.org/emmo#EMMO_8dd40ec6_2c5a_43f3_bf64_cadcd447a1c1",
+      "unit": "W·m⁻¹·K⁻¹",
+      "unit_iri": "https://w3id.org/emmo#WattPerMetreKelvin",
+      "context_type": "ThermalConductivity",
+      "description": "Material property characterizing its ability to transmit heat through a surface element.",
+      "type": "Real"
+    },
+    "ElectronicConductivity": {
+      "max_value": 1000000000,
+      "unit_name": "emmo:SiemensPerMetre",
+      "min_value": 1e-20,
+      "context_type_iri": "https://w3id.org/emmo#EMMO_cde4368c_1d4d_4c94_8548_604749523c6d",
+      "unit": "S·m⁻¹",
+      "unit_iri": "https://w3id.org/emmo#SiemensPerMetre",
+      "context_type": "ElectricConductivity",
+      "description": "Measure of a material's ability to conduct an electric current.",
+      "type": "Real"
+    }
+  },
+  "ModelSettings": {
+    "ButlerVolmer": {
+      "options": [
+        "Standard",
+        "Chayambuka"
+      ],
+      "context_type_iri": "https://w3id.org/emmo/domain/battery#battery_b1921f7b_afac_465a_a275_26f929f7f936",
+      "documentation": "https://battmoteam.github.io/BattMo.jl/dev/manuals/user_guide/pxd_model",
+      "context_type": "ButlerVolmerEquation",
+      "type": "String",
+      "category": "ModelSettings",
+      "description": "When set to Chayambuka, the slightly adapted butler volmer equation from reference [Chayambuka2020](https://www.sciencedirect.com/science/article/pii/S0013468621020478?via%3Dihub) will be selected within the model."
+    },
+    "CurrentCollectors": {
+      "options": [
+        "Standard"
+      ],
+      "context_type_iri": null,
+      "context_type": "CurrentCollectors",
+      "type": "String",
+      "category": "ModelSettings",
+      "description": "Which model describes the current collectors."
+    },
+    "SEIModel": {
+      "options": [
+        "Bolay"
+      ],
+      "context_type_iri": null,
+      "documentation": "https://battmoteam.github.io/BattMo.jl/dev/manuals/user_guide/sei_model",
+      "type": "String",
+      "category": "ModelSettings",
+      "description": "Which SEI model is used. For instance: \"Bolay\" "
+    },
+    "RampUp": {
+      "options": [
+        "Sinusoidal"
+      ],
+      "context_type_iri": "https://w3id.org/emmo/domain/electrochemistry#electrochemistry_rampup",
+      "documentation": "https://battmoteam.github.io/BattMo.jl/dev/manuals/user_guide/ramp_up",
+      "context_type": "RampUp",
+      "type": "String",
+      "category": "ModelSettings",
+      "description": "Type of signal of electric current used to initialize the cell simulation. Example: \"Sinusoidal\"."
+    },
+    "TemperatureDependence": {
+      "options": [
+        "Arrhenius"
+      ],
+      "documentation": "https://battmoteam.github.io/BattMo.jl/dev/manuals/user_guide/arrhenius",
+      "type": "String",
+      "category": "ModelSettings",
+      "description": "Temperature dependence model for electrode diffusion coefficients and reaction rates. Example: \"Arrhenius\"."
+    },
+    "PotentialFlowDiscretization": {
+      "options": [
+        "GeneralAD",
+        "TwoPointDiscretization"
+      ],
+      "context_type_iri": null,
+      "type": "String",
+      "category": "ModelSettings",
+      "description": "Specifies the numerical backend used for solving the potential flow equations. \nThe GenericAD option uses a general automatic differentiation approach that is robust and widely applicable, \nwhile the TwoPointDiscretization option applies a specialized two-point flux discretization of the conservation laws, \n\twhich can be faster but is less general. We recommend using GenericAD unless performance considerations dictate otherwise."
+    },
+    "TransportInSolid": {
+      "options": [
+        "FullDiffusion"
+      ],
+      "context_type_iri": null,
+      "type": "String",
+      "category": "ModelSettings",
+      "description": "Which model is used to describe the intercalant diffusion in the solid particles. Example \"FullDiffusion\". "
+    },
+    "ModelFramework": {
+      "options": [
+        "P2D",
+        "P4D Pouch",
+        "P4D Cylindrical"
+      ],
+      "context_type_iri": "https://w3id.org/emmo/domain/battery#battery_b1921f7b_afac_465a_a275_26f929f7f936",
+      "documentation": "https://battmoteam.github.io/BattMo.jl/dev/manuals/user_guide/pxd_model",
+      "context_type": "ModelFramework",
+      "type": "String",
+      "category": "ModelSettings",
+      "description": "Framework defining the dimensionality of the electrochemical model. Examples: \"P2D\", \"P4D Pouch\". "
+    }
+  },
+  "SolverSettings": {
+    "ProgressColor": {
+      "description": "Color for progress meter.",
+      "type": "String",
+      "variable_name": "progress_color",
+      "category": "SolverSettings"
+    },
+    "Method": {
+      "options": [
+        "Direct",
+        "Iterative",
+        "UserDefined"
+      ],
+      "type": "String",
+      "category": "SolverSettings",
+      "description": "Linear solver method."
+    },
+    "MinTimestep": {
+      "max_value": 1000,
+      "description": "Minimum time step length.",
+      "min_value": 0,
+      "type": "Int64",
+      "variable_name": "min_timestep",
+      "category": "SolverSettings"
+    },
+    "OutputSubstrates": {
+      "description": "Store substates (between report steps) as field on each state.",
+      "type": "Bool",
+      "variable_name": "output_substates",
+      "category": "SolverSettings"
+    },
+    "MaxSize": {
+      "max_value": 10000000,
+      "min_value": 0,
+      "type": "Int64",
+      "category": "SolverSettings",
+      "description": "Maximum size for linear solver."
+    },
+    "InMemoryReports": {
+      "max_value": 10,
+      "description": "Limit for number of reports kept in memory if output_path is provided.",
+      "min_value": 0,
+      "type": "Int64",
+      "variable_name": "in_memory_reports",
+      "category": "SolverSettings"
+    },
+    "TimeStepSelectors": {
+      "options": [
+        "TimestepSelector"
+      ],
+      "description": "Time-step selectors that pick mini steps.",
+      "type": "String",
+      "variable_name": "timestep_selectors",
+      "category": "SolverSettings"
+    },
+    "MaxLinearIterations": {
+      "max_value": 10000,
+      "description": "Max number of linear iterations in a Newton solve before time-step is cut.",
+      "min_value": 0,
+      "type": "Int64",
+      "variable_name": "max_linear_iterations",
+      "category": "SolverSettings"
+    },
+    "CheckBeforeSolve": {
+      "options": [
+        true,
+        false
+      ],
+      "description": "Check convergence before solving linear system. Can skip some linear solves if not using increment tolerances.",
+      "type": "Bool",
+      "variable_name": "check_before_solve",
+      "category": "SolverSettings"
+    },
+    "AlwaysUpdateSecondary": {
+      "options": [
+        true,
+        false
+      ],
+      "description": "Always update secondary variables (even when they can be reused from end of previous step). Only useful for nested solvers",
+      "type": "Bool",
+      "variable_name": "always_update_secondary",
+      "category": "SolverSettings"
+    },
+    "ReportLevel": {
+      "max_value": 10,
+      "description": "Level of information stored in reports when written to disk.",
+      "min_value": 0,
+      "type": "Int64",
+      "variable_name": "report_level",
+      "category": "SolverSettings"
+    },
+    "MaxNonLinearIterations": {
+      "max_value": 10000,
+      "description": "Max number of nonlinear iterations in a Newton solve before time-step is cut.",
+      "min_value": 0,
+      "type": "Int64",
+      "variable_name": "max_nonlinear_iterations",
+      "category": "SolverSettings"
+    },
+    "Verbosity": {
+      "max_value": 10000,
+      "min_value": 0,
+      "type": "Int64",
+      "category": "SolverSettings",
+      "description": "Verbosity for linear solver."
+    },
+    "EndReport": {
+      "description": "Output a final report that includes timings etc. If nothing, depends on info_level instead.",
+      "type": "Nothing",
+      "variable_name": "end_report",
+      "category": "SolverSettings"
+    },
+    "OutputPath": {
+      "description": "Path to folder in which the output should be written. The output will be givin in JLD2 files which adhere to the HDF5 format. If nothing, output is not written to disk.",
+      "type": "String",
+      "variable_name": "output_path",
+      "category": "SolverSettings"
+    },
+    "ASCIITerminal": {
+      "description": "Avoid unicode (if possible) in terminal output.",
+      "type": "Bool",
+      "variable_name": "ascii_terminal",
+      "category": "SolverSettings"
+    },
+    "MaxTimestep": {
+      "max_value": 1e+100,
+      "description": "Maximum time step length.",
+      "min_value": 0,
+      "type": "Int64",
+      "variable_name": "max_timestep",
+      "category": "SolverSettings"
+    },
+    "TimestepMaxDecrease": {
+      "max_value": 100,
+      "description": "Max allowable factor to decrease time-step by. Overrides step selectors.",
+      "min_value": 0,
+      "type": "Real",
+      "variable_name": "timestep_max_decrease",
+      "category": "SolverSettings"
+    },
+    "ID": {
+      "description": "String identifier for simulator that is prefixed to some verbose output.",
+      "type": "String",
+      "variable_name": "id",
+      "category": "SolverSettings"
+    },
+    "progress_glyphs": {
+      "options": [
+        "default"
+      ],
+      "description": "Glyphs",
+      "type": "String",
+      "variable_name": "progress_glyphs",
+      "category": "SolverSettings"
+    },
+    "FailureCutsTimesteps": {
+      "options": [
+        true,
+        false
+      ],
+      "description": "Cut the timestep if exceptions occur during step. If set to false, throw errors and terminate.",
+      "type": "Bool",
+      "variable_name": "failure_cuts_timestep",
+      "category": "SolverSettings"
+    },
+    "DebugLevel": {
+      "max_value": 10,
+      "description": "Define the amount of debug output in the reports. Higher values means more output.",
+      "min_value": 0,
+      "type": "Int64",
+      "variable_name": "debug_level",
+      "category": "SolverSettings"
+    },
+    "Relaxation": {
+      "options": [
+        "NoRelaxation",
+        "SimpleRelaxation"
+      ],
+      "description": "Non-Linear relaxation used. Currently supports `NoRelaxation()` and `SimpleRelaxation()`.",
+      "type": "String",
+      "variable_name": "relaxation",
+      "category": "SolverSettings"
+    },
+    "MinNonLinearIterations": {
+      "max_value": 100000000,
+      "description": "Minimum number of nonlinear iterations in Newton solver. This number of Newtion iterations is always performed, even if all equations are converged.",
+      "min_value": 0,
+      "type": "Int64",
+      "variable_name": "min_nonlinear_iterations",
+      "category": "SolverSettings"
+    },
+    "TimestepMaxIncrease": {
+      "max_value": 100,
+      "description": "Max allowable factor to increase time-step by. Overrides step selectors.",
+      "min_value": 0,
+      "type": "Real",
+      "variable_name": "timestep_max_increase",
+      "category": "SolverSettings"
+    },
+    "InfoLevel": {
+      "max_value": 4,
+      "description": "Info level determines the amount of runtime output to the terminal during simulation.\n0  - gives minimal output (just a progress bar by default, and a final report)\n1  - gives some more details, printing at the start of each step\n2  - as 1, but also printing the current worst residual at each iteration\n3  - as 1, but prints a table of all non-converged residuals at each iteration\n4  - as 3, but all residuals are printed (even converged values)\n-1 - disables output. ",
+      "min_value": -1,
+      "type": "Int64",
+      "variable_name": "info_level",
+      "category": "SolverSettings"
+    },
+    "TolFactorFinalIteration": {
+      "max_value": 10,
+      "description": "Value that multiplies all tolerances for the final convergence check before a time-step is cut.",
+      "min_value": 0,
+      "type": "Int64",
+      "variable_name": "tol_factor_final_iteration",
+      "category": "SolverSettings"
+    },
+    "LinearTolerance": {
+      "max_value": 1,
+      "description": "Tolerance used for convergence criterions.",
+      "min_value": 1e-40,
+      "type": "Real",
+      "variable_name": "linear_tolerance",
+      "category": "SolverSettings"
+    },
+    "SafeMode": {
+      "options": [
+        true,
+        false
+      ],
+      "description": "Add extra checks in simulator that have a small extra cost.",
+      "type": "Bool",
+      "variable_name": "safe_mode",
+      "category": "SolverSettings"
+    },
+    "MaxTimestepCuts": {
+      "max_value": 10000,
+      "description": "Maximum time step cuts in a single mini step before termination of simulation.",
+      "min_value": 0,
+      "type": "Int64",
+      "variable_name": "max_timestep_cuts",
+      "category": "SolverSettings"
+    },
+    "ExtraTiming": {
+      "options": [
+        true,
+        false
+      ],
+      "description": "Output extra, highly detailed performance report at simulation end.",
+      "type": "Bool",
+      "variable_name": "extra_timing",
+      "category": "SolverSettings"
+    },
+    "CuttingCriterion": {
+      "description": "Criterion to use for early cutting of time-steps. Default value of nothing means cutting when max_nonlinear_iterations is reached.",
+      "type": "Nothing",
+      "variable_name": "cutting_criterion",
+      "category": "SolverSettings"
+    },
+    "OutputStates": {
+      "description": "Return states in-memory as output.",
+      "type": "Bool",
+      "variable_name": "output_states",
+      "category": "SolverSettings"
+    },
+    "OutputReports": {
+      "description": "Return reports in-memory as output.",
+      "type": "Bool",
+      "variable_name": "output_reports",
+      "category": "SolverSettings"
+    },
+    "Tolerances": {
+      "max_value": 1,
+      "description": "Tolerances used for convergence criterions.",
+      "min_value": 1e-40,
+      "type": "Dict",
+      "variable_name": "tolerances",
+      "category": "SolverSettings"
+    },
+    "ErrorOnIncomplete": {
+      "options": [
+        true,
+        false
+      ],
+      "description": "Throw an error if the simulation could not complete. If `false` emit a message and return.",
+      "type": "Bool",
+      "variable_name": "error_on_incomplete",
+      "category": "SolverSettings"
+    },
+    "LinearSolver": {
+      "description": "The linear solver used to solve linearized systems.",
+      "type": "Dict",
+      "variable_name": "linear_solver",
+      "category": "SolverSettings"
+    }
+  }
+}

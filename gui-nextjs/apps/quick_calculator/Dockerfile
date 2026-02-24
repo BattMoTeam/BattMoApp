@@ -48,10 +48,10 @@ RUN addgroup -S nextjs && adduser -S nextjs -G nextjs
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/apps/web ./apps/web
+COPY --from=build /app/apps/quick_calculator ./apps/quick_calculator
 COPY --from=build /app/packages ./packages
 
 USER nextjs
-EXPOSE 3001
+EXPOSE 3002
 
-CMD ["pnpm", "--filter", "quick_calculator", "exec", "next", "start", "-H", "0.0.0.0", "-p", "3001"]
+CMD ["pnpm", "--filter", "quick_calculator", "exec", "next", "start", "-H", "0.0.0.0", "-p", "3002"]

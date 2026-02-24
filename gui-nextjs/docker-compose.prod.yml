@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  api:
+    image: ghcr.io/battmoteam/battmo_api:latest
+    container_name: api
+    restart: unless-stopped
+    expose:
+      - "8081"
+      - "8080"
+    ports:
+      - "8081:8081"
+      - "8080:8080"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8081 || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+    image: yourorg/web:latest
+    container_name: web
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://api:8081
+      NODE_ENV: production
+    ports:
+      - "3001:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  quick-calc:
+    build:
+      context: .
+      dockerfile: docker/quick-calc.Dockerfile
+    image: yourorg/quick-calc:latest
+    container_name: quick-calc
+    restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: http://api:8081
+      NODE_ENV: production
+    ports:
+      - "5173:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
