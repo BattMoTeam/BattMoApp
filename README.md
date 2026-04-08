@@ -8,6 +8,7 @@ It offers users a flexible framework for building fully coupled electrochemical-
 devices using 1D, 2D, or 3D geometries. The original **BattMo** is implemented in MATLAB and builds on the open-source MATLAB
 Reservoir Simulation Toolbox (MRST) developed at SINTEF. BattMo being rewritten in Julia and builds on the open source Julia framework for multiphysics simulators, Jutul.jl. This repository builds further upon BattMo.jl.
 
+
 Additional information about BattMo on the [BattMo repository](https://github.com/BattMoTeam/BattMo.git)
 
 **BattMoApp** is a web-based application which offers a user-friendly interface to
