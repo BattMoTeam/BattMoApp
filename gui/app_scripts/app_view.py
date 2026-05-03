@@ -4384,7 +4384,7 @@ class RunSimulation:
         # self.file_mime_type = "application/json"
         # self.progress_bar = st.progress(st.session_state.simulation_progress)
         self.simulation_successful = st.session_state.simulation_successful
-        self.api_url = "ws://api:8081"
+        self.api_url = os.getenv("BATTMO_API_URL", "ws://api:8081")
         self.json_input_folder = "BattMoJulia"
         self.json_input_file = "battmo_formatted_input.json"
         self.julia_module_folder = "BattMoJulia"
@@ -4531,14 +4531,38 @@ class RunSimulation:
             st.error(f"WebSocket message handling error: {e}")
             st.session_state.simulation_completed = True
 
+    def _close_error_code(self, error):
+        if hasattr(error, "status_code") and error.status_code is not None:
+            return error.status_code
+
+        if isinstance(error, bytes) and len(error) >= 2:
+            return int.from_bytes(error[:2], byteorder="big")
+
+        if hasattr(error, "data") and isinstance(error.data, bytes) and len(error.data) >= 2:
+            return int.from_bytes(error.data[:2], byteorder="big")
+
+        return None
+
+    def _is_normal_close_error(self, error):
+        return self._close_error_code(error) == 1000
+
     def on_error(self, ws, error):
         print(f"Error object: {error}")
+        if self._is_normal_close_error(error):
+            print("WebSocket received a normal close frame (1000).")
+            return
+
+        if st.session_state.simulation_completed and st.session_state.simulation_results not in (None, False):
+            print("WebSocket closed after results were received.")
+            return
+
         st.error(f"WebSocket error: {error}")
         print(f"WebSocket error: {error}")
 
         st.session_state.response = False
         st.session_state.simulation_completed = True
-        st.session_state.simulation_results = False
+        if st.session_state.simulation_results is None:
+            st.session_state.simulation_results = False
 
     def on_close(self, ws, close_status_code, close_msg):
 
@@ -4550,7 +4574,7 @@ class RunSimulation:
                 self.sim_start, st.session_state.simulation_results
             ).simulation_successful
             # self.sim_start.error("WebSocket was closed: {}_{}".format(close_status_code, close_msg))
-        else:
+        elif close_status_code not in (None, 1000):
             self.sim_start.error(
                 "WebSocket was closed unexpectedly: {}_{}".format(close_status_code, close_msg)
             )

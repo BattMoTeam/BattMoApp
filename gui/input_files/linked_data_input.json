@@ -1528,7 +1528,7 @@
                "@type": "NumberOfEntities",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": null
+                  "hasNumericalValue": 1
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "1",
@@ -1552,7 +1552,7 @@
                "@type": "CRate",
                "hasNumericalPart": {
                   "@type": "Real",
-                  "hasNumericalValue": null
+                  "hasNumericalValue": 1.0
                },
                "hasMeasurementUnit": {
                   "hasSymbolValue": "1",
@@ -1588,7 +1588,7 @@
                "@type": "Cycling",
                "hasStringPart": {
                   "@type": "String",
-                  "hasStringValue": "CCDischarge"
+                  "hasStringValue": "CCCV"
                }
             },
             {
