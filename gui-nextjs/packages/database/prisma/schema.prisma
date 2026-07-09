@@ -6,7 +6,7 @@
 // Data model definition: Specifies your application models (the shape of the data per data source) and their relations
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
@@ -39,23 +39,23 @@ model Parameter {
 }
 
 model ParameterMetaData {
-  id               Int         @id @default(autoincrement())
-  name             String
-  type             String?
-  min_value        Float?
-  max_value        Float?
-  unit             String?
-  unit_name        String?
-  unit_iri         String?
-  context_type     String?
+  id                Int                       @id @default(autoincrement())
+  name              String
+  type              String?
+  min_value         Float?
+  max_value         Float?
+  unit              String?
+  unit_name         String?
+  unit_iri          String?
+  context_type      String?
   context_type_json Json?
-  context_type_iri String?
-  description      String?
-  documentation    String?
-  category         Category    @relation(fields: [category_id], references: [id])
-  category_id      Int
-  parameters       Parameter[]
-  options          ParameterMetaDataOption[]
+  context_type_iri  String?
+  description       String?
+  documentation     String?
+  category          Category                  @relation(fields: [category_id], references: [id])
+  category_id       Int
+  parameters        Parameter[]
+  options           ParameterMetaDataOption[]
 
   @@unique([category_id, name])
 }
@@ -69,4 +69,128 @@ model ParameterMetaDataOption {
 
   @@unique([parameter_meta_data_id, value])
   @@index([parameter_meta_data_id, order_index])
+}
+
+model Template {
+  id         Int                  @id @default(autoincrement())
+  name       String               @unique
+  parameters TemplateParameter[]
+  categories SimulatorCategory[]
+  components SimulatorComponent[]
+}
+
+model TemplateParameter {
+  id                Int      @id @default(autoincrement())
+  name              String
+  model_names       Json?
+  par_class         String?
+  difficulty        String?
+  context_type      String?
+  context_type_json Json?
+  context_type_iri  String?
+  type              String?
+  unit              String?
+  unit_name         String?
+  unit_iri          String?
+  max_value         Float?
+  min_value         Float?
+  is_shown_to_user  Boolean  @default(true)
+  description       String?
+  display_name      String?
+  order_index       Int      @default(0)
+  template          Template @relation(fields: [template_id], references: [id], onDelete: Cascade)
+  template_id       Int
+
+  @@unique([template_id, name])
+  @@index([template_id, order_index])
+}
+
+model SimulatorTab {
+  id                Int                 @id @default(autoincrement())
+  name              String              @unique
+  model_names       Json?
+  difficulty        String?
+  context_type      String?
+  context_type_json Json?
+  context_type_iri  String?
+  display_name      String
+  description       String?
+  order_index       Int                 @default(0)
+  categories        SimulatorCategory[]
+
+  @@index([order_index])
+}
+
+model SimulatorCategory {
+  id                  Int                  @id @default(autoincrement())
+  name                String               @unique
+  model_names         Json?
+  difficulty          String?
+  context_type        String?
+  context_type_json   Json?
+  context_type_iri    String?
+  emmo_relation       String?
+  display_name        String
+  description         String?
+  order_index         Int                  @default(0)
+  tab                 SimulatorTab         @relation(fields: [tab_id], references: [id])
+  tab_id              Int
+  default_template    Template             @relation(fields: [default_template_id], references: [id])
+  default_template_id Int
+  components          SimulatorComponent[]
+
+  @@index([tab_id, order_index])
+}
+
+model SimulatorComponent {
+  id                  Int                 @id @default(autoincrement())
+  name                String              @unique
+  model_names         Json?
+  difficulty          String?
+  material            Boolean             @default(false)
+  context_type        String?
+  context_type_json   Json?
+  context_type_iri    String?
+  emmo_relation       String?
+  display_name        String
+  description         String?
+  order_index         Int                 @default(0)
+  category            SimulatorCategory   @relation(fields: [category_id], references: [id])
+  category_id         Int
+  default_template    Template            @relation(fields: [default_template_id], references: [id])
+  default_template_id Int
+  materials           MaterialComponent[]
+
+  @@index([category_id, order_index])
+}
+
+model Material {
+  id                    Int                 @id @default(autoincrement())
+  name                  String              @unique
+  model_names           Json?
+  difficulty            String?
+  is_shown_to_user      Boolean             @default(true)
+  reference_name        String?
+  reference             String?
+  reference_url         String?
+  context_type          String?
+  context_type_json     Json?
+  context_type_iri      String?
+  display_name          String
+  number_of_components  Int?
+  default_material      Boolean             @default(false)
+  description           String?
+  materialsToComponents MaterialComponent[]
+}
+
+model MaterialComponent {
+  id           Int                @id @default(autoincrement())
+  order_index  Int                @default(0)
+  material     Material           @relation(fields: [material_id], references: [id], onDelete: Cascade)
+  material_id  Int
+  component    SimulatorComponent @relation(fields: [component_id], references: [id], onDelete: Cascade)
+  component_id Int
+
+  @@unique([material_id, component_id])
+  @@index([component_id, order_index])
 }

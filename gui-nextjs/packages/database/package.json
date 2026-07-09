@@ -15,7 +15,12 @@
   },
   "scripts": {
     "metadata:fetch": "node --experimental-strip-types ./scripts/get_recources.ts",
-    "metadata:import": "node --experimental-strip-types ./scripts/update_db.ts"
+    "metadata:import": "node --experimental-strip-types ./scripts/update_db.ts",
+    "simulator:import": "node --experimental-strip-types ./scripts/import_simulator_db.ts"
+  },
+  "exports": {
+    ".": "./index.ts",
+    "./lib/*": "./lib/*.ts"
   },
   "prisma": {
     "schema": "./prisma"

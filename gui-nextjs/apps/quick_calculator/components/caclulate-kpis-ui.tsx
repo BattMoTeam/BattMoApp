@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@workspace/ui/components/ui/button';
 import { useBattMoWebSocket, type BattMoEvent } from '@workspace/ui/hooks/useBattMoWebSocket';
-import Metric, { type MetricType } from '@workspace/ui/components/metric';
+import Metric, { type MetricType } from '@workspace/ui/components/Metric';
 
 type CellData = Record<string, unknown>;
 type KPIResult = Record<string, unknown>;

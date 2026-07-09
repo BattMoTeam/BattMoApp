@@ -3,7 +3,7 @@ import { useId } from 'react'
 import { Input } from '@workspace/ui/components/ui/input'
 import { Label } from '@workspace/ui/components/ui/label'
 
-import LabelWithTooltip from '@workspace/ui/components/label-with-tooltip.js'
+import LabelWithTooltip from '@workspace/ui/components/label-with-tooltip'
 
 type Props = {
   label: string

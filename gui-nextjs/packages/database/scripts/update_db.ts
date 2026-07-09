@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "../generated/prisma/client.ts";
 
@@ -33,9 +34,19 @@ const SUPPORTED_CATEGORIES: SupportedCategoryName[] = [
 const connectionString = process.env.DATABASE_URL || "file:./dev.db";
 const adapter = new PrismaBetterSqlite3({ url: connectionString });
 const prisma = new PrismaClient({ adapter });
+const scriptDir = fileURLToPath(new URL(".", import.meta.url));
+const packageRoot = resolve(scriptDir, "..");
 
 function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
+}
+
+function asRequiredString(value: unknown): string {
+  return typeof value === "string" ? value : "";
+}
+
+function asRequiredNumber(value: unknown): number {
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
 }
 
 function asNumber(value: unknown): number | null {
@@ -64,7 +75,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 async function loadMetadataFile() {
-  const sourcePath = resolve(process.cwd(), "recources", "metadata.raw.json");
+  const sourcePath = resolve(packageRoot, "recources", "metadata.raw.json");
   const raw = await readFile(sourcePath, "utf8");
   const parsed = JSON.parse(raw) as unknown;
   if (!isRecord(parsed)) {
@@ -99,30 +110,30 @@ async function upsertCategoryWithMetaData(categoryName: SupportedCategoryName, c
         },
       },
       update: {
-        type: asString(definition.type),
-        min_value: asNumber(definition.min_value),
-        max_value: asNumber(definition.max_value),
-        unit: asString(definition.unit),
-        unit_name: asString(definition.unit_name),
-        unit_iri: asString(definition.unit_iri),
-        context_type: asContextTypeString(definition.context_type),
+        type: asRequiredString(definition.type),
+        min_value: asRequiredNumber(definition.min_value),
+        max_value: asRequiredNumber(definition.max_value),
+        unit: asRequiredString(definition.unit),
+        unit_name: asRequiredString(definition.unit_name),
+        unit_iri: asRequiredString(definition.unit_iri),
+        context_type: asRequiredString(definition.context_type),
         context_type_json: asContextTypeJson(definition.context_type),
-        context_type_iri: asString(definition.context_type_iri),
-        description: asString(definition.description),
+        context_type_iri: asRequiredString(definition.context_type_iri),
+        description: asRequiredString(definition.description),
         documentation: asString(definition.documentation),
       },
       create: {
         name: parameterName,
-        type: asString(definition.type),
-        min_value: asNumber(definition.min_value),
-        max_value: asNumber(definition.max_value),
-        unit: asString(definition.unit),
-        unit_name: asString(definition.unit_name),
-        unit_iri: asString(definition.unit_iri),
-        context_type: asContextTypeString(definition.context_type),
+        type: asRequiredString(definition.type),
+        min_value: asRequiredNumber(definition.min_value),
+        max_value: asRequiredNumber(definition.max_value),
+        unit: asRequiredString(definition.unit),
+        unit_name: asRequiredString(definition.unit_name),
+        unit_iri: asRequiredString(definition.unit_iri),
+        context_type: asRequiredString(definition.context_type),
         context_type_json: asContextTypeJson(definition.context_type),
-        context_type_iri: asString(definition.context_type_iri),
-        description: asString(definition.description),
+        context_type_iri: asRequiredString(definition.context_type_iri),
+        description: asRequiredString(definition.description),
         documentation: asString(definition.documentation),
         category: { connect: { id: category.id } },
       },

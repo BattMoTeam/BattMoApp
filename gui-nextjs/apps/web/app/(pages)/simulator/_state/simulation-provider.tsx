@@ -1,11 +1,9 @@
-
-// app/simulator/_state/simulation-provider.tsx (CLIENT)
 'use client';
 
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { useBattMoWebSocket } from '@workspace/ui/hooks/useBattMoWebSocket';
 
-type SimulationData = Record<string, any>;
+type SimulationData = Record<string, unknown>;
 
 type SimulationContextType = {
   data: SimulationData;
@@ -16,24 +14,33 @@ type SimulationContextType = {
 const SimulationContext = createContext<SimulationContextType | null>(null);
 
 export function SimulationProvider({ children }: { children: React.ReactNode }) {
-  const [logs, setLogs] = useState<string[]>([]);
-  const [data, setData] = useState<SimulationData>({});
-
-  const { send } = useBattMoWebSocket({
+  const { events, runSimulationTask } = useBattMoWebSocket({
     url: 'ws://localhost:8080',
-    onData: setData,
-    onLog: (msg) => setLogs((prev) => [...prev, msg]),
   });
+
+  const data = useMemo<SimulationData>(() => {
+    const resultEvent = [...events].reverse().find((event) => event.type === 'result');
+    return (resultEvent?.raw as SimulationData | undefined) ?? {};
+  }, [events]);
+
+  const logs = useMemo(
+    () =>
+      events
+        .filter((event) => event.type === 'info' || event.type === 'error')
+        .map((event) =>
+          typeof event.raw === 'string' ? event.raw : JSON.stringify(event.raw),
+        ),
+    [events],
+  );
 
   const runSimulation = async () => {
     try {
-      const res = await fetch('/input_example.json'); // from public/
+      const res = await fetch('/input_example.json');
       if (!res.ok) throw new Error(`Failed to load JSON: ${res.status}`);
-      const jsonData = await res.json();
-
-      await send({ task: 'run_simulation', data: jsonData });
+      const jsonData = (await res.json()) as Record<string, unknown>;
+      runSimulationTask(jsonData);
     } catch (err) {
-      console.error('❌ Error loading JSON:', err);
+      console.error('Error loading JSON:', err);
     }
   };
 

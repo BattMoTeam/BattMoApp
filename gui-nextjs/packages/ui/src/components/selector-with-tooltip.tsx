@@ -2,7 +2,7 @@ import { useId } from 'react'
 
 import { Label } from '@workspace/ui/components/ui/label'
 import { SelectNative } from '@workspace/ui/components/ui/select-native'
-import LabelWithTooltip from '@workspace/ui/components/label-with-tooltip.js'
+import LabelWithTooltip from '@workspace/ui/components/label-with-tooltip'
 
 type Props = {
   label: string

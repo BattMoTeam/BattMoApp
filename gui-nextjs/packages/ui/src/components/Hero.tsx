@@ -1,45 +1,35 @@
-import React from "react";
 import Image from "next/image";
-import { Button } from "@workspace/ui/components/ui/button";
 import ExploreSimulatorButton from "@workspace/ui/components/explore-simulator-button";
 
-const Hero = () => {
-    
+export default function Hero() {
   return (
-    <section className="relative h-[calc(100vh-8rem)] bg-gray-50 overflow-hidden">
-      
-      {/* Centered screenshots */}
+    <section className="relative h-[calc(100vh-8rem)] overflow-hidden bg-gray-50">
       <div className="absolute inset-0 flex items-center justify-center p-20">
-        <div className="relative w-full max-w-5xl mx-auto px-4"> 
-          {/* Shifted upwards with -mt-16 */}
-          
-          {/* Left screenshot */}
-          <div className="absolute top-8 left-0 w-[30%] drop-shadow-xl">
+        <div className="relative mx-auto w-full max-w-5xl px-4">
+          <div className="absolute top-8 left-0 hidden w-[30%] drop-shadow-xl md:block">
             <Image
               src="/screenshot-left.png"
-              alt="Screenshot Left"
+              alt="BattMo parameter controls"
               width={500}
               height={400}
               className="rounded-xl"
             />
           </div>
 
-          {/* Middle screenshot */}
-          <div className="relative z-10 mx-auto w-[50%] drop-shadow-2xl">
+          <div className="relative z-10 mx-auto w-[88%] drop-shadow-2xl md:w-[50%]">
             <Image
               src="/screenshot-center.png"
-              alt="Screenshot Center"
-              width={600}
-              height={450}
+              alt="BattMo simulator preview"
+              width={900}
+              height={640}
               className="rounded-xl"
             />
           </div>
 
-          {/* Right screenshot */}
-          <div className="absolute top-8 right-0 w-[30%] drop-shadow-xl">
+          <div className="absolute top-8 right-0 hidden w-[30%] drop-shadow-xl md:block">
             <Image
               src="/screenshot-right.png"
-              alt="Screenshot Right"
+              alt="BattMo results overview"
               width={500}
               height={400}
               className="rounded-xl"
@@ -48,22 +38,19 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Bottom content */}
-      <div className="absolute bottom-0 left-0 right-0 flex justify-between items-end px-12 pb-12">
-        {/* Title & Description */}
+      <div className="absolute bottom-0 left-0 right-0 flex flex-col gap-6 px-8 pb-10 md:flex-row md:items-end md:justify-between md:px-12 md:pb-12">
         <div className="max-w-lg">
-          <h1 className="text-5xl font-bold text-primary mb-4">BattMo</h1>
+          <h1 className="mb-4 text-5xl font-bold text-primary">BattMo</h1>
           <p className="text-lg text-gray-700">
-            An interactive simulator for designing and optimizing lithium
-            batteries.
+            An interactive simulator for designing and optimizing electrochemical
+            devices.
           </p>
         </div>
 
-        {/* Explore the simulator button */}
-        <ExploreSimulatorButton/>
+        <div className="self-start md:self-auto">
+          <ExploreSimulatorButton />
+        </div>
       </div>
     </section>
   );
-};
-
-export default Hero;
+}

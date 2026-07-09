@@ -34,13 +34,13 @@ COPY . .
 # Re-link workspace dependencies against the full copied source tree.
 RUN pnpm install --no-frozen-lockfile
 
-RUN pnpm turbo run build --filter=quick_calculator...
+RUN pnpm turbo run build --filter=web...
 
 FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=3002
+ENV PORT=3001
 ENV HOSTNAME=0.0.0.0
 
 RUN addgroup -S nextjs && adduser -S nextjs -G nextjs
@@ -54,4 +54,4 @@ COPY --from=build /app/packages ./packages
 USER nextjs
 EXPOSE 3001
 
-CMD ["pnpm", "--filter", "quick_calculator", "exec", "next", "start", "-H", "0.0.0.0", "-p", "3001"]
+CMD ["pnpm", "--filter", "web", "exec", "next", "start", "-H", "0.0.0.0", "-p", "3001"]
