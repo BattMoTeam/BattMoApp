@@ -32,7 +32,7 @@ Open a bash terminal and pull the latest Docker images from the registry. For th
 docker pull ghcr.io/battmoteam/battmoapp_gui:latest
 ```
 
-For the Docker image that serves as a Web socket API and runs the BattMo.jl package:
+For the Docker image that serves as a Web socket API and runs the BattMo.jl package you can run:
 
 ```<bash>
 docker pull ghcr.io/battmoteam/battmo_api:latest
