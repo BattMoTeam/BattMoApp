@@ -146,6 +146,7 @@ Contributors, in alphabetical order
 BattMo has received funding from the European Union's Horizon 2020
 innovation program under grant agreement numbers:
 
+
 - 875527 HYDRA
 - 957189 BIG-MAP
 - 101104013 BATMAX
